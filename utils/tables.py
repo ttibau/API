@@ -156,8 +156,6 @@ class Tables(object):
         sqlalchemy.Column("league_id", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("league_info.league_id")),
         sqlalchemy.Column("team_1_name", sqlalchemy.String(length=64)),
         sqlalchemy.Column("team_2_name", sqlalchemy.String(length=64)),
-        sqlalchemy.Column("team_1_channel", sqlalchemy.BigInteger),
-        sqlalchemy.Column("team_2_channel", sqlalchemy.BigInteger),
         sqlalchemy.Column("team_1_score", sqlalchemy.Integer, server_default="0"),
         sqlalchemy.Column("team_2_score", sqlalchemy.Integer, server_default="0"),
         sqlalchemy.Column("team_1_side", sqlalchemy.Integer, server_default="0"),
