@@ -10,13 +10,13 @@ from .errors import Errors
 class Routes(object):
     def __init__(self, obj):
         # Route object passing.
-        self.league = League
-        self.league.obj = obj
+        league = League
+        league.obj = obj
 
         self.list = [
             Mount("/api", routes=[
                 Mount("/league", routes=[
-                    Route("/", endpoint=self.league),
+                    Route("/", endpoint=league),
                 ]),
             ]),
         ]
