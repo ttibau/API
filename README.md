@@ -15,7 +15,6 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 
 ## Index
 - [Deploying](#deploying)
-- [Updates](#updates)
 - [Planned Features](#planned-features)
 - [Planned Endpoints](#planned-endpoints)
 - Documentation is planned.
@@ -63,7 +62,3 @@ Planning to add more information about each endpoint in the documentation once c
     - /check
 - discord
   Post, Delete & Get
-
-## Updates
-- Version 0.0.1
-    Base project.
