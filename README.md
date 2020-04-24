@@ -29,7 +29,7 @@ I recommend deploying [Starlette](https://www.starlette.io/) using [Uvicorn](htt
 
 I like to use [Certbot](https://certbot.eff.org/) for automatizing [LetsEncrypt](https://letsencrypt.org/) certificates.
 
-Make sure to run ``run.py`` with [pm2](https://pm2.keymetrics.io/) before wondering why it isn't responding.
+Make sure to run ``run.py`` with python 3 using [pm2](https://pm2.keymetrics.io/) before wondering why it isn't responding.
 
 Heaps of online resources can help you with each one of these steps.
 
