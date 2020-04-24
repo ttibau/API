@@ -14,7 +14,7 @@ ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of 
 The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs. Currently ModuleLIFT is just a REST API but Graphql integration is planned.
 
 ## Index
-- [Deploying][#deploying]
+- [Deploying](#deploying)
 - [Updates](#updates)
 - [Planned Features](#planned-features)
 - [Planned Endpoints](#planned-endpoints)
