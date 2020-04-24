@@ -6,15 +6,25 @@
  | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |     / ____ \| |    _| |_ 
  |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|    /_/    \_\_|   |_____|
 ```
+##### This project is NOT considered production ready.
+
 ## About
 ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of pugging system. Recently I've decided to open source the project in hope to get support from other developers in the communitity.
 
-The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs.
+The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs. Currently ModuleLIFT is just a REST API but Graphql integration is planned.
 
 ### Index
 - [Updates](#updates)
 - [Planned Endpoints](#planned-endpoints)
-- Documentation is coming soon.
+- [Planned Features](#planned-features)
+- Documentation is planned.
+
+#### Planned Features
+- Example website.
+- Example bot.
+- Setup guide.
+- Python API client.
+- Documentation.
 
 #### Planned Endpoints
 Planning to add more information about each endpoint in the documentation once closer to completion.
