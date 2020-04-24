@@ -2,11 +2,11 @@ class Config(object):
     debug = True
 
     database = {
-        "username": "",
-        "password": "",
-        "servername": "",
+        "username": "modulelift",
+        "password": "Y2ZRSsje9qZHsxDu",
+        "servername": "localhost",
         "port": 3306,
-        "dbname": "",
+        "dbname": "modulelift",
     }
 
     auth_bypass = [

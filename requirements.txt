@@ -11,3 +11,4 @@ git+https://github.com/WardPearce/aiob2.git
 git+https://github.com/MertYakupBaykan/aioproxyio.git
 git+https://github.com/WardPearce/aiodactyl.git
 python-multipart
+cryptography
