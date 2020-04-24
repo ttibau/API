@@ -13,7 +13,7 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 
 ### Index
 - [Updates](#updates)
-- [Todo](#todo)
+- [Planned Endpoints](#planned-endpoints)
 - Documentation is coming soon.
 
 #### Planned Endpoints
