@@ -14,3 +14,13 @@ class Map(object):
 
         shuffle(self.obj.maps)
         self.obj.data["details"]["map"] = self.obj.maps[0]
+
+    def veto(self):
+        """ Sets map selection type to veto. """
+
+        self.obj.data["details"]["map"] = None
+
+    def vote(self):
+        """ Sets map selection type to veto. """
+
+        self.obj.data["details"]["map"] = None
