@@ -54,16 +54,20 @@ class Queue(object):
     def create(self):
         """ Assigns players & captains to given team. """
         
-        if self.players["options"]["assiged_teams"]:
-            if self.maps["options"]["type"] == ("random" or "given"):
+        if self.maps["options"]["type"] == ("random" or "given"):
+            if self.players["options"]["assiged_teams"]:
                 # Setting match as live
                 self.data["details"]["status"] = 1
             else:
+                # Setting match as player selection stage
+                self.data["details"]["status"] = 3
+        else:
+            if self.players["options"]["assiged_teams"]:
                 # Setting match as map selection stage
                 self.data["details"]["status"] = 2
-        else:
-            # Setting match as player selection stage
-            self.data["details"]["status"] = 3
+            else:
+                # Setting match as player selection stage
+                self.data["details"]["status"] = 3
 
         for user_id, team in self.players["list"].items():
             if team != 1 or team != 2 or team is not None:
