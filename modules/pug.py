@@ -68,7 +68,6 @@ class Pug(object):
                         or not players["options"].get("assiged_teams") \
                             or not players["options"].get("selection") \
                                 or not players["options"].get("param"):
-
                 self.clear_cache()
 
                 return response(error="Players payload formatted incorrectly")
@@ -77,28 +76,24 @@ class Pug(object):
                 or type(maps["options"]) != dict or not maps["options"].get("type") \
                     or not maps["options"].get("selection") or not maps.get("list") \
                         or type(maps["list"]) != list:
-
                 self.clear_cache()
 
                 return response(error="Maps payload formatted incorrectly")
 
             if not self.current_league.obj.config.pug["selection_types"].get(players["options"]["selection"]) \
                 or not self.current_league.obj.config.pug["selection_types"].get(maps["options"]["selection"]):
-
                 self.clear_cache()
 
                 return response(error="Invaild selection type")
 
             len_players = len(players["list"])
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
-
                 self.clear_cache()
 
                 return response(error="Odd amout of players or players is above 2 or below 10")
 
             available_server = await self.current_league.obj.get_server()
             if available_server.error:
-
                 self.clear_cache()
 
                 return available_server
@@ -160,14 +155,12 @@ class Pug(object):
                     if type(players["options"]["param"]) != dict or not players["options"]["param"].get("capt_1") \
                         or not players["options"]["param"].get("capt_2") or type(players["options"]["param"]["capt_1"]) != int \
                             or type(players["options"]["param"]["capt_2"]) != int:
-
                         self.clear_cache(server_id=available_server.data)
 
                         return response(error="Param payload formatted incorrectly")
 
                     if players["options"]["param"]["capt_1"] > len_players - 1 or \
                          players["options"]["param"]["capt_2"] > len_players - 1:
-
                          self.clear_cache(server_id=available_server.data)
 
                          return response(error="Index is not within range")
@@ -192,7 +185,7 @@ class Pug(object):
                 pass
             else:
                 self.clear_cache(server_id=available_server.data)
-                
+
                 return response(error="{} isn't a valid map type".format(maps["options"]["type"]))
 
             queue_create = queue.create()
