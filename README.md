@@ -14,10 +14,20 @@ ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of 
 The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs. Currently ModuleLIFT is just a REST API but Graphql integration is planned.
 
 ### Index
+- [Deploying][#deploying]
 - [Updates](#updates)
-- [Planned Endpoints](#planned-endpoints)
 - [Planned Features](#planned-features)
+- [Planned Endpoints](#planned-endpoints)
 - Documentation is planned.
+
+#### Deploying
+I recommend deploying [Starlette](https://www.starlette.io/) using [Uvicorn](http://www.uvicorn.org/) in a containerized environment with [Nginx](https://www.nginx.com/) acting as a reverse proxy, then using [pm2](https://pm2.keymetrics.io/) to manage running processes.
+
+I like to use [Certbot](https://certbot.eff.org/) for automatizing [LetsEncrypt](https://letsencrypt.org/) certificates.
+
+[Uvicorn](http://www.uvicorn.org/) will interact with [Nginx](https://www.nginx.com/) using a UNIX domain socket what can be set like this ``uvicorn.run(app, uds="path/to/uds")`` in ``run.py`` or can be done via the [Uvicorn Command Line](http://www.uvicorn.org/#command-line-options).
+
+Heaps of online resources can help you with each one of these steps.
 
 #### Planned Features
 - Example website.
