@@ -8,19 +8,19 @@
 ```
 ##### This project is NOT considered production ready.
 
-## About
+# About
 ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of pugging system. Recently I've decided to open source the project in hope to get support from other developers in the communitity.
 
 The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs. Currently ModuleLIFT is just a REST API but Graphql integration is planned.
 
-### Index
+## Index
 - [Deploying][#deploying]
 - [Updates](#updates)
 - [Planned Features](#planned-features)
 - [Planned Endpoints](#planned-endpoints)
 - Documentation is planned.
 
-#### Deploying
+## Deploying
 I recommend deploying [Starlette](https://www.starlette.io/) using [Uvicorn](http://www.uvicorn.org/) in a containerized environment with [Nginx](https://www.nginx.com/) acting as a reverse proxy, then using [pm2](https://pm2.keymetrics.io/) to manage running processes.
 
 I like to use [Certbot](https://certbot.eff.org/) for automatizing [LetsEncrypt](https://letsencrypt.org/) certificates.
@@ -29,14 +29,14 @@ I like to use [Certbot](https://certbot.eff.org/) for automatizing [LetsEncrypt]
 
 Heaps of online resources can help you with each one of these steps.
 
-#### Planned Features
+## Planned Features
 - Example website.
 - Example bot.
 - Setup guide.
 - Python API client.
 - Documentation.
 
-#### Planned Endpoints
+## Planned Endpoints
 Planning to add more information about each endpoint in the documentation once closer to completion.
 
 - /graphql
@@ -64,6 +64,6 @@ Planning to add more information about each endpoint in the documentation once c
 - discord
   Post, Delete & Get
 
-#### Updates
+## Updates
 - Version 0.0.1
     Base project.
