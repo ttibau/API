@@ -176,9 +176,9 @@ class Pug(object):
                 return response(error="{} isn't a valid player type".format(players["options"]["type"]))
 
             if maps["options"]["type"] == "given":
-                pass
+                queue.map.given()
             elif maps["options"]["type"] == "random":
-                pass
+                queue.map.random()
             elif maps["options"]["type"] == "vote":
                 pass
             elif maps["options"]["type"] == "veto":

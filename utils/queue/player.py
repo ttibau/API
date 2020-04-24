@@ -1,5 +1,6 @@
-from utils.misc import Misc
 from utils.response import response
+
+from random import shuffle
 
 class Player(object):
     def __init__(self, obj):
@@ -39,9 +40,9 @@ class Player(object):
     def random(self):
         """ Randomly assigns a captain. """
 
-        players_shuffled = Misc.list_random(self.obj.players_list)
+        shuffle(self.obj.players_list)
 
-        for user_id in players_shuffled:
+        for user_id in self.obj.players_list:
             if not self.obj.players["list"][user_id]:
                 if not self.obj.captains["team_1"]:
                     self.obj.captains["team_1"] = user_id

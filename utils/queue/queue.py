@@ -1,6 +1,8 @@
 from utils.misc import Misc
 from utils.response import response
+
 from utils.queue.player import Player
+from utils.queue.map import Map
 
 class Queue(object):
     captains = {"team_1": None, "team_2": None}
@@ -30,6 +32,7 @@ class Queue(object):
         self.data["details"]["team_2_name"] = Misc.sanitation(team_names["team_2"])
 
         self.player = Player(obj=self)
+        self.map = Map(obj=self)
 
     def assign(self, user_id, team, captain):
         """ Assigns player to tell. """
