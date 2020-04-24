@@ -7,6 +7,20 @@ class Pug(object):
     def __init__(self, current_league):
         self.current_league = current_league
 
+    def clear_cache(self, server_id=None):
+        """ Clears cached data for current league out of memeory. """
+
+        in_memory_cache = self.current_league.obj.in_memory_cache
+
+        if server_id and server_id in in_memory_cache.temp_server_blacklist:
+            in_memory_cache.temp_server_blacklist.remove(server_id)
+        
+        if in_memory_cache.started_queues.get(self.current_league.league_id):
+            if in_memory_cache.started_queues[self.current_league.league_id] == 1:
+                in_memory_cache.started_queues.pop(self.current_league.league_id)
+            else:
+                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+
     async def create(self, players: dict, maps: dict, team_names: dict):
         """ Creates pug lobby, if creates correct returns details on pug.
                 - players 
@@ -24,7 +38,7 @@ class Pug(object):
                 - maps 
                     {
                         "options": {
-                            "type": "vetos" / "random" / "vote" / "given (just uses the 1st index of the list)",
+                            "type": "veto" / "random" / "vote" / "given (just uses the 1st index of the list)",
                             "selection": "ABBAABBA" / "ABBABABA" / "ABABABAB",
                         },
                         "list": [list of full map names],
@@ -55,7 +69,8 @@ class Pug(object):
                             or not players["options"].get("selection") \
                                 or not players["options"].get("param"):
 
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+                self.clear_cache()
+
                 return response(error="Players payload formatted incorrectly")
 
             if len(maps) < 1 or not maps.get("options") \
@@ -63,25 +78,29 @@ class Pug(object):
                     or not maps["options"].get("selection") or not maps.get("list") \
                         or type(maps["list"]) != list:
 
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+                self.clear_cache()
+
                 return response(error="Maps payload formatted incorrectly")
 
             if not self.current_league.obj.config.pug["selection_types"].get(players["options"]["selection"]) \
                 or not self.current_league.obj.config.pug["selection_types"].get(maps["options"]["selection"]):
 
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+                self.clear_cache()
+
                 return response(error="Invaild selection type")
 
             len_players = len(players["list"])
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
 
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+                self.clear_cache()
+
                 return response(error="Odd amout of players or players is above 2 or below 10")
 
             available_server = await self.current_league.obj.get_server()
             if available_server.error:
 
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
+                self.clear_cache()
+
                 return available_server
 
             in_memory_cache.temp_server_blacklist.append(available_server.data)
@@ -104,8 +123,7 @@ class Pug(object):
             # data of incorrect user ids.
             players_validate = await self.current_league.obj.players.validate_many(user_ids=queue.players_list)
             if players_validate.error:
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                self.clear_cache(server_id=available_server.data)
                 
                 return players_validate
 
@@ -115,16 +133,13 @@ class Pug(object):
                 # If none isn't returned
                 # something has errored.
                  if assign_random:
-                     in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                     in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                     self.clear_cache(server_id=available_server.data)
                 
                      return assign_random
 
             elif players["options"]["type"] == "elo" or players["options"]["type"] == "given":
                 if not players["options"].get("param"):
-
-                    in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                    in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                    self.clear_cache(server_id=available_server.data)
 
                     return response(error="Param is required for type {}".format(players["options"]["type"]))
 
@@ -134,14 +149,11 @@ class Pug(object):
                     if not players_elo.error:
                         assign_elo = queue.assign_elo(players_elo)
                         if assign_elo:
-
-                            in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                            in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                            self.clear_cache(server_id=available_server.data)
 
                             return assign_elo
                     else:
-                        in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                        in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                        self.clear_cache(server_id=available_server.data)
 
                         return response(error="Something went wrong during elo fetch")
                 else:
@@ -149,58 +161,63 @@ class Pug(object):
                         or not players["options"]["param"].get("capt_2") or type(players["options"]["param"]["capt_1"]) != int \
                             or type(players["options"]["param"]["capt_2"]) != int:
 
-                        in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                        in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                        self.clear_cache(server_id=available_server.data)
 
                         return response(error="Param payload formatted incorrectly")
 
                     if players["options"]["param"]["capt_1"] > len_players - 1 or \
                          players["options"]["param"]["capt_2"] > len_players - 1:
 
-                         in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                         in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                         self.clear_cache(server_id=available_server.data)
 
                          return response(error="Index is not within range")
 
                     assign_given = queue.assign_given(players["options"]["param"]["capt_1"], players["options"]["param"]["capt_2"])
                     if assign_given:
-                        in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                        in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                        self.clear_cache(server_id=available_server.data)
 
                         return assign_given
             else:
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                self.clear_cache(server_id=available_server.data)
 
-                return response(error="{} isn't a valid type".format(players["options"]["type"]))
+                return response(error="{} isn't a valid player type".format(players["options"]["type"]))
+
+            if maps["options"]["type"] == "given":
+                pass
+            elif maps["options"]["type"] == "random":
+                pass
+            elif maps["options"]["type"] == "vote":
+                pass
+            elif maps["options"]["type"] == "veto":
+                pass
+            else:
+                self.clear_cache(server_id=available_server.data)
+                
+                return response(error="{} isn't a valid map type".format(maps["options"]["type"]))
 
             queue_create = queue.create()
             # If none isn't returned
             # something has errored.
             if queue_create:
-                in_memory_cache.started_queues[self.current_league.league_id] -= 1
-                in_memory_cache.temp_server_blacklist.remove(available_server.data)
+                self.clear_cache(server_id=available_server.data)
 
                 return queue_create
 
             query = """INSERT INTO scoreboard_total (match_id, league_id, 
                                                      status, server_id, 
                                                      region, team_1_name,
-                                                     team_2_name) 
+                                                     team_2_name, map) 
                                             VALUES  (:match_id, :league_id, 
                                                      :status, :server_id, 
                                                      :region, :team_1_name,
-                                                     :team_2_name)"""
+                                                     :team_2_name, :map)"""
             await self.current_league.obj.database.execute(query=query, values=queue.data["details"])
 
             query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
                                        VALUES (:match_id, :user_id, :captain, :team)"""
-            await self.current_league.obj.database.execute_many(query=query, values=queue.insert)
+            await self.current_league.obj.database.execute_many(query=query, values=queue.users)
 
-            # Removing a queue from out temp cache.
-            in_memory_cache.started_queues[self.current_league.league_id] -= 1
-            # Removing server ID from temp server blacklist
-            in_memory_cache.temp_server_blacklist.remove(available_server.data)
+            self.clear_cache(server_id=available_server.data)
 
             # Server startup push into a task to run in the backgroud.
             server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=available_server.data).start)

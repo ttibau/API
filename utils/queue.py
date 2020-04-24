@@ -4,8 +4,8 @@ from utils.response import response
 class QueueCreate(object):
     captains = {"team_1": None, "team_2": None}
 
-    insert = []
-    insert_append = insert.append
+    users = []
+    users_append = users.append
 
     data = {
         "details": {},
@@ -38,43 +38,15 @@ class QueueCreate(object):
 
         team_dict[user_id] = {
             "captain": captain == 1,
+            "team": team,
         }
 
-        self.insert_append({
+        self.users_append({
             "match_id": self.match_id,
             "user_id": user_id,
             "captain": captain,
             "team": team,
         })
-
-    def create(self):
-        """ Assigns players & captains to given team. """
-        
-        if self.players["options"]["assiged_teams"]:
-            if self.maps["options"]["type"] == ("random" or "given"):
-                # Setting match as live
-                self.data["details"]["status"] = 1
-            else:
-                # Setting match as map selection stage
-                self.data["details"]["status"] = 2
-        else:
-            # Setting match as player selection stage
-            self.data["details"]["status"] = 3
-
-        for user_id, team in self.players["list"].items():
-            if team != 1 or team != 2 or team is not None:
-                return response(error="{} isn't a valid team side".format(team))
-
-            if team is None:
-                team = 0
-
-            if self.captains["team_1"].get(user_id) or \
-                self.captains["team_2"].get(user_id):
-                captain = 1
-            else:
-                captain = 0
-
-            self.assign_player(user_id=user_id, team=team, captain=captain)
 
     def assign_given(self, capt_1_index, capt_2_index):
         """ Assigns the given captins. """
@@ -130,3 +102,32 @@ class QueueCreate(object):
                     return response(error="{} should be None, 1 or 2".format(self.players["list"][user_id]))
                 else:
                     break
+
+    def create(self):
+        """ Assigns players & captains to given team. """
+        
+        if self.players["options"]["assiged_teams"]:
+            if self.maps["options"]["type"] == ("random" or "given"):
+                # Setting match as live
+                self.data["details"]["status"] = 1
+            else:
+                # Setting match as map selection stage
+                self.data["details"]["status"] = 2
+        else:
+            # Setting match as player selection stage
+            self.data["details"]["status"] = 3
+
+        for user_id, team in self.players["list"].items():
+            if team != 1 or team != 2 or team is not None:
+                return response(error="{} isn't a valid team side".format(team))
+
+            if team is None:
+                team = 0
+
+            if self.captains["team_1"].get(user_id) or \
+                self.captains["team_2"].get(user_id):
+                captain = 1
+            else:
+                captain = 0
+
+            self.assign_player(user_id=user_id, team=team, captain=captain)
