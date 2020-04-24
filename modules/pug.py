@@ -218,3 +218,18 @@ class Pug(object):
             return response(backgroud=server_task, data=queue.data)
         else:
             return response(error="Over queue limit")
+
+    async def select_player(self, user_id: str):
+        pass
+
+    async def select_map(self, map_id: str):
+        pass
+
+    async def players(self):
+        pass
+
+    async def info(self):
+        pass
+
+    async def end(self):
+        pass
