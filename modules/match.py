@@ -3,7 +3,7 @@ from utils.queue.queue import Queue
 
 from starlette.background import BackgroundTask
 
-class Pug(object):
+class Match(object):
     def __init__(self, current_league):
         self.current_league = current_league
 
@@ -22,7 +22,7 @@ class Pug(object):
                 in_memory_cache.started_queues[self.current_league.league_id] -= 1
 
     async def create(self, players: dict, maps: dict, team_names: dict):
-        """ Creates pug lobby, if creates correct returns details on pug.
+        """ Creates pug lobby.
                 - players 
                     {
                         "options": {

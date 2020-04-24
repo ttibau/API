@@ -1,6 +1,6 @@
 from utils.response import response
 
-from .pug import Pug
+from .match import Match
 from .players import Players
 
 class League(object):
@@ -10,10 +10,10 @@ class League(object):
         self.region = region
 
     @property
-    def pug(self):
+    def match(self):
         """ Pug Object. """
 
-        return Pug(current_league=self)
+        return Match(current_league=self)
 
     @property
     def players(self):
