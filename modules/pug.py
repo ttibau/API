@@ -1,5 +1,5 @@
 from utils.response import response
-from utils.queue import QueueCreate
+from utils.queue.queue import Queue
 
 from starlette.background import BackgroundTask
 
@@ -108,10 +108,10 @@ class Pug(object):
                     "team_2": "Team 2",
                 }
 
-            queue = QueueCreate(players=players, maps=maps, team_names=team_names,
-                                server_id=available_server.data,
-                                league_id=self.current_league.league_id,
-                                region=self.current_league.region)
+            queue = Queue(players=players, maps=maps, team_names=team_names,
+                          server_id=available_server.data,
+                          league_id=self.current_league.league_id,
+                          region=self.current_league.region)
 
             # Ensures valid user IDs are given
             # If errors returns response return with
@@ -123,7 +123,7 @@ class Pug(object):
                 return players_validate
 
             if players["options"]["type"] == "random":
-                 assign_random = queue.assign_random()
+                 assign_random = queue.player.random()
 
                 # If none isn't returned
                 # something has errored.
@@ -142,7 +142,7 @@ class Pug(object):
                     players_elo = await self.current_league.obj.players.fetch_many(user_ids=queue.players_list, include_stats=True)
 
                     if not players_elo.error:
-                        assign_elo = queue.assign_elo(players_elo)
+                        assign_elo = queue.player.elo(players_elo)
                         if assign_elo:
                             self.clear_cache(server_id=available_server.data)
 
@@ -165,7 +165,7 @@ class Pug(object):
 
                          return response(error="Index is not within range")
 
-                    assign_given = queue.assign_given(players["options"]["param"]["capt_1"], players["options"]["param"]["capt_2"])
+                    assign_given = queue.player.given(players["options"]["param"]["capt_1"], players["options"]["param"]["capt_2"])
                     if assign_given:
                         self.clear_cache(server_id=available_server.data)
 
