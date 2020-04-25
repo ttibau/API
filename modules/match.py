@@ -191,14 +191,13 @@ class Match(object):
                 return response(error="{} isn't a valid map type".format(maps["options"]["type"]))
 
             queue_create = await queue.create()
+
+            self.clear_cache(server_id=available_server.data)
+            
             # If none isn't returned
             # something has errored.
             if queue_create:
-                self.clear_cache(server_id=available_server.data)
-
                 return queue_create
-
-            self.clear_cache(server_id=available_server.data)
 
             # Server startup push into a task to run in the backgroud.
             server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=available_server.data).start)
