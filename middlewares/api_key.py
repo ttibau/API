@@ -3,7 +3,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from datetime import datetime, timedelta
 
 class APIKeyValidation(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):        
+    async def dispatch(self, request, call_next):             
         if request.url.path not in self.obj.config.auth_bypass:
             if request.query_params.get("api_key") and request.query_params.get("league_id") and request.query_params.get("region"):
                 api_key = request.query_params["api_key"]
