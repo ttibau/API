@@ -22,6 +22,8 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 ## Deploying
 1st install the needed modules ``pip install -r /path/to/requirements.txt``
 
+Edit ``settings.py``
+
 ### Production
 I recommend deploying [Starlette](https://www.starlette.io/) using [Uvicorn](http://www.uvicorn.org/) in a containerized environment with [Nginx](https://www.nginx.com/) acting as a reverse proxy, then using [pm2](https://pm2.keymetrics.io/) to manage running processes.
 
