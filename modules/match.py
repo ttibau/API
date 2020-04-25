@@ -22,7 +22,7 @@ class Match(object):
                 in_memory_cache.started_queues[self.current_league.league_id] -= 1
 
     async def create(self, players: dict, maps: dict, team_names: dict):
-        """ Creates pug lobby.
+        """ Creates match.
                 - players 
                     {
                         "options": {
