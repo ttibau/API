@@ -209,7 +209,7 @@ class Match(object):
             return response(error="Over queue limit")
 
     async def get(self):
-        """ Gets base details about a match. """
+        """ Gets base details about the match. """
 
         query = """SELECT server_id, map_order, player_order, timestamp, status,
                           map, team_1_name, team_2_name, team_1_score, team_2_score, 
@@ -247,11 +247,12 @@ class Match(object):
 
         return response(data=match.data, backgroud=server_task)
 
+    async def players(self):
+        """ List players for given match. """
+        pass
+
     async def select_player(self, user_id: str):
         pass
 
     async def select_map(self, map_id: str):
-        pass
-
-    async def players(self):
         pass
