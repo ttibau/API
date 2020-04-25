@@ -138,9 +138,9 @@ class Tables(object):
         sqlalchemy.Column("country", sqlalchemy.String(length=64)),
     )
 
-    # Match Types
+    # Selection Types
     sqlalchemy.Table(
-        "match_types",
+        "selection_types",
         metadata,
         sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, autoincrement=True),
         sqlalchemy.Column("type", sqlalchemy.String(length=8)),
@@ -157,7 +157,8 @@ class Tables(object):
         metadata,
         sqlalchemy.Column("match_id", sqlalchemy.String(length=36), primary_key=True),
         sqlalchemy.Column("server_id", sqlalchemy.String(length=36)),
-        sqlalchemy.Column("match_type", sqlalchemy.Integer, sqlalchemy.ForeignKey("match_types.id")),
+        sqlalchemy.Column("map_selection", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_types.id")),
+        sqlalchemy.Column("player_selection", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_types.id")),
         sqlalchemy.Column("timestamp", sqlalchemy.types.TIMESTAMP, server_default=sqlalchemy.text("CURRENT_TIMESTAMP()")),
         sqlalchemy.Column("status", sqlalchemy.Integer),
         sqlalchemy.Column("map", sqlalchemy.String(length=24), server_default="NULL"),
