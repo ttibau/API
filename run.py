@@ -26,7 +26,7 @@ print("-"*62)
 ml = modulelift.client()
 
 # Security checks.
-if len(ml.config.master_key) < 48:
+if len(ml.config.master_key) < 48 and not ml.config.debug:
     sys.exit("Master key must be 48 characters or longer.")
 
 async def startup_task():
