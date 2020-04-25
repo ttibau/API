@@ -24,8 +24,6 @@ class Queue(object):
 
         self.database = database
 
-        self.players_list = list(self.players["list"].keys())
-
         self.data["details"]["match_id"] = self.match_id
         self.data["details"]["server_id"] = server_id
         self.data["details"]["league_id"] = league_id
@@ -123,5 +121,7 @@ class Queue(object):
         await self.database.execute_many(query=query, values=self.users)
 
         if map_pool:
+            # If map type is random or given we don't
+            # need a map pool.
             query = "INSERT INTO map_pool (match_id, map) VALUES (:match_id, :map)"
             await self.database.execute_many(query=query, values=map_pool)

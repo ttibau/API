@@ -190,10 +190,11 @@ class Match(object):
 
                 return response(error="{} isn't a valid map type".format(maps["options"]["type"]))
 
+            # Creating match from given data.
             queue_create = await queue.create()
 
             self.clear_cache(server_id=available_server.data)
-            
+
             # If none isn't returned
             # something has errored.
             if queue_create:
