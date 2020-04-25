@@ -4,27 +4,32 @@ import uvicorn
 import asyncio
 import aiohttp
 import aiodactyl
+import sys
 
 from aioproxyio import proxy_io
 
 import modulelift
 
+print("-"*62)
+
+print("  __  __           _       _      _      _____ ______ _______ ")
+print(" |  \/  |         | |     | |    | |    |_   _|  ____|__   __|")
+print(" | \  / | ___   __| |_   _| | ___| |      | | | |__     | |   ")
+print(" | |\/| |/ _ \ / _` | | | | |/ _ \ |      | | |  __|    | |   ")
+print(" | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |   ")
+print(" |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|   ")
+print("\nCreated by the ModuleLFIT team.")
+print("https://github.com/ModuleLIFT\n")
+
+print("-"*62)
+
 ml = modulelift.client()
 
+# Security checks.
+if len(ml.config.master_key) < 48:
+    sys.exit("Master key must be 48 characters or longer.")
+
 async def startup_task():
-    print("-"*62)
-    
-    print("  __  __           _       _      _      _____ ______ _______ ")
-    print(" |  \/  |         | |     | |    | |    |_   _|  ____|__   __|")
-    print(" | \  / | ___   __| |_   _| | ___| |      | | | |__     | |   ")
-    print(" | |\/| |/ _ \ / _` | | | | |/ _ \ |      | | |  __|    | |   ")
-    print(" | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |   ")
-    print(" |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|   ")
-    print("\nCreated by the ModuleLFIT team.")
-    print("https://github.com/ModuleLIFT\n")
-
-    print("-"*62)
-
     ml.sessions.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
     ml.sessions.proxy = proxy_io(api_key=ml.config.proxyio["key"], session=ml.sessions.aiohttp)
     ml.sessions.dactyl = aiodactyl.client(api_key=ml.config.pterodactyl["key"], route=ml.config.pterodactyl["route"],

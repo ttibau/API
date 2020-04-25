@@ -11,18 +11,19 @@ from .errors import Errors
 # Routing
 class Routes(object):
     def __init__(self, obj):
-        # Route object passing.
-        league = League
-        league.obj = obj
+        routes = {
+            "/league": League,
+            "/match": Match,
+        }
 
-        match = Match
-        match.obj = obj
+        routes_init = []
+        for route, route_obj in routes.items():
+            route_obj.obj = obj
 
+            routes_init.append(Route(route, endpoint=route_obj))
+        
         self.list = [
-            Mount("/api", routes=[
-                Route("/league", endpoint=league),
-                Route("/match", endpoint=match),
-            ]),
+            Mount("/api", routes=routes_init),
         ]
 
         self.exception_handlers = {
