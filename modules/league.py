@@ -11,7 +11,7 @@ class League(object):
 
     @property
     def match(self):
-        """ Pug Object. """
+        """ Match Object. """
 
         return Match(current_league=self)
 
