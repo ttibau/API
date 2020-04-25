@@ -138,9 +138,9 @@ class Tables(object):
         sqlalchemy.Column("country", sqlalchemy.String(length=64)),
     )
 
-    # Selection Types
+    # Selection Order
     sqlalchemy.Table(
-        "selection_types",
+        "selection_order",
         metadata,
         sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, autoincrement=True),
         sqlalchemy.Column("type", sqlalchemy.String(length=8)),
@@ -157,8 +157,8 @@ class Tables(object):
         metadata,
         sqlalchemy.Column("match_id", sqlalchemy.String(length=36), primary_key=True),
         sqlalchemy.Column("server_id", sqlalchemy.String(length=36)),
-        sqlalchemy.Column("map_selection", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_types.id"), nullable=True),
-        sqlalchemy.Column("player_selection", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_types.id"), nullable=True),
+        sqlalchemy.Column("map_order", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_order.id"), nullable=True),
+        sqlalchemy.Column("player_order", sqlalchemy.Integer, sqlalchemy.ForeignKey("selection_order.id"), nullable=True),
         sqlalchemy.Column("timestamp", sqlalchemy.types.TIMESTAMP, server_default=sqlalchemy.text("CURRENT_TIMESTAMP()")),
         sqlalchemy.Column("status", sqlalchemy.Integer),
         sqlalchemy.Column("map", sqlalchemy.String(length=24), server_default="NULL"),
@@ -196,27 +196,13 @@ class Tables(object):
         sqlalchemy.Column("disconnected", sqlalchemy.Boolean, server_default="0"),
     )
 
-    # Ladder Details
+    # Match Map Pool
+    # Data is delete from here once match has ended.
     sqlalchemy.Table(
-        "ladder_details",
+        "map_pool",
         metadata,
-        sqlalchemy.Column("ladder_id", sqlalchemy.String(length=36), primary_key=True),
-        sqlalchemy.Column("league_id", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("league_info.league_id")),
-        sqlalchemy.Column("region", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("region.region")),
-        sqlalchemy.Column("type", sqlalchemy.String(length=24)),
-        sqlalchemy.Column("starts", sqlalchemy.types.TIMESTAMP),
-        sqlalchemy.Column("ends", sqlalchemy.types.TIMESTAMP),
-    )
-
-    # Ladder Table
-    sqlalchemy.Table(
-        "ladders",
-        metadata,
-        sqlalchemy.Column("ladder_id", sqlalchemy.String(length=36), sqlalchemy.ForeignKey("ladder_details.ladder_id")),
-        sqlalchemy.Column("user_id", sqlalchemy.String(length=36), sqlalchemy.ForeignKey("users.user_id")),
-        sqlalchemy.Column("wins", sqlalchemy.Integer),
-        sqlalchemy.Column("losses", sqlalchemy.Integer),
-        sqlalchemy.Column("ties", sqlalchemy.Integer),
+        sqlalchemy.Column("match_id", sqlalchemy.String(length=36), sqlalchemy.ForeignKey("scoreboard_total.match_id")),
+        sqlalchemy.Column("map", sqlalchemy.String(length=24)),
     )
 
     # Statistics

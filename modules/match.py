@@ -111,7 +111,9 @@ class Match(object):
             queue = Queue(players=players, maps=maps, team_names=team_names,
                           server_id=available_server.data,
                           league_id=self.current_league.league_id,
-                          region=self.current_league.region)
+                          region=self.current_league.region,
+                          selection_types=self.current_league.obj.config.pug["selection_types"],
+                          database=self.current_league.obj.database)
 
             # Ensures valid user IDs are given
             # If errors returns response return with
@@ -180,35 +182,21 @@ class Match(object):
             elif maps["options"]["type"] == "random":
                 queue.map.random()
             elif maps["options"]["type"] == "vote":
-                pass
+                queue.map.vote()
             elif maps["options"]["type"] == "veto":
-                pass
+                queue.map.veto()
             else:
                 self.clear_cache(server_id=available_server.data)
 
                 return response(error="{} isn't a valid map type".format(maps["options"]["type"]))
 
-            queue_create = queue.create()
+            queue_create = await queue.create()
             # If none isn't returned
             # something has errored.
             if queue_create:
                 self.clear_cache(server_id=available_server.data)
 
                 return queue_create
-
-            query = """INSERT INTO scoreboard_total (match_id, league_id, 
-                                                     status, server_id, 
-                                                     region, team_1_name,
-                                                     team_2_name, map) 
-                                            VALUES  (:match_id, :league_id, 
-                                                     :status, :server_id, 
-                                                     :region, :team_1_name,
-                                                     :team_2_name, :map)"""
-            await self.current_league.obj.database.execute(query=query, values=queue.data["details"])
-
-            query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
-                                       VALUES (:match_id, :user_id, :captain, :team)"""
-            await self.current_league.obj.database.execute_many(query=query, values=queue.users)
 
             self.clear_cache(server_id=available_server.data)
 

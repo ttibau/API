@@ -16,10 +16,13 @@ class Queue(object):
         "team_2": {},
     }
 
-    def __init__(self, players, maps, team_names, league_id, region, server_id):
+    def __init__(self, players, maps, selection_types, database, team_names, league_id, region, server_id):
         self.match_id = Misc.uuid4()
         self.players = players
         self.maps = maps
+        self.selection_types = selection_types
+
+        self.database = database
 
         self.players_list = list(self.players["list"].keys())
 
@@ -54,22 +57,36 @@ class Queue(object):
             "team": team,
         })
 
-    def create(self):
-        """ Assigns players & captains to given team. """
+    async def create(self):
+        """ Assigns players & captains to given team & also inserts the data into the database. """
         
         if self.maps["options"]["type"] == ("random" or "given"):
+            map_pool = None
+
             if self.players["options"]["assiged_teams"]:
                 # Setting match as live
+                self.data["details"]["player_order"] = None
                 self.data["details"]["status"] = 1
             else:
                 # Setting match as player selection stage
+                self.data["details"]["player_order"] = self.selection_types[self.players["options"]["selection"]]
                 self.data["details"]["status"] = 3
         else:
+            map_pool = []
+            map_pool_append = map_pool.append
+            for map_name in self.maps:
+                map_pool_append({
+                    "map": map_name,
+                    "match_id": self.match_id,
+                })
+
             if self.players["options"]["assiged_teams"]:
                 # Setting match as map selection stage
+                self.data["details"]["player_order"] = None
                 self.data["details"]["status"] = 2
             else:
                 # Setting match as player selection stage
+                self.data["details"]["player_order"] = self.selection_types[self.players["options"]["selection"]]
                 self.data["details"]["status"] = 3
 
         for user_id, team in self.players["list"].items():
@@ -86,3 +103,25 @@ class Queue(object):
                 captain = 0
 
             self.assign(user_id=user_id, team=team, captain=captain)
+
+        query = """INSERT INTO scoreboard_total (match_id, league_id, 
+                                                    status, server_id, 
+                                                    region, team_1_name,
+                                                    team_2_name, map,
+                                                    map_order,
+                                                    player_order) 
+                                        VALUES  (:match_id, :league_id, 
+                                                    :status, :server_id, 
+                                                    :region, :team_1_name,
+                                                    :team_2_name, :map,
+                                                    :map_order,
+                                                    :player_order)"""
+        await self.database.execute(query=query, values=self.data["details"])
+
+        query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
+                                    VALUES (:match_id, :user_id, :captain, :team)"""
+        await self.database.execute_many(query=query, values=self.users)
+
+        if map_pool:
+            query = "INSERT INTO map_pool (match_id, map) VALUES (:match_id, :map)"
+            await self.database.execute_many(query=query, values=map_pool)
