@@ -1,5 +1,7 @@
 from databases import Database, DatabaseURL
+
 from settings import Config
+from tables import Tables
 
 from routes.router import Routes
 from middlewares.middlewares import Middlewares
@@ -8,7 +10,6 @@ from utils.memory_cache import InMemoryCache
 from utils.sessions import Sessions
 from utils.responder import Responder
 from utils.api import Api
-from utils.tables import Tables
 
 from modules.league import League
 
