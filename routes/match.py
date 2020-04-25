@@ -9,4 +9,9 @@ class Match(HTTPEndpoint):
     async def post(self, request, args):
         """ Creates match. """
 
-        return self.obj.responder.render(await request.state.league.match.create(args))
+        return self.obj.responder.render(await request.state.league.match().create(args))
+    
+    @use_args({"match_id": fields.String(required=True),})
+    async def delete(self, request, match_id):
+        
+        return self.obj.responder.render(await request.state.league.match(match_id=match_id).end())

@@ -9,11 +9,10 @@ class League(object):
         self.league_id = league_id
         self.region = region
 
-    @property
-    def match(self):
+    def match(self, match_id=None):
         """ Match Object. """
 
-        return Match(current_league=self)
+        return Match(current_league=self, match_id=match_id)
 
     @property
     def players(self):

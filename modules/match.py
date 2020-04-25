@@ -4,8 +4,9 @@ from utils.queue.queue import Queue
 from starlette.background import BackgroundTask
 
 class Match(object):
-    def __init__(self, current_league):
+    def __init__(self, current_league, match_id):
         self.current_league = current_league
+        self.match_id = match_id
 
     def clear_cache(self, server_id=None):
         """ Clears cached data for current league out of memeory. """
@@ -207,6 +208,45 @@ class Match(object):
         else:
             return response(error="Over queue limit")
 
+    async def get(self):
+        """ Gets base details about a match. """
+
+        query = """SELECT server_id, map_order, player_order, timestamp, status,
+                          map, team_1_name, team_2_name, team_1_score, team_2_score, 
+                          team_1_side, team_2_side
+                   FROM scoreboard_total
+                   WHERE match_id = :match_id AND league_id = :league_id AND region = :region"""
+        values = {
+            "match_id": self.match_id, 
+            "league_id": self.current_league.league_id,
+            "region": self.current_league.region,
+        }
+
+        row = await self.current_league.obj.database.fetch_one(query=query, values=values)
+        if row:
+            return response(data={**row})
+        else:
+            return response(error="No match with that ID")
+
+    async def end(self):
+        """ Ends given match. """
+
+        match = self.get()
+        if match.error:
+            return match
+
+        values = {"match_id": self.match_id,}
+
+        query = "UPDATE scoreboard_total SET status = 0 WHERE match_id = :match_id"
+        await self.current_league.obj.database.execute(query=query, values=values)
+
+        query = "DELETE FROM map_pool WHERE match_id = :match_id"
+        await self.current_league.obj.database.execute(query=query, values=values)
+
+        server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=match.data["server_id"]).stop)
+
+        return response(data=match.data, backgroud=server_task)
+
     async def select_player(self, user_id: str):
         pass
 
@@ -214,10 +254,4 @@ class Match(object):
         pass
 
     async def players(self):
-        pass
-
-    async def info(self):
-        pass
-
-    async def end(self):
         pass
