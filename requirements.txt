@@ -10,5 +10,7 @@ webargs-starlette>=1.2.0
 git+https://github.com/WardPearce/aiob2.git
 git+https://github.com/MertYakupBaykan/aioproxyio.git
 git+https://github.com/WardPearce/aiodactyl.git
+git+https://github.com/WardPearce/aiopes.git
+git+https://github.com/WardPearce/aiodathost.git
 python-multipart
 cryptography

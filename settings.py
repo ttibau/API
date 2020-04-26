@@ -27,12 +27,49 @@ class Config(object):
         "key": "",
     }
 
-    pterodactyl = {
+    regions = {
+        # Unique region code
+        # and all iso codes what fall under it.
+        "OCE": [
+            "AU",
+            "NZ",
+        ],
+    }
+
+    server = {
+        # pterodactyl application key, dathost key or pes key.
+        # incase of dathost just do username/password
         "key": "",
-        "route": "",
+
+        # https://pterodactyl.io/
+        # self hosting using the pterodactyl control panel.
+        "pterodactyl": {
+            "enabled": True,
+
+            # Route to your pterodactyl panel ending in
+            # /api
+            "route": "",
+        },
+
+        # https://dathost.net/
+        "dathost": {
+            "enabled": False,
+        },
+
+        # https://www.pacifices.cloud/
+        "pes": {
+            "enabled": False,
+        },
 
         # Cached on boot and on change.
-        "regions": {}
+        "regions": {
+            # Region code for that server.
+            "OCE": [
+                # Unique ID for server
+                # given by host.
+                "server_id"
+            ],
+        },
     }
 
     pug = {

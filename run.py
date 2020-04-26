@@ -3,7 +3,6 @@ from starlette.applications import Starlette
 import uvicorn
 import asyncio
 import aiohttp
-import aiodactyl
 import sys
 
 from aioproxyio import proxy_io
@@ -31,9 +30,9 @@ if len(ml.config.master_key) < 48 and not ml.config.debug:
 
 async def startup_task():
     ml.sessions.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
+    # Initializes our wrapper for different providers.
+    ml.server_init()
     ml.sessions.proxy = proxy_io(api_key=ml.config.proxyio["key"], session=ml.sessions.aiohttp)
-    ml.sessions.dactyl = aiodactyl.client(api_key=ml.config.pterodactyl["key"], route=ml.config.pterodactyl["route"],
-                                          session=ml.sessions.aiohttp)
     await ml.database.connect()
 
 async def shutdown_task():

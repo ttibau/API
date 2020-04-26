@@ -204,7 +204,7 @@ class Match(object):
             self.match_id = queue.match_id
 
             # Server startup push into a task to run in the backgroud.
-            server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=available_server.data).start)
+            server_task = BackgroundTask(self.current_league.obj.server.client(server_id=available_server.data).start)
 
             return response(backgroud=server_task, data=queue.data)
         else:
@@ -245,7 +245,7 @@ class Match(object):
         query = "DELETE FROM map_pool WHERE match_id = :match_id"
         await self.current_league.obj.database.execute(query=query, values=values)
 
-        server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=match.data["server_id"]).stop)
+        server_task = BackgroundTask(self.current_league.obj.server.client(server_id=match.data["server_id"]).stop)
 
         return response(data=match.data, backgroud=server_task)
 

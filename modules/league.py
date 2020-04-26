@@ -44,7 +44,7 @@ class League(object):
         """ Finds a available server for the currnet league. """
         
         if not self.obj.config.pterodactyl["regions"].get(self.region):
-            return response(error="No server for that region")
+            return response(error="No server IDs for that region")
 
         region_servers = list(self.obj.config.pterodactyl["regions"][self.region])
         region_servers_remove = region_servers.remove
@@ -133,7 +133,9 @@ class League(object):
                         item = 0
 
                 values[key] = item
-
+                
+                # Don't worry this isn't
+                # injecting any values.
                 query += "{}={},".format(key, ":"+key)
 
             query = query[:-1]

@@ -9,6 +9,7 @@ from middlewares.middlewares import Middlewares
 from utils.memory_cache import InMemoryCache
 from utils.sessions import Sessions
 from utils.api import Api
+from utils.server import Server
 
 from modules.league import League
 
@@ -27,10 +28,17 @@ class client:
     sessions = Sessions
 
     def __init__(self):
+        """ This client assumes the developer has taken the initiative to correctly initialize the need sessions. """
+
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)
         self.api = Api(obj=self)
         self.tables = Tables(obj=self)
+
+    def server_init(self):
+        """ Should be ran within context of the loop after the aiohttp session is created. """
+
+        self.server = Server(obj=self)
 
     def league(self, league_id, region):
         return League(obj=self, league_id=league_id, region=region)
