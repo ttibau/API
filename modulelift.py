@@ -38,7 +38,7 @@ class client:
     def server_init(self):
         """ Should be ran within context of the loop after the aiohttp session is created. """
 
-        self.server = Server(obj=self)
+        self.server = Server(obj=self).client
 
     def league(self, league_id, region):
         return League(obj=self, league_id=league_id, region=region)
