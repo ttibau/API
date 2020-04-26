@@ -8,12 +8,11 @@ from middlewares.middlewares import Middlewares
 
 from utils.memory_cache import InMemoryCache
 from utils.sessions import Sessions
-from utils.responder import Responder
 from utils.api import Api
 
 from modules.league import League
 
-class client():
+class client:
     config = Config
 
     database_url = DatabaseURL("mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(config.database["username"], 
@@ -26,8 +25,6 @@ class client():
 
     in_memory_cache = InMemoryCache
     sessions = Sessions
-
-    responder = Responder()
 
     def __init__(self):
         self.routes = Routes(obj=self)

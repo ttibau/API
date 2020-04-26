@@ -2,6 +2,7 @@ from utils.response import response
 
 from .match import Match
 from .players import Players
+from .list import List
 
 class League(object):
     def __init__(self, obj, league_id, region):
@@ -13,6 +14,16 @@ class League(object):
         """ Match Object. """
 
         return Match(current_league=self, match_id=match_id)
+
+    def list(self, limit: int = 25, offset: int = 0, search: str = "", desc: bool = True):
+        """ List Object. 
+                - limit.
+                - offset.
+                - search.
+        """
+
+        return List(current_league=self, limit=limit, offset=offset,
+                    search=search, desc=desc)
 
     @property
     def players(self):

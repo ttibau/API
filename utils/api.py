@@ -1,4 +1,5 @@
 from utils.response import response
+from utils.responder import responder
 
 class Api(object):
     def __init__(self, obj):
@@ -30,4 +31,4 @@ class Api(object):
     def unauthorized(self):
         """ Handles unauthorized requests """
 
-        return self.obj.responder.render(response(error="Unauthorized", status=401))
+        return responder.render(response(error="Unauthorized", status=401))
