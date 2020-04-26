@@ -103,11 +103,9 @@ class Match(object):
 
             if not team_names.get("team_1") or not team_names.get("team_2") \
                 or type(team_names["team_1"]) != str or type(team_names["team_2"]) != str:
-                
-                team_names = {
-                    "team_1": "Team 1",
-                    "team_2": "Team 2",
-                }
+                self.clear_cache()
+
+                return response(error="Invalid team names")
 
             queue = Queue(players=players, maps=maps, team_names=team_names,
                           server_id=available_server.data,
