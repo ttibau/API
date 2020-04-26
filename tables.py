@@ -106,6 +106,7 @@ class Tables(object):
     )
 
     # User account details
+    # Region here is the users most recent region.
     sqlalchemy.Table(
         "users",
         metadata,
@@ -115,6 +116,7 @@ class Tables(object):
         sqlalchemy.Column("region", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("region.region")),
         sqlalchemy.Column("name", sqlalchemy.String(length=36)),
         sqlalchemy.Column("pfp", sqlalchemy.String(length=128)),
+        sqlalchemy.Column("joined", sqlalchemy.types.TIMESTAMP, server_default=sqlalchemy.text("CURRENT_TIMESTAMP()")),
         sqlalchemy.Column("ip_id", sqlalchemy.String(length=36), sqlalchemy.ForeignKey("ip_details.ip_id")),
     )
 
@@ -206,31 +208,33 @@ class Tables(object):
     )
 
     # Statistics
+    # user_id isn't unique here,
+    # different regions have different stats.
     sqlalchemy.Table(
         "statistics",
         metadata,
         sqlalchemy.Column("user_id", sqlalchemy.String(length=36), sqlalchemy.ForeignKey("users.user_id")),
         sqlalchemy.Column("league_id", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("league_info.league_id")),
         sqlalchemy.Column("region", sqlalchemy.String(length=4), sqlalchemy.ForeignKey("region.region")),
-        sqlalchemy.Column("last_connected", sqlalchemy.types.TIMESTAMP),
-        sqlalchemy.Column("total_time", sqlalchemy.Integer),
+        sqlalchemy.Column("last_connected", sqlalchemy.types.TIMESTAMP, server_default=sqlalchemy.text("CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()")),
+        sqlalchemy.Column("total_time", sqlalchemy.Integer, server_default="0"),
 
-        sqlalchemy.Column("elo", sqlalchemy.Integer),
+        sqlalchemy.Column("elo", sqlalchemy.Integer, server_default="0"),
 
-        sqlalchemy.Column("kills", sqlalchemy.Integer),
-        sqlalchemy.Column("deaths", sqlalchemy.Integer),
-        sqlalchemy.Column("assists", sqlalchemy.Integer),
-        sqlalchemy.Column("shots", sqlalchemy.Integer),
-        sqlalchemy.Column("hits", sqlalchemy.Integer),
-        sqlalchemy.Column("damage", sqlalchemy.Integer),
-        sqlalchemy.Column("headshots", sqlalchemy.Integer),
+        sqlalchemy.Column("kills", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("deaths", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("assists", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("shots", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("hits", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("damage", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("headshots", sqlalchemy.Integer, server_default="0"),
         
-        sqlalchemy.Column("roundswon", sqlalchemy.Integer),
-        sqlalchemy.Column("roundslost", sqlalchemy.Integer),
+        sqlalchemy.Column("roundswon", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("roundslost", sqlalchemy.Integer, server_default="0"),
         
-        sqlalchemy.Column("wins", sqlalchemy.Integer),
-        sqlalchemy.Column("ties", sqlalchemy.Integer),
-        sqlalchemy.Column("losses", sqlalchemy.Integer),
+        sqlalchemy.Column("wins", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("ties", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("losses", sqlalchemy.Integer, server_default="0"),
     )
 
     def __init__(self, obj):

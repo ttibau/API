@@ -121,7 +121,7 @@ class Match(object):
             # data of incorrect user ids.
             players_obj = self.current_league.obj.players(user_ids=queue.players_list)
 
-            players_validate = await players_obj.validate_many()
+            players_validate = await players_obj.validate()
             if players_validate.error:
                 self.clear_cache(server_id=available_server.data)
                 
@@ -144,7 +144,7 @@ class Match(object):
                     return response(error="Param is required for type {}".format(players["options"]["type"]))
 
                 if players["options"]["type"] == "elo":
-                    players_elo = await players_obj.fetch_many(include_stats=True)
+                    players_elo = await players_obj.fetch(include_stats=True)
 
                     if not players_elo.error:
                         assign_elo = queue.captain.elo(players_elo)

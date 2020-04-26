@@ -56,15 +56,16 @@ class List(object):
     async def players(self):
         """ Pulls players """
 
-        query = """SELECT statistics.user_id, IFNULL(statistics.elo, 0) AS elo, IFNULL(statistics.kills, 0) AS kills, 
+        query = """SELECT IFNULL(statistics.elo, 0) AS elo, IFNULL(statistics.kills, 0) AS kills, 
                           IFNULL(statistics.deaths, 0) AS deaths, IFNULL(statistics.assists, 0) AS assists, IFNULL(statistics.shots, 0) AS shots, IFNULL(statistics.hits, 0) AS hits, IFNULL(statistics.damage, 0) AS damage, 
                           IFNULL(statistics.headshots, 0) AS headshots, IFNULL(statistics.roundswon, 0) AS roundswon, IFNULL(statistics.roundslost, 0) AS roundslost, IFNULL(statistics.wins, 0) AS wins, IFNULL(statistics.ties, 0) AS ties, 
-                          IFNULL(statistics.losses, 0) AS losses, users.steam_id, users.discord_id, users.name, users.pfp 
-                    FROM statistics
-                        INNER JOIN users
+                          IFNULL(statistics.losses, 0) AS losses, 
+                          users.steam_id, users.discord_id, users.name, users.pfp, users.user_id, users.joined
+                    FROM users
+                        INNER JOIN statistics
                                 ON users.user_id = statistics.user_id
-                    WHERE statistics.region = :region AND statistics.league_id = :league_id AND (statistics.user_id = :search OR users.steam_id = :search OR users.discord_id = :search
-                                                                                                OR users.name LIKE :search)
+                    WHERE users.region = :region AND users.league_id = :league_id AND (users.user_id = :search OR users.steam_id = :search OR users.discord_id = :search
+                                                                                       OR users.name LIKE :search)
                     ORDER BY statistics.elo {}
                     LIMIT :limit, :offset""".format(self.order_by)
 
@@ -76,6 +77,7 @@ class List(object):
                 "user_id": row["user_id"],
                 "steam_id": row["steam_id"],
                 "discord_id": row["discord_id"],
+                "joined": row["joined"],
                 "pfp": row["pfp"],
                 "ranking": {
                     "elo": row["elo"],

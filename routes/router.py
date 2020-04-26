@@ -5,7 +5,7 @@ from webargs_starlette import WebargsHTTPException
 
 from .league import League
 from .match import Match, MatchList
-from .player import PlayerList, PlayerFetch
+from .player import Player, PlayerList, PlayerFetch
 
 from .errors import Errors
 
@@ -18,6 +18,7 @@ class Routes(object):
             "match": Match,
             "match/list": MatchList,
 
+            "player": Player,
             "player/list": PlayerList,
             "player/fetch_many": PlayerFetch,
         }

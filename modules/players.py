@@ -4,14 +4,12 @@ class Players(object):
     def __init__(self, current_league, user_ids: list):
         self.current_league = current_league
 
-        self.user_ids = user_ids
-
         self.values = {
             "user_ids": user_ids, 
             "region": current_league.region, 
         }
 
-    async def fetch_many(self, include_stats=False):
+    async def fetch(self, include_stats=False):
         """ Selects given players. """
 
         values = list(self.values)
@@ -26,7 +24,7 @@ class Players(object):
                               IFNULL(statistics.roundslost, 0) AS roundslost, IFNULL(statistics.wins, 0) AS wins, 
                               IFNULL(statistics.ties, 0) AS ties, 
                               IFNULL(statistics.losses, 0) AS losses, 
-                              users.discord_id, users.name, users.pfp, users.user_id, users.steam_id
+                              users.discord_id, users.name, users.pfp, users.user_id, users.steam_id, users.joined
                     FROM users
                         LEFT JOIN statistics
                                 ON users.user_id = statistics.user_id AND statistics.league_id = :league_id 
@@ -48,6 +46,7 @@ class Players(object):
                 "user_id": row["user_id"],
                 "steam_id": row["steam_id"],
                 "discord_id": row["discord_id"],
+                "joined": row["joined"],
                 "pfp": row["pfp"],
             }
 
@@ -75,10 +74,10 @@ class Players(object):
 
         return response(data=rows_formatted)
 
-    async def validate_many(self):
+    async def validate(self):
         """ Validates given users & returns data of users who aren't valid. """
 
-        user_ids = list(self.user_ids)
+        user_ids = list(self.values["user_ids"])
 
         query = "SELECT user_id FROM users WHERE region = :region AND user_id IN (:user_ids)"
         
