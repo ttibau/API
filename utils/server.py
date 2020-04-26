@@ -17,25 +17,23 @@ class Server(object):
             and see if all those APIs support it.
         """
 
-        self.obj = obj
-
-        if self.obj.config.server["pterodactyl"]["enabled"]:
-            pterodactyl = aiodactyl.client(api_key=self.obj.config.server["key"], route=self.obj.config.server["pterodactyl"]["route"], session=self.obj.sessions.aiohttp)
+        if obj.config.server["pterodactyl"]["enabled"]:
+            pterodactyl = aiodactyl.client(api_key=obj.config.server["key"], route=obj.config.server["pterodactyl"]["route"], session=obj.sessions.aiohttp)
 
             self.client = pterodactyl.client
 
-        elif self.obj.config.server["pes"]["enabled"]:
-            pes = aiopes.client(api_key=self.obj.config.server["key"], session=self.obj.sessions.aiohttp)
+        elif obj.config.server["pes"]["enabled"]:
+            pes = aiopes.client(api_key=obj.config.server["key"], session=obj.sessions.aiohttp)
 
             self.client = pes.server
 
-        elif self.obj.config.server["dathost"]["enabled"]:
-            if "/" not in self.obj.config.server["key"]:
+        elif obj.config.server["dathost"]["enabled"]:
+            if "/" not in obj.config.server["key"]:
                 sys.exit("Dathost key isn't formatted correctly.")
 
-            username, password = self.obj.config.server["key"].split("/")
+            username, password = obj.config.server["key"].split("/")
 
-            dathost = aiodathost.client(username=username, password=password, session=self.obj.sessions.aiohttp)
+            dathost = aiodathost.client(username=username, password=password, session=obj.sessions.aiohttp)
 
             self.client = dathost.server
         else:
