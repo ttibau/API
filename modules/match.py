@@ -119,14 +119,14 @@ class Match(object):
             # Ensures valid user IDs are given
             # If errors returns response return with
             # data of incorrect user ids.
-            players_validate = await self.current_league.obj.players.validate_many(user_ids=queue.players_list)
+            players_validate = await self.current_league.obj.players().validate_many(user_ids=queue.players_list)
             if players_validate.error:
                 self.clear_cache(server_id=available_server.data)
                 
                 return players_validate
 
             if players["options"]["type"] == "random":
-                 assign_random = queue.player.random()
+                 assign_random = queue.captain.random()
 
                 # If none isn't returned
                 # something has errored.
@@ -142,10 +142,10 @@ class Match(object):
                     return response(error="Param is required for type {}".format(players["options"]["type"]))
 
                 if players["options"]["type"] == "elo":
-                    players_elo = await self.current_league.obj.players.fetch_many(user_ids=queue.players_list, include_stats=True)
+                    players_elo = await self.current_league.obj.players().fetch_many(user_ids=queue.players_list, include_stats=True)
 
                     if not players_elo.error:
-                        assign_elo = queue.player.elo(players_elo)
+                        assign_elo = queue.captain.elo(players_elo)
                         if assign_elo:
                             self.clear_cache(server_id=available_server.data)
 
@@ -168,7 +168,7 @@ class Match(object):
 
                          return response(error="Index is not within range")
 
-                    assign_given = queue.player.given(players["options"]["param"]["capt_1"], players["options"]["param"]["capt_2"])
+                    assign_given = queue.captain.given(players["options"]["param"]["capt_1"], players["options"]["param"]["capt_2"])
                     if assign_given:
                         self.clear_cache(server_id=available_server.data)
 

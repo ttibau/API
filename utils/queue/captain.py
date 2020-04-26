@@ -2,7 +2,7 @@ from utils.response import response
 
 from random import shuffle
 
-class Player(object):
+class Captain(object):
     def __init__(self, obj):
         self.obj = obj
 

@@ -4,7 +4,8 @@ from starlette.exceptions import HTTPException
 from webargs_starlette import WebargsHTTPException
 
 from .league import League
-from .match import Match
+from .match import Match, MatchList
+from .player import PlayerList, PlayerFetch
 
 from .errors import Errors
 
@@ -12,15 +13,20 @@ from .errors import Errors
 class Routes(object):
     def __init__(self, obj):
         routes = {
-            "/league": League,
-            "/match": Match,
+            "league": League,
+            
+            "match": Match,
+            "match/list": MatchList,
+
+            "player/list": PlayerList,
+            "player/fetch_many": PlayerFetch,
         }
 
         routes_init = []
         for route, route_obj in routes.items():
             route_obj.obj = obj
 
-            routes_init.append(Route(route, endpoint=route_obj))
+            routes_init.append(Route("/" + route, endpoint=route_obj))
         
         self.list = [
             Mount("/api", routes=routes_init),

@@ -1,7 +1,7 @@
 from utils.misc import Misc
 from utils.response import response
 
-from utils.queue.player import Player
+from utils.queue.captain import Captain
 from utils.queue.map import Map
 
 class Queue(object):
@@ -32,7 +32,7 @@ class Queue(object):
         self.data["details"]["team_1_name"] = Misc.sanitation(team_names["team_1"])
         self.data["details"]["team_2_name"] = Misc.sanitation(team_names["team_2"])
 
-        self.player = Player(obj=self)
+        self.captain = Captain(obj=self)
         self.map = Map(obj=self)
 
     def assign(self, user_id, team, captain):

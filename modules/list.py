@@ -30,10 +30,10 @@ class List(object):
                         ORDER BY timestamp {}
                         LIMIT :limit, :offset""".format(self.order_by)
         
-        return_data = []
-        return_data_append = return_data.append
+        rows_formatted = []
+        rows_formatted_append = rows_formatted.append
         async for row in self.current_league.obj.database.iterate(query=query, values=self.values):
-            return_data_append({
+            rows_formatted_append({
                 "match_id": row["match_id"],
                 "server_id": row["server_id"],
                 "map": row["map"],
@@ -51,7 +51,7 @@ class List(object):
                 },
             })
 
-        return response(data=return_data)
+        return response(data=rows_formatted)
 
     async def players(self):
         """ Pulls players """
@@ -68,10 +68,10 @@ class List(object):
                     ORDER BY statistics.elo {}
                     LIMIT :limit, :offset""".format(self.order_by)
 
-        return_data = []
-        return_data_append = return_data.append
+        rows_formatted = []
+        rows_formatted_append = rows_formatted.append
         async for row in self.current_league.obj.database.iterate(query=query, values=self.values):
-            return_data_append({
+            rows_formatted_append({
                 "name": row["name"],
                 "user_id": row["user_id"],
                 "steam_id": row["steam_id"],
@@ -96,4 +96,4 @@ class List(object):
                 },
             })
 
-        return response(data=return_data)
+        return response(data=rows_formatted)

@@ -1,7 +1,7 @@
 from utils.response import response
 
 from .match import Match
-from .players import Players
+from .player import Player
 from .list import List
 
 class League(object):
@@ -15,21 +15,21 @@ class League(object):
 
         return Match(current_league=self, match_id=match_id)
 
-    def list(self, limit: int = 25, offset: int = 0, search: str = "", desc: bool = True):
+    def list(self, limit: int, offset: int, desc: bool, search: str = ""):
         """ List Object. 
                 - limit.
                 - offset.
+                - desc.
                 - search.
         """
 
         return List(current_league=self, limit=limit, offset=offset,
                     search=search, desc=desc)
 
-    @property
-    def players(self):
+    def player(self, user_id=None):
         """ Players Object. """
 
-        return Players(current_league=self)
+        return Player(current_league=self, user_id=user_id)
 
     async def get_server(self):
         """ Finds a available server for the currnet league. """
