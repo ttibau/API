@@ -13,7 +13,7 @@ class Match(object):
 
         in_memory_cache = self.current_league.obj.in_memory_cache
 
-        if server_id and server_id in in_memory_cache.temp_server_blacklist:
+        if server_id in in_memory_cache.temp_server_blacklist:
             in_memory_cache.temp_server_blacklist.remove(server_id)
         
         if in_memory_cache.started_queues.get(self.current_league.league_id):
