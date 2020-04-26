@@ -12,7 +12,10 @@ class League(object):
         self.region = region
 
     def match(self, match_id=None):
-        """ Match Object. """
+        """ Match Object. 
+            
+            If create passes match_id will be updated to that matches match ID.
+        """
 
         return Match(current_league=self, match_id=match_id)
 
