@@ -53,7 +53,7 @@ Run ``run.py`` with python 3.
 
 ## Planned Features
 - Example website.
-- Example bot.
+- Example discord bot.
 - Setup guide.
 - Python API client.
 - Documentation.
