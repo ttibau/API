@@ -3,54 +3,37 @@ from utils.response import response
 class Player(object):
     def __init__(self, current_league, user_id):
         self.current_league = current_league
-        self.user_id = user_id
 
-    async def fetch_many(self, user_ids: list, include_stats=False):
-        """ Selects given players. """
+        self.values = {
+            "user_id": user_id, 
+            "region": current_league.region, 
+            "league_id": current_league.league_id
+        }
 
-        values = {"user_ids": user_ids, "region": self.current_league.region}
-
-        if include_stats:
-            query = """SELECT IFNULL(statistics.elo, 0) AS elo, 
-                              IFNULL(statistics.kills, 0) AS kills, 
-                              IFNULL(statistics.deaths, 0) AS deaths, IFNULL(statistics.assists, 0) AS assists, 
-                              IFNULL(statistics.shots, 0) AS shots, IFNULL(statistics.hits, 0) AS hits, 
-                              IFNULL(statistics.damage, 0) AS damage, 
-                              IFNULL(statistics.headshots, 0) AS headshots, IFNULL(statistics.roundswon, 0) AS roundswon, 
-                              IFNULL(statistics.roundslost, 0) AS roundslost, IFNULL(statistics.wins, 0) AS wins, 
-                              IFNULL(statistics.ties, 0) AS ties, 
-                              IFNULL(statistics.losses, 0) AS losses, 
-                              users.discord_id, users.name, users.pfp, users.user_id, users.steam_id
-                    FROM users
+    async def get(self):
+        query = """SELECT users.user_id, users.steam_id, users.discord_id, users.name, users.pfp, IFNULL(statistics.total_time, 0) AS total_time, IFNULL(statistics.elo, 0) AS elo, IFNULL(statistics.kills, 0) AS kills, 
+                        IFNULL(statistics.deaths, 0) AS deaths, IFNULL(statistics.assists, 0) AS assists, IFNULL(statistics.shots, 0) AS shots, IFNULL(statistics.hits, 0) AS hits, IFNULL(statistics.damage, 0) AS damage, 
+                        IFNULL(statistics.headshots, 0) AS headshots, IFNULL(statistics.roundswon, 0) AS roundswon, IFNULL(statistics.roundslost, 0) AS roundslost, IFNULL(statistics.wins, 0) AS wins, IFNULL(statistics.ties, 0) AS ties, 
+                        IFNULL(statistics.losses, 0) AS losses
+                        FROM users
                         LEFT JOIN statistics
-                                ON users.user_id = statistics.user_id AND statistics.league_id = :league_id 
-                    WHERE users.region = :region AND users.user_id IN (:user_ids)
-                    ORDER BY statistics.elo DESC"""
+                            ON statistics.user_id = users.user_id
+                    WHERE (users.steam_id = :user_id OR users.discord_id = :user_id OR users.user_id = :user_id) AND users.region = :region AND statistics.league_id = :league_id
+                """
 
-            values["league_id"] = self.current_league.league_id
-        else:
-            query = """SELECT discord_id, name, pfp, user_id, steam_id
-                       FROM users WHERE region = :region AND user_id IN (:user_ids)"""
-
-        rows_formatted = []
-        rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(query=query,
-                                                                  values=values):
-
-            player = {
+        row = await self.current_league.obj.database.fetch_one(query=query, values=self.values)
+        if row:
+            return response(data={
                 "name": row["name"],
                 "user_id": row["user_id"],
                 "steam_id": row["steam_id"],
                 "discord_id": row["discord_id"],
                 "pfp": row["pfp"],
-            }
-
-            if include_stats:
-                player["ranking"] = {
+                "total_time": row["total_time"],
+                "ranking": {
                     "elo": row["elo"],
-                }
-
-                player["statistics"] = {
+                },
+                "statistics": {
                     "kills": row["kills"],
                     "deaths": row["deaths"],
                     "assists": row["assists"],
@@ -63,25 +46,12 @@ class Player(object):
                     "wins": row["wins"],
                     "ties": row["ties"],
                     "losses": row["losses"],
-                }
-
-            rows_formatted_append(player)
-
-        return response(data=rows_formatted)
-
-    async def validate_many(self, user_ids: list):
-        """ Validates given users & returns data of users who aren't valid. """
-
-        user_ids = list(user_ids)
-
-        query = "SELECT user_id FROM users WHERE region = :region AND user_id IN (:user_ids)"
-        values = {"user_ids": user_ids, "region": self.current_league.region}
-        
-        async for row in self.current_league.obj.database.iterate(query=query,
-                                                                  values=values):
-            user_ids.remove(row["user_id"])
-
-        if len(user_ids) == 0:
-            return response(data="Valid user IDs")
+                }})
         else:
-            return response(data=user_ids, error="Invalid user IDs")
+            return response(error="No data")
+
+    async def reset(self):
+        pass
+
+    async def delete(self):
+        pass

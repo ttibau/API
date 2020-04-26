@@ -231,16 +231,6 @@ class Tables(object):
         sqlalchemy.Column("wins", sqlalchemy.Integer),
         sqlalchemy.Column("ties", sqlalchemy.Integer),
         sqlalchemy.Column("losses", sqlalchemy.Integer),
-        
-        sqlalchemy.Column("2k", sqlalchemy.Integer),
-        sqlalchemy.Column("3k", sqlalchemy.Integer),
-        sqlalchemy.Column("4k", sqlalchemy.Integer),
-        sqlalchemy.Column("5k", sqlalchemy.Integer),
-        
-        sqlalchemy.Column("1v2", sqlalchemy.Integer),
-        sqlalchemy.Column("1v3", sqlalchemy.Integer),
-        sqlalchemy.Column("1v4", sqlalchemy.Integer),
-        sqlalchemy.Column("1v5", sqlalchemy.Integer),
     )
 
     def __init__(self, obj):

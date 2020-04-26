@@ -5,6 +5,9 @@ from webargs_starlette import use_args
 
 from utils.responder import responder
 
+class Player(HTTPEndpoint):
+    pass
+
 class PlayerList(HTTPEndpoint):
     @use_args({"limit": fields.Integer(missing=25, min=1, max=50), 
                "offset": fields.Integer(missing=25, min=1, max=50),
