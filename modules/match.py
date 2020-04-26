@@ -201,6 +201,8 @@ class Match(object):
             if queue_create:
                 return queue_create
 
+            self.match_id = queue.match_id
+
             # Server startup push into a task to run in the backgroud.
             server_task = BackgroundTask(self.current_league.obj.sessions.dactyl.client(server_id=available_server.data).start)
 
