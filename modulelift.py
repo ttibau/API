@@ -28,7 +28,7 @@ class client:
     sessions = Sessions
 
     def __init__(self):
-        """ This client assumes the developer has taken the initiative to correctly initialize the need sessions. """
+        """ This client assumes the developer has taken the initiative to correctly initialize the needed sessions. """
 
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)

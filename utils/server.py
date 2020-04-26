@@ -20,12 +20,12 @@ class Server(object):
         self.obj = obj
 
         if self.obj.config.server["pterodactyl"]["enabled"]:
-            pterodactyl = aiodactyl.client(api_key=self.obj.config.server["key"], route=self.obj.config.server["route"], session=self.obj.session.aiohttp)
+            pterodactyl = aiodactyl.client(api_key=self.obj.config.server["key"], route=self.obj.config.server["pterodactyl"]["route"], session=self.obj.sessions.aiohttp)
 
             self.client = pterodactyl.client
 
         elif self.obj.config.server["pes"]["enabled"]:
-            pes = aiopes.client(api_key=self.obj.config.server["key"], session=self.obj.session.aiohttp)
+            pes = aiopes.client(api_key=self.obj.config.server["key"], session=self.obj.sessions.aiohttp)
 
             self.client = pes.server
 
@@ -35,7 +35,7 @@ class Server(object):
 
             username, password = self.obj.config.server["key"].split("/")
 
-            dathost = aiodathost.client(username=username, password=password, session=self.obj.session.aiohttp)
+            dathost = aiodathost.client(username=username, password=password, session=self.obj.sessions.aiohttp)
 
             self.client = dathost.server
         else:
