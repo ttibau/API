@@ -18,7 +18,8 @@ class Server(object):
         """
 
         if obj.config.server["pterodactyl"]["enabled"]:
-            pterodactyl = aiodactyl.client(api_key=obj.config.server["key"], route=obj.config.server["pterodactyl"]["route"], session=obj.sessions.aiohttp)
+            pterodactyl = aiodactyl.client(api_key=obj.config.server["key"], route=obj.config.server["pterodactyl"]["route"], 
+                                           session=obj.sessions.aiohttp)
 
             self.client = pterodactyl.client
 
