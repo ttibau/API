@@ -6,6 +6,17 @@ import sys
 
 class Server(object):
     def __init__(self, obj):
+        """ Working out what server provider we are using.
+            
+            For safetly reason only use identical functions what all given wrappers provide. 
+
+            Before adding any new functionality, look over 
+            https://github.com/WardPearce/aiodactyl
+            https://github.com/WardPearce/aiopes
+            https://github.com/WardPearce/aiodathost
+            and see if all those APIs support it.
+        """
+
         self.obj = obj
 
         if self.obj.config.server["pterodactyl"]["enabled"]:
