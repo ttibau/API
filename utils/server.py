@@ -11,9 +11,9 @@ class Server(object):
             For safetly reason only use identical functions what all given wrappers provide. 
 
             Before adding any new functionality, look over 
-            https://github.com/WardPearce/aiodactyl
-            https://github.com/WardPearce/aiopes
-            https://github.com/WardPearce/aiodathost
+                https://github.com/WardPearce/aiodactyl
+                https://github.com/WardPearce/aiopes
+                https://github.com/WardPearce/aiodathost
             and see if all those APIs support it.
         """
 
