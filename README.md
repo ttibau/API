@@ -13,6 +13,17 @@ ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of 
 
 The idea behind ModuleLIFT is to create a powerful API for creating & monitoring PUGs. Currently ModuleLIFT is just a REST API but Graphql integration is planned.
 
+# Why use ModuleLIFT API?
+- We provide support for multiple server hosts, including [Pterodactyl](https://pterodactyl.io/) (self hosting), [Dathost](https://dathost.net/) & [Pacifices Cloud](https://www.pacifices.cloud/).
+- Full featured API, want to write your own completely custom PUG / Tournament system? Well ModuleLIFT wont limit you.
+- Region support, make it easy to write a system what supports players from different regions.
+- League support, own multiple communities or want to use ModuleLIFT API for your Business? Well you don't have to bother setting up multiple instances of this script.
+- API Key permissions, grant & deny different API Keys different access levels to routes and leagues.
+- Discord & Steam integration, Discord based PUGGing systems can easily be implemented using this system. 
+- Alt detection, When users login there IP is compared to already existing users & also uses [proxycheck.io](https://proxycheck.io/) to block VPNs.
+- Advanced ban system, ModuleLIFT assigns an reputation value to each player, the more they get banned the worse there "rep" becomes resulting in longer bans, staff can also decide the severity of the ban what causes more rep loss.
+- Scalable, ModuleLIFT is written in Python Starlette with good coding practices what ensure this application scales well.
+
 ## Index
 - [Deploying](#deploying)
 - [Planned Features](#planned-features)
