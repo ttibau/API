@@ -27,7 +27,6 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 ## Index
 - [Deploying](#deploying)
 - [Planned Features](#planned-features)
-- [Planned Endpoints](#planned-endpoints)
 - Documentation is planned.
 
 ## Deploying
