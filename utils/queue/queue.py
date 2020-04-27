@@ -124,4 +124,4 @@ class Queue:
 
         self.obj.match_id = self.match_id
 
-        return response(data=await self.obj.scoreboard())
+        return await self.obj.scoreboard()
