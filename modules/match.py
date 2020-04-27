@@ -243,10 +243,10 @@ class Match(object):
                           sb.score, sb.disconnected,
                           users.discord_id, users.name, users.pfp,
                           users.steam_id, users.joined
-                    FROM scoreboard AS sb
+                   FROM scoreboard AS sb
                         LEFT JOIN users
                             ON users.user_id = sb.user_id
-                    WHERE sb.match_id = :match_id"""
+                   WHERE sb.match_id = :match_id"""
             
         values = {"match_id": self.match_id,}
 
