@@ -194,6 +194,7 @@ class Tables(object):
         sqlalchemy.Column("team_2_score", sqlalchemy.Integer, server_default="0"),
         sqlalchemy.Column("team_1_side", sqlalchemy.Integer, server_default="0"),
         sqlalchemy.Column("team_2_side", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("record_statistics", sqlalchemy.Boolean, server_default="1"),
     )
 
     ## Team Codes
