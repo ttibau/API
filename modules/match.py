@@ -2,6 +2,7 @@ from utils.response import response
 from utils.queue.queue import Queue
 
 from models.match import MatchModel
+from models.scoreboard import ScoreboardModel
 
 from starlette.background import BackgroundTask
 
@@ -231,6 +232,37 @@ class Match(object):
             return response(data=MatchModel(row).full)
         else:
             return response(error="No match with that ID")
+
+    async def scoreboard(self):
+        """ Match scoreboard. """
+
+        match = self.get()
+        if match.error:
+            return match
+
+        # Don't need to validate region or league
+        # because self.get() will fail if isn't
+        # valid already.
+        query = """SELECT sb.user_id, sb.captain, sb.team, sb.alive, 
+                          sb.ping, sb.kills, sb.headshots, sb.assists,
+                          sb.deaths, sb.shots_fired, sb.shots_hit, sb.mvps
+                          sb.score, sb.disconnected,
+                          users.discord_id, users.name, 
+                          users.pfp, users.user_id, 
+                          users.steam_id, users.joined
+                    FROM scoreboard AS sb
+                        LEFT JOIN users
+                            ON users.user_id = sb.user_id
+                    WHERE sb.match_id = :match_id"""
+            
+        values = {"match_id": self.match_id,}
+
+        players = []
+        players_append = players.append
+        async for row in self.current_league.obj.database.iterate(query=query, values=values):
+            players_append({**row})
+
+        return response(data=ScoreboardModel(match=match, players=players).full)
 
     async def end(self):
         """ Ends given match. """
