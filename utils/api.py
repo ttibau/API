@@ -7,7 +7,7 @@ class Api(object):
         self.obj = obj
 
     async def validate(self, api_key, league_id, request_path):
-        """ Validates the given request depending on the 
+        """ Validates the given request depending on the
             api key, league id & the access type
                 - api_key, UUID api key.
                 - league_id, 2 to 4 letter league ID.
@@ -21,7 +21,8 @@ class Api(object):
                             ON api_paths.path_id = api_permissions.path_id
                    WHERE api_keys.key = :api_key
                          AND api_keys.league_id = :league_id
-                         AND api_permissions.access_level >= api_keys.access_level 
+                         AND api_permissions.access_level
+                             >= api_keys.access_level
                          AND api_paths.path = :path"""
 
         row = await self.obj.database.fetch_val(query=query, values={

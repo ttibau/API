@@ -651,7 +651,7 @@ class Tables(object):
             server_default="0"
         ),
         sqlalchemy.Column(
-            "losses", 
+            "losses",
             sqlalchemy.Integer,
             server_default="0"
         ),

@@ -1,4 +1,4 @@
-from starlette.routing import Route, Mount, WebSocketRoute
+from starlette.routing import Route, Mount
 from starlette.exceptions import HTTPException
 
 from webargs_starlette import WebargsHTTPException
