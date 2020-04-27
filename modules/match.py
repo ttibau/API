@@ -266,6 +266,7 @@ class Match(object):
         query = "UPDATE scoreboard_total SET status = 0 WHERE match_id = :match_id"
         await self.current_league.obj.database.execute(query=query, values=values)
 
+        # We just delete map pool for the given match.
         query = "DELETE FROM map_pool WHERE match_id = :match_id"
         await self.current_league.obj.database.execute(query=query, values=values)
 
