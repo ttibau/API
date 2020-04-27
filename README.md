@@ -62,7 +62,9 @@ Run ``run.py`` with python 3.
 
 ## Contributions
 ### Code Style
-This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 120 character line limits. I recommend using the VS Code extension [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter).
+This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 120 character line limits.
+
+I recommend installing [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter) if you use VS Code.
 
 ### Branches
 Create a branch if you're working on an issue with the issue number and name like so: `100_Title-Separated-By-Dashes`.
