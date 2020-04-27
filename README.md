@@ -23,6 +23,8 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 - Alt detection, When users login there IP is compared to already existing users & also uses [proxycheck.io](https://proxycheck.io/) to block VPNs.
 - Advanced ban system, ModuleLIFT assigns a reputation value to each player, the more they get banned the worse there "rep" becomes resulting in longer bans, staff can also decide the severity of the ban what causes more rep loss.
 - Scalable, ModuleLIFT is written in Python Starlette with good coding practices what ensure this application scales well.
+- Elo system, measure how skillful players are.
+- Statistics & Match recording.
 
 ## Index
 - [Deploying](#deploying)
