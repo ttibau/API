@@ -4,8 +4,8 @@ import aiodathost
 
 import sys
 
-class Server(object):
-    def __init__(self, obj):
+class Server:
+    def find_client(obj):
         """ Working out what server provider we are using.
             
             For safetly reason only use identical functions what all given wrappers provide. 
@@ -21,12 +21,12 @@ class Server(object):
             pterodactyl = aiodactyl.client(api_key=obj.config.server["key"], route=obj.config.server["pterodactyl"]["route"], 
                                            session=obj.sessions.aiohttp)
 
-            self.client = pterodactyl.client
+            return pterodactyl.client
 
         elif obj.config.server["pes"]["enabled"]:
             pes = aiopes.client(api_key=obj.config.server["key"], session=obj.sessions.aiohttp)
 
-            self.client = pes.server
+            return pes.server
 
         elif obj.config.server["dathost"]["enabled"]:
             if "/" not in obj.config.server["key"]:
@@ -36,6 +36,6 @@ class Server(object):
 
             dathost = aiodathost.client(username=username, password=password, session=obj.sessions.aiohttp)
 
-            self.client = dathost.server
+            return dathost.server
         else:
             sys.exit("No server provider given.")
