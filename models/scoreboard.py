@@ -11,7 +11,7 @@ class ScoreboardModel:
 
         return {
             **self.minimal,
-            **self.players,
+            "players": self.players,
         }
 
     @property
