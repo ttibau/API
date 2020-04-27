@@ -26,7 +26,7 @@ class List(object):
         query = """SELECT match_id, timestamp, status, map, server_id,
                           team_1_name, team_2_name, team_1_score, team_2_score,
                           team_1_side, team_2_side,
-                          map_order, player_order
+                          map_order, player_order, record_statistics
                     FROM scoreboard_total
                     WHERE region = :region AND league_id = :league_id
                         AND (timestamp LIKE :search OR team_1_name LIKE :search OR team_2_name LIKE :search

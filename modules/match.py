@@ -211,7 +211,7 @@ class Match(object):
 
         query = """SELECT server_id, map_order, player_order, timestamp, status,
                           map, team_1_name, team_2_name, team_1_score, team_2_score, 
-                          team_1_side, team_2_side
+                          team_1_side, team_2_side, record_statistics
                    FROM scoreboard_total
                    WHERE match_id = :match_id AND league_id = :league_id AND region = :region"""
         values = {

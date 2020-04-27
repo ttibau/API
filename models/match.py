@@ -24,6 +24,7 @@ class MatchModel:
                 "timestamp": self.data["timestamp"],
                 "map_order": self.data["map_order"],
                 "player_order": self.data["player_order"],
+                "record_statistics": self.data["record_statistics"] == 1,
         }
 
     @property
