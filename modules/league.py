@@ -5,6 +5,7 @@ from .player import Player
 from .players import Players
 from .list import List
 
+
 class League(object):
     def __init__(self, obj, league_id, region):
         self.obj = obj
@@ -12,15 +13,14 @@ class League(object):
         self.region = region
 
     def match(self, match_id=None):
-        """ Match Object. 
-            
+        """ Match Object.
             If create passes match_id will be updated to that matches match ID.
         """
 
         return Match(current_league=self, match_id=match_id)
 
     def list(self, limit: int, offset: int, desc: bool, search: str = ""):
-        """ List Object. 
+        """ List Object.
                 - limit.
                 - offset.
                 - desc.
@@ -42,15 +42,17 @@ class League(object):
 
     async def get_server(self):
         """ Finds a available server for the currnet league. """
-        
+
         if not self.obj.config.pterodactyl["regions"].get(self.region):
             return response(error="No server IDs for that region")
 
-        region_servers = list(self.obj.config.pterodactyl["regions"][self.region])
+        region_servers = list(
+            self.obj.config.pterodactyl["regions"][self.region]
+        )
         region_servers_remove = region_servers.remove
 
-        query = """SELECT server_id 
-                   FROM scoreboard_total 
+        query = """SELECT server_id
+                   FROM scoreboard_total
                    WHERE server_id IN :server_ids AND status != 0"""
         values = {"server_ids": region_servers}
 
@@ -71,19 +73,24 @@ class League(object):
     async def queue_allowed(self):
         """ Checks if over the active queue limit. """
 
-        query = """SELECT COUNT(score.status) AS active_queues, 
+        query = """SELECT COUNT(score.status) AS active_queues,
                           IFNULL(info.queue_limit, 0) AS queue_limit
-                   FROM scoreboard_total AS score 
+                   FROM scoreboard_total AS score
                     INNER JOIN league_info AS info
                         ON score.league_id = info.league_id
                    WHERE score.status != 0 AND score.league_id = :league_id"""
-        row = await self.obj.database.fetch_one(query=query, values={"league_id": self.league_id})
+        row = await self.obj.database.fetch_one(
+            query=query,
+            values={"league_id": self.league_id}
+        )
 
         if row:
-            # Ensures users can't create another queue when another queue is being created
+            # Ensures users can't create another
+            # queue when another queue is being created
             # what would put them over the queue limit.
             if self.obj.in_memory_cache.started_queues.get(self.league_id):
-                active_queues = row["active_queues"] + self.obj.in_memory_cache.started_queues[self.league_id]
+                active_queues = row["active_queues"] \
+                     + self.obj.in_memory_cache.started_queues[self.league_id]
             else:
                 active_queues = row["active_queues"]
 
@@ -94,15 +101,15 @@ class League(object):
     async def details(self):
         """ Gets basic details of league. """
 
-        row = await self.obj.database.fetch_one(query="""SELECT league_name, league_website, 
-                                                                websocket_endpoint, queue_limit,
-                                                                league_id, discord_prefix,
-                                                                sm_message_prefix, knife_round,
-                                                                pause, surrender,
-                                                                warmup_commands_only, captain_choice_time
-                                                         FROM league_info WHERE league_id = :league_id""",
-
-                                                values={"league_id": self.league_id})
+        row = await self.obj.database.fetch_one(
+            query="""SELECT league_name, league_website,
+                            websocket_endpoint, queue_limit,
+                            league_id, discord_prefix,
+                            sm_message_prefix, knife_round,
+                            pause, surrender,
+                            warmup_commands_only, captain_choice_time
+                     FROM league_info WHERE league_id = :league_id""",
+            values={"league_id": self.league_id, })
 
         if row:
             formatted_row = {**row}
@@ -111,7 +118,8 @@ class League(object):
                 formatted_row["pause"] = False
 
             formatted_row["surrender"] = formatted_row["surrender"] == 1
-            formatted_row["warmup_commands_only"] = formatted_row["warmup_commands_only"] == 1
+            formatted_row["warmup_commands_only"] = \
+                formatted_row["warmup_commands_only"] == 1
             formatted_row["knife_round"] = formatted_row["knife_round"] == 1
 
             return response(data=formatted_row)
@@ -133,7 +141,7 @@ class League(object):
                         item = 0
 
                 values[key] = item
-                
+
                 # Don't worry this isn't
                 # injecting any values.
                 query += "{}={},".format(key, ":"+key)

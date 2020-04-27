@@ -1,5 +1,6 @@
 from models.match import MatchModel
 
+
 class ScoreboardModel:
     def __init__(self, match: dict = None, players: dict = None):
         self.match = match
@@ -20,7 +21,7 @@ class ScoreboardModel:
 
         if not self.match:
             raise Exception("Match dict not passed.")
-        
+
         return MatchModel(self.match).full
 
     @property

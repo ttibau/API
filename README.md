@@ -29,6 +29,7 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 ## Index
 - [Deploying](#deploying)
 - [Planned Features](#planned-features)
+- [Contributions](#Contributions)
 - Documentation is planned.
 
 ## Deploying
@@ -58,3 +59,10 @@ Run ``run.py`` with python 3.
 - Setup guide.
 - Python API client.
 - Documentation.
+
+## Contributions
+### Code Style
+This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 120 character line limits. I recommend using the VS Code extension [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter).
+
+### Branches
+Create a branch if you're working on an issue with the issue number and name like so: `100_Title-Separated-By-Dashes`.

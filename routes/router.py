@@ -9,12 +9,13 @@ from .player import Player, PlayerList, PlayerFetch
 
 from .errors import Errors
 
+
 # Routing
 class Routes(object):
     def __init__(self, obj):
         routes = {
             "league": League,
-            
+
             "match": Match,
             "match/list": MatchList,
 
@@ -28,7 +29,7 @@ class Routes(object):
             route_obj.obj = obj
 
             routes_init.append(Route("/" + route, endpoint=route_obj))
-        
+
         self.list = [
             Mount("/api", routes=routes_init),
         ]

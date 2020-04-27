@@ -13,14 +13,18 @@ from utils.server import Server
 
 from modules.league import League
 
+
 class client:
     config = Config
 
-    database_url = DatabaseURL("mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(config.database["username"], 
-                                                                               config.database["password"], 
-                                                                               config.database["servername"], 
-                                                                               config.database["port"], 
-                                                                               config.database["dbname"]))
+    database_url = DatabaseURL(
+        "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
+                                                config.database["username"],
+                                                config.database["password"],
+                                                config.database["servername"],
+                                                config.database["port"],
+                                                config.database["dbname"])
+    )
 
     database = Database(database_url)
 
@@ -28,7 +32,9 @@ class client:
     sessions = Sessions
 
     def __init__(self):
-        """ This client assumes the developer has taken the initiative to correctly initialize the needed sessions. """
+        """ This client assumes the developer has taken
+            the initiative to correctly initialize the needed sessions.
+        """
 
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)
@@ -36,9 +42,12 @@ class client:
         self.tables = Tables(obj=self)
 
     def server_init(self):
-        """ Should be ran within context of the loop after the aiohttp session is created. """
+        """ Should be ran within context of the
+            loop after the aiohttp session is created.
+        """
 
         self.server = Server.find_client(obj=self)
 
     def league(self, league_id, region):
+
         return League(obj=self, league_id=league_id, region=region)

@@ -4,13 +4,15 @@ import aiodathost
 
 import sys
 
+
 class Server:
     def find_client(obj):
         """ Working out what server provider we are using.
-            
-            For safetly reason only use identical functions what all given wrappers provide. 
 
-            Before adding any new functionality, look over 
+            For safetly reason only use identical
+            functions what all given wrappers provide.
+
+            Before adding any new functionality, look over
                 https://github.com/WardPearce/aiodactyl
                 https://github.com/WardPearce/aiopes
                 https://github.com/WardPearce/aiodathost
@@ -18,13 +20,19 @@ class Server:
         """
 
         if obj.config.server["pterodactyl"]["enabled"]:
-            pterodactyl = aiodactyl.client(api_key=obj.config.server["key"], route=obj.config.server["pterodactyl"]["route"], 
-                                           session=obj.sessions.aiohttp)
+            pterodactyl = aiodactyl.client(
+                api_key=obj.config.server["key"],
+                route=obj.config.server["pterodactyl"]["route"],
+                session=obj.sessions.aiohttp
+            )
 
             return pterodactyl.client
 
         elif obj.config.server["pes"]["enabled"]:
-            pes = aiopes.client(api_key=obj.config.server["key"], session=obj.sessions.aiohttp)
+            pes = aiopes.client(
+                api_key=obj.config.server["key"],
+                session=obj.sessions.aiohttp
+            )
 
             return pes.server
 
@@ -34,7 +42,11 @@ class Server:
 
             username, password = obj.config.server["key"].split("/")
 
-            dathost = aiodathost.client(username=username, password=password, session=obj.sessions.aiohttp)
+            dathost = aiodathost.client(
+                username=username,
+                password=password,
+                session=obj.sessions.aiohttp
+            )
 
             return dathost.server
         else:

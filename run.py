@@ -11,12 +11,12 @@ import modulelift
 
 print("-"*62)
 
-print("  __  __           _       _      _      _____ ______ _______ ")
-print(" |  \/  |         | |     | |    | |    |_   _|  ____|__   __|")
-print(" | \  / | ___   __| |_   _| | ___| |      | | | |__     | |   ")
-print(" | |\/| |/ _ \ / _` | | | | |/ _ \ |      | | |  __|    | |   ")
-print(" | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |   ")
-print(" |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|   ")
+print(r"  __  __           _       _      _      _____ ______ _______ ")
+print(r" |  \/  |         | |     | |    | |    |_   _|  ____|__   __|")
+print(r" | \  / | ___   __| |_   _| | ___| |      | | | |__     | |   ")
+print(r" | |\/| |/ _ \ / _` | | | | |/ _ \ |      | | |  __|    | |   ")
+print(r" | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |   ")
+print(r" |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|   ")
 print("\nCreated by the ModuleLFIT team.")
 print("https://github.com/ModuleLIFT\n")
 
@@ -28,12 +28,15 @@ ml = modulelift.client()
 if len(ml.config.master_key) < 48 and not ml.config.debug:
     sys.exit("Master key must be 48 characters or longer.")
 
+
 async def startup_task():
     ml.sessions.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
     # Initializes our wrapper for different providers.
     ml.server_init()
-    ml.sessions.proxy = proxy_io(api_key=ml.config.proxyio["key"], session=ml.sessions.aiohttp)
+    ml.sessions.proxy = proxy_io(api_key=ml.config.proxyio["key"],
+                                 session=ml.sessions.aiohttp)
     await ml.database.connect()
+
 
 async def shutdown_task():
     await ml.sessions.aiohttp.close()

@@ -2,6 +2,7 @@ from starlette.middleware import Middleware
 
 from .api_key import APIKeyValidation
 
+
 class Middlewares(object):
     def __init__(self, obj):
         middlewares = [

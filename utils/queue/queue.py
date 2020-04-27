@@ -4,6 +4,7 @@ from utils.response import response
 from utils.queue.captain import Captain
 from utils.queue.map import Map
 
+
 class Queue:
     captains = {"team_1": None, "team_2": None}
 
@@ -14,7 +15,7 @@ class Queue:
 
     def __init__(self, players, maps, team_names, server_id, obj):
         self.obj = obj
-        
+
         current_league = self.obj.current_league
 
         self.match_id = Misc.uuid4()
@@ -52,8 +53,10 @@ class Queue:
         })
 
     async def create(self):
-        """ Assigns players & captains to given team & also inserts the data into the database. """
-        
+        """ Assigns players & captains to given
+            team & also inserts the data into the database.
+        """
+
         if self.maps["options"]["type"] == ("random" or "given"):
             map_pool = None
 
@@ -63,7 +66,9 @@ class Queue:
                 self.details["status"] = 1
             else:
                 # Setting match as player selection stage
-                self.details["player_order"] = self.selection_types[self.players["options"]["selection"]]
+                self.details["player_order"] = self.selection_types[
+                    self.players["options"]["selection"]
+                ]
                 self.details["status"] = 3
         else:
             map_pool = []
@@ -80,7 +85,9 @@ class Queue:
                 self.details["status"] = 2
             else:
                 # Setting match as player selection stage
-                self.details["player_order"] = self.selection_types[self.players["options"]["selection"]]
+                self.details["player_order"] = self.selection_types[
+                    self.players["options"]["selection"]
+                ]
                 self.details["status"] = 3
 
         if self.players["options"]["record_statistics"]:
@@ -90,28 +97,30 @@ class Queue:
 
         for user_id, team in self.players["list"].items():
             if team != 1 or team != 2 or team is not None:
-                return response(error="{} isn't a valid team side".format(team))
+                return response(error="{} isn't a valid team side".format(
+                    team
+                ))
 
             if team is None:
                 team = 0
 
             if self.captains["team_1"].get(user_id) or \
-                self.captains["team_2"].get(user_id):
+                    self.captains["team_2"].get(user_id):
                 captain = 1
             else:
                 captain = 0
 
             self.assign(user_id=user_id, team=team, captain=captain)
 
-        query = """INSERT INTO scoreboard_total (match_id, league_id, 
-                                                 status, server_id, 
+        query = """INSERT INTO scoreboard_total (match_id, league_id,
+                                                 status, server_id,
                                                  region, team_1_name,
                                                  team_2_name, map,
                                                  map_order,
                                                  player_order,
-                                                 record_statistics) 
-                                        VALUES  (:match_id, :league_id, 
-                                                 :status, :server_id, 
+                                                 record_statistics)
+                                        VALUES  (:match_id, :league_id,
+                                                 :status, :server_id,
                                                  :region, :team_1_name,
                                                  :team_2_name, :map,
                                                  :map_order,
@@ -119,14 +128,15 @@ class Queue:
                                                  :record_statistics)"""
         await self.database.execute(query=query, values=self.details)
 
-        query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
-                                    VALUES (:match_id, :user_id, :captain, :team)"""
+        query = """INSERT INTO scoreboard (match_id, user_id, captain, team)
+                   VALUES (:match_id, :user_id, :captain, :team)"""
         await self.database.execute_many(query=query, values=self.users)
 
         if map_pool:
             # If map type is random or given we don't
             # need a map pool.
-            query = "INSERT INTO map_pool (match_id, map) VALUES (:match_id, :map)"
+            query = """INSERT INTO map_pool (match_id, map)
+                                     VALUES (:match_id, :map)"""
             await self.database.execute_many(query=query, values=map_pool)
 
         self.obj.match_id = self.match_id

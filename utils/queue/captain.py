@@ -2,15 +2,20 @@ from utils.response import response
 
 from random import shuffle
 
+
 class Captain(object):
     def __init__(self, obj):
         self.obj = obj
 
-    def given(self, capt_1_index, capt_2_index):
+    def given(self):
         """ Assigns the given captins. """
 
+        capt_1_index = self.obj.players["options"]["param"]["capt_1"]
+        capt_2_index = self.obj.players["options"]["param"]["capt_2"]
+
         if self.obj.players["options"]["assiged_teams"]:
-            if self.obj.players[self.obj.players_list[capt_1_index]] == self.obj.players[self.obj.players_list[capt_2_index]]:
+            if self.obj.players[self.obj.players_list[capt_1_index]] == \
+                    self.obj.players[self.obj.players_list[capt_2_index]]:
                 return response(error="Both captains are on the same team")
 
         self.obj.captains["team_1"] = self.obj.players_list[capt_1_index]
@@ -27,10 +32,13 @@ class Captain(object):
                      and not self.obj.captains["team_1"].get(row["user_id"]):
                     self.obj.captains["team_1"] = row["user_id"]
                 elif self.obj.players[row["user_id"]] == 2 \
-                 and not self.obj.captains["team_2"].get(row["user_id"]):
+                        and not self.obj.captains["team_2"].get(
+                            row["user_id"]):
                     self.obj.captains["team_2"] = row["user_id"]
                 elif self.obj.players[row["user_id"]] != (1 or 2):
-                    return response(error="{} should be None, 1 or 2".format(self.obj.players[row["user_id"]]))
+                    return response(error="{} should be None, 1 or 2".format(
+                        self.obj.players[row["user_id"]]
+                    ))
                 else:
                     break
         else:
@@ -51,12 +59,14 @@ class Captain(object):
                     break
             else:
                 if self.obj.players["list"][user_id] == 1 \
-                    and not self.obj.captains["team_1"]:
+                        and not self.obj.captains["team_1"]:
                     self.obj.captains["team_1"] = user_id
                 elif self.obj.players["list"][user_id] == 2 \
-                    and not self.obj.captains["team_2"]:
+                        and not self.obj.captains["team_2"]:
                     self.obj.captains["team_2"] = user_id
                 elif self.obj.players["list"][user_id] != (1 or 2):
-                    return response(error="{} should be None, 1 or 2".format(self.obj.players["list"][user_id]))
+                    return response(error="{} should be None, 1 or 2".format(
+                        self.obj.players["list"][user_id]
+                    ))
                 else:
                     break

@@ -15,7 +15,8 @@ class Config(object):
 
     # Anyone with access to this key
     # can bypass all authorization.
-    # Should be something generated like "import secrets; print(secrets.token_urlsafe(48))"
+    # Should be something generated like
+    # "import secrets; print(secrets.token_urlsafe(48))"
     master_key = "placeholder"
 
     cache = {

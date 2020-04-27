@@ -1,5 +1,6 @@
 from starlette.responses import JSONResponse
 
+
 class responder:
     def render(response: object):
         """ Renders API json
