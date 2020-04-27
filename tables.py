@@ -33,6 +33,28 @@ class Tables(object):
         sqlalchemy.Column("access_level", sqlalchemy.Integer),
     )
 
+    sqlalchemy.Table(
+        "elo_settings",
+        metadata,
+        sqlalchemy.Column("elo_id", sqlalchemy.Integer, primary_key=True, autoincrement=True),
+
+        sqlalchemy.Column("kill", sqlalchemy.Float),
+        sqlalchemy.Column("death", sqlalchemy.Float),
+
+        sqlalchemy.Column("round_won", sqlalchemy.Float),
+        sqlalchemy.Column("round_lost", sqlalchemy.Float),
+
+        sqlalchemy.Column("match_won", sqlalchemy.Float),
+        sqlalchemy.Column("match_lost", sqlalchemy.Float),
+
+        sqlalchemy.Column("assist", sqlalchemy.Float),
+
+        sqlalchemy.Column("mate_blined", sqlalchemy.Float),
+        sqlalchemy.Column("mate_hed", sqlalchemy.Float),
+        sqlalchemy.Column("mate_infernod", sqlalchemy.Float),
+        sqlalchemy.Column("mate_killed", sqlalchemy.Float),
+    )
+
     # Basic league info
     # knife_round
     ## 0 - Disabled
@@ -66,6 +88,8 @@ class Tables(object):
         sqlalchemy.Column("surrender", sqlalchemy.Integer),
         sqlalchemy.Column("warmup_commands_only", sqlalchemy.Integer),
         sqlalchemy.Column("captain_choice_time", sqlalchemy.Integer),
+
+        sqlalchemy.Column("elo_id", sqlalchemy.Integer, sqlalchemy.ForeignKey("elo_settings.elo_id")),
     )
 
     # League Discords
@@ -219,7 +243,7 @@ class Tables(object):
         sqlalchemy.Column("last_connected", sqlalchemy.types.TIMESTAMP, server_default=sqlalchemy.text("CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()")),
         sqlalchemy.Column("total_time", sqlalchemy.Integer, server_default="0"),
 
-        sqlalchemy.Column("elo", sqlalchemy.Integer, server_default="0"),
+        sqlalchemy.Column("elo", sqlalchemy.Float, server_default="0"),
 
         sqlalchemy.Column("kills", sqlalchemy.Integer, server_default="0"),
         sqlalchemy.Column("deaths", sqlalchemy.Integer, server_default="0"),
