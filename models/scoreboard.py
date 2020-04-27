@@ -10,7 +10,7 @@ class ScoreboardModel:
         """ Formats and returns full response for scoreboard. """
 
         return {
-            **self.match,
+            **self.minimal,
             **self.players,
         }
 
