@@ -14,7 +14,7 @@ class Players(object):
     async def fetch(self, include_stats=False):
         """ Selects given players. """
 
-        values = list(self.values)
+        values = dict(self.values)
 
         if include_stats:
             query = """SELECT IFNULL(statistics.elo, 0) AS elo, 
@@ -32,7 +32,7 @@ class Players(object):
                                 ON users.user_id = statistics.user_id AND statistics.league_id = :league_id 
                     WHERE users.region = :region AND users.user_id IN (:user_ids)
                     ORDER BY statistics.elo DESC"""
-
+                    
             values["league_id"] = self.current_league.league_id
         else:
             query = """SELECT discord_id, name, pfp, user_id, steam_id, joined
