@@ -195,8 +195,6 @@ class Match(object):
 
             self.clear_cache(server_id=available_server.data)
 
-            # If none isn't returned
-            # something has errored.
             if queue_create.error:
                 return queue_create
 
