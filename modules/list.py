@@ -1,5 +1,8 @@
 from utils.response import response
 
+from models.match import MatchModel
+from models.player import PlayerModel
+
 class List(object):
     def __init__(self, current_league, limit, offset, search, desc):
         self.current_league = current_league
@@ -22,7 +25,8 @@ class List(object):
 
         query = """SELECT match_id, timestamp, status, map, server_id,
                           team_1_name, team_2_name, team_1_score, team_2_score,
-                          team_1_side, team_2_side
+                          team_1_side, team_2_side,
+                          map_order, player_order
                     FROM scoreboard_total
                     WHERE region = :region AND league_id = :league_id
                         AND (timestamp LIKE :search OR team_1_name LIKE :search OR team_2_name LIKE :search
@@ -33,23 +37,7 @@ class List(object):
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
         async for row in self.current_league.obj.database.iterate(query=query, values=self.values):
-            rows_formatted_append({
-                "match_id": row["match_id"],
-                "server_id": row["server_id"],
-                "map": row["map"],
-                "status": row["status"],
-                "timestamp": row["timestamp"],
-                "team_1": {
-                    "name": row["team_1_name"],
-                    "score": row["team_1_score"],
-                    "side": row["team_1_side"],
-                },
-                "team_2": {
-                    "name": row["team_2_name"],
-                    "score": row["team_2_score"],
-                    "side": row["team_2_side"],
-                },
-            })
+            rows_formatted_append(MatchModel(row).full)
 
         return response(data=rows_formatted)
 
@@ -72,30 +60,6 @@ class List(object):
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
         async for row in self.current_league.obj.database.iterate(query=query, values=self.values):
-            rows_formatted_append({
-                "name": row["name"],
-                "user_id": row["user_id"],
-                "steam_id": row["steam_id"],
-                "discord_id": row["discord_id"],
-                "joined": row["joined"],
-                "pfp": row["pfp"],
-                "ranking": {
-                    "elo": row["elo"],
-                },
-                "statistics": {
-                    "kills": row["kills"],
-                    "deaths": row["deaths"],
-                    "assists": row["assists"],
-                    "shots": row["shots"],
-                    "hits": row["hits"],
-                    "damage": row["damage"],
-                    "headshots": row["headshots"],
-                    "roundswon": row["roundswon"],
-                    "roundslost": row["roundslost"],
-                    "wins": row["wins"],
-                    "ties": row["ties"],
-                    "losses": row["losses"],
-                },
-            })
+            rows_formatted_append(PlayerModel(row).full)
 
         return response(data=rows_formatted)

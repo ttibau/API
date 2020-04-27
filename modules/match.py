@@ -1,6 +1,8 @@
 from utils.response import response
 from utils.queue.queue import Queue
 
+from models.match import MatchModel
+
 from starlette.background import BackgroundTask
 
 class Match(object):
@@ -226,25 +228,7 @@ class Match(object):
 
         row = await self.current_league.obj.database.fetch_one(query=query, values=values)
         if row:
-            return response(data={
-                "match_id": row["match_id"],
-                "server_id": row["server_id"],
-                "map": row["map"],
-                "status": row["status"],
-                "timestamp": row["timestamp"],
-                "map_order": row["map_order"],
-                "player_order": row["player_order"],
-                "team_1": {
-                    "name": row["team_1_name"],
-                    "score": row["team_1_score"],
-                    "side": row["team_1_side"],
-                },
-                "team_2": {
-                    "name": row["team_2_name"],
-                    "score": row["team_2_score"],
-                    "side": row["team_2_side"],
-                },
-            })
+            return response(data=MatchModel(row).full)
         else:
             return response(error="No match with that ID")
 

@@ -1,5 +1,7 @@
 from utils.response import response
 
+from models.player import PlayerModel
+
 class Players(object):
     def __init__(self, current_league, user_ids: list):
         self.current_league = current_league
@@ -41,36 +43,12 @@ class Players(object):
         async for row in self.current_league.obj.database.iterate(query=query,
                                                                   values=values):
 
-            player = {
-                "name": row["name"],
-                "user_id": row["user_id"],
-                "steam_id": row["steam_id"],
-                "discord_id": row["discord_id"],
-                "joined": row["joined"],
-                "pfp": row["pfp"],
-            }
+            player = PlayerModel(row)
 
             if include_stats:
-                player["ranking"] = {
-                    "elo": row["elo"],
-                }
-
-                player["statistics"] = {
-                    "kills": row["kills"],
-                    "deaths": row["deaths"],
-                    "assists": row["assists"],
-                    "shots": row["shots"],
-                    "hits": row["hits"],
-                    "damage": row["damage"],
-                    "headshots": row["headshots"],
-                    "roundswon": row["roundswon"],
-                    "roundslost": row["roundslost"],
-                    "wins": row["wins"],
-                    "ties": row["ties"],
-                    "losses": row["losses"],
-                }
-
-            rows_formatted_append(player)
+                rows_formatted_append(player.full)
+            else:
+                rows_formatted_append(player.minimal)
 
         return response(data=rows_formatted)
 

@@ -1,5 +1,7 @@
 from utils.response import response
 
+from models.player import PlayerModel
+
 class Player(object):
     def __init__(self, current_league, user_id):
         self.current_league = current_league
@@ -25,31 +27,7 @@ class Player(object):
 
         row = await self.current_league.obj.database.fetch_one(query=query, values=self.values)
         if row:
-            return response(data={
-                "name": row["name"],
-                "user_id": row["user_id"],
-                "steam_id": row["steam_id"],
-                "discord_id": row["discord_id"],
-                "joined": row["joined"],
-                "pfp": row["pfp"],
-                "total_time": row["total_time"],
-                "ranking": {
-                    "elo": row["elo"],
-                },
-                "statistics": {
-                    "kills": row["kills"],
-                    "deaths": row["deaths"],
-                    "assists": row["assists"],
-                    "shots": row["shots"],
-                    "hits": row["hits"],
-                    "damage": row["damage"],
-                    "headshots": row["headshots"],
-                    "roundswon": row["roundswon"],
-                    "roundslost": row["roundslost"],
-                    "wins": row["wins"],
-                    "ties": row["ties"],
-                    "losses": row["losses"],
-                }})
+            return response(data=PlayerModel(row).full)
         else:
             return response(error="No such user")
 
