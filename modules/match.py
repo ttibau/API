@@ -241,8 +241,7 @@ class Match(object):
                           sb.ping, sb.kills, sb.headshots, sb.assists,
                           sb.deaths, sb.shots_fired, sb.shots_hit, sb.mvps
                           sb.score, sb.disconnected,
-                          users.discord_id, users.name, 
-                          users.pfp, users.user_id, 
+                          users.discord_id, users.name, users.pfp,
                           users.steam_id, users.joined
                     FROM scoreboard AS sb
                         LEFT JOIN users
