@@ -50,8 +50,6 @@ class Tables(object):
         sqlalchemy.Column("assist", sqlalchemy.Float),
 
         sqlalchemy.Column("mate_blined", sqlalchemy.Float),
-        sqlalchemy.Column("mate_hed", sqlalchemy.Float),
-        sqlalchemy.Column("mate_infernod", sqlalchemy.Float),
         sqlalchemy.Column("mate_killed", sqlalchemy.Float),
     )
 
