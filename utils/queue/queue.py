@@ -104,19 +104,19 @@ class Queue:
             self.assign(user_id=user_id, team=team, captain=captain)
 
         query = """INSERT INTO scoreboard_total (match_id, league_id, 
-                                                    status, server_id, 
-                                                    region, team_1_name,
-                                                    team_2_name, map,
-                                                    map_order,
-                                                    player_order,
-                                                    record_statistics) 
+                                                 status, server_id, 
+                                                 region, team_1_name,
+                                                 team_2_name, map,
+                                                 map_order,
+                                                 player_order,
+                                                 record_statistics) 
                                         VALUES  (:match_id, :league_id, 
-                                                    :status, :server_id, 
-                                                    :region, :team_1_name,
-                                                    :team_2_name, :map,
-                                                    :map_order,
-                                                    :player_order,
-                                                    :record_statistics)"""
+                                                 :status, :server_id, 
+                                                 :region, :team_1_name,
+                                                 :team_2_name, :map,
+                                                 :map_order,
+                                                 :player_order,
+                                                 :record_statistics)"""
         await self.database.execute(query=query, values=self.details)
 
         query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
