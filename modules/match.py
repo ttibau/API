@@ -33,7 +33,8 @@ class Match(object):
                             "type": "random"      / "elo"       / "given",
                             "param": None        / ASC OR DESC / {"capt_1": index, "capt_2": index}
                             "selection": "ABBAABBA" / "ABBABABA" / "ABABABAB",
-                            "assiged_teams": True / False
+                            "assiged_teams": True / False,
+                            "record_statistics": True / False,
                         },
                         "list": {
                             "user_id": None / 1 / 2
@@ -71,7 +72,8 @@ class Match(object):
                      or type(players["list"]) != dict \
                         or not players["options"].get("assiged_teams") \
                             or not players["options"].get("selection") \
-                                or not players["options"].get("param"):
+                                or not players["options"].get("param") \
+                                    or not players["options"].get("record_statistics"):
                 self.clear_cache()
 
                 return response(error="Players payload formatted incorrectly")

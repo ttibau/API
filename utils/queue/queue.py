@@ -83,6 +83,11 @@ class Queue:
                 self.details["player_order"] = self.selection_types[self.players["options"]["selection"]]
                 self.details["status"] = 3
 
+        if self.players["options"]["record_statistics"]:
+            self.details["record_statistics"] = 1
+        else:
+            self.details["record_statistics"] = 0
+
         for user_id, team in self.players["list"].items():
             if team != 1 or team != 2 or team is not None:
                 return response(error="{} isn't a valid team side".format(team))
@@ -103,13 +108,15 @@ class Queue:
                                                     region, team_1_name,
                                                     team_2_name, map,
                                                     map_order,
-                                                    player_order) 
+                                                    player_order,
+                                                    record_statistics) 
                                         VALUES  (:match_id, :league_id, 
                                                     :status, :server_id, 
                                                     :region, :team_1_name,
                                                     :team_2_name, :map,
                                                     :map_order,
-                                                    :player_order)"""
+                                                    :player_order,
+                                                    :record_statistics)"""
         await self.database.execute(query=query, values=self.details)
 
         query = """INSERT INTO scoreboard (match_id, user_id, captain, team) 
