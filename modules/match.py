@@ -198,7 +198,6 @@ class Match(object):
             if queue_create.error:
                 return queue_create
 
-            # Server startup push into a task to run in the backgroud.
             server_task = BackgroundTask(self.current_league.obj.server(server_id=available_server.data).start)
 
             return response(backgroud=server_task, data=queue_create.data)
