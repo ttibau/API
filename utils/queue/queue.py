@@ -4,7 +4,7 @@ from utils.response import response
 from utils.queue.captain import Captain
 from utils.queue.map import Map
 
-class Queue(object):
+class Queue:
     captains = {"team_1": None, "team_2": None}
 
     users = []

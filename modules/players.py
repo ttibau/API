@@ -35,7 +35,7 @@ class Players(object):
 
             values["league_id"] = self.current_league.league_id
         else:
-            query = """SELECT discord_id, name, pfp, user_id, steam_id
+            query = """SELECT discord_id, name, pfp, user_id, steam_id, joined
                        FROM users WHERE region = :region AND user_id IN (:user_ids)"""
 
         rows_formatted = []
