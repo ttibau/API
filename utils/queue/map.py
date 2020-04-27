@@ -7,15 +7,16 @@ class Map(object):
     def given(self):
         """ Sets the map as the 1st index in the given maps. """
 
-        self.obj.data["details"]["map"] = self.obj.maps[0]
-        self.obj.data["details"]["map_order"] = None
+        self.obj.details["map"] = self.obj.maps[0]
+        self.obj.details["map_order"] = None
 
     def random(self):
         """ Sets a random map from the given maps. """
 
         shuffle(self.obj.maps)
-        self.obj.data["details"]["map"] = self.obj.maps[0]
-        self.obj.data["details"]["map_order"] = None
+        
+        self.obj.details["map"] = self.obj.maps[0]
+        self.obj.details["map_order"] = None
 
     def veto(self):
         """ Sets map selection type to veto. """
@@ -23,11 +24,11 @@ class Map(object):
         # Decided to keep veto and vote seperate functions in case if each
         # type needs some different functionality later on.
 
-        self.obj.data["details"]["map"] = None
-        self.obj.data["details"]["map_order"] = self.obj.selection_types[self.obj.maps["options"]["selection"]]
+        self.obj.details["map"] = None
+        self.obj.details["map_order"] = self.obj.selection_types[self.obj.maps["options"]["selection"]]
 
     def vote(self):
         """ Sets map selection type to vote. """
 
-        self.obj.data["details"]["map"] = None
-        self.obj.data["details"]["map_order"] = self.obj.selection_types[self.obj.maps["options"]["selection"]]
+        self.obj.details["map"] = None
+        self.obj.details["map_order"] = self.obj.selection_types[self.obj.maps["options"]["selection"]]
