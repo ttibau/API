@@ -111,11 +111,7 @@ class Match(object):
                 return response(error="Invalid team names")
 
             queue = Queue(players=players, maps=maps, team_names=team_names,
-                          server_id=available_server.data,
-                          league_id=self.current_league.league_id,
-                          region=self.current_league.region,
-                          selection_types=self.current_league.obj.config.pug["selection_types"],
-                          database=self.current_league.obj.database)
+                          server_id=available_server.data, obj=self)
 
             # Ensures valid user IDs are given
             # If errors returns response return with
@@ -201,15 +197,13 @@ class Match(object):
 
             # If none isn't returned
             # something has errored.
-            if queue_create:
+            if queue_create.error:
                 return queue_create
-
-            self.match_id = queue.match_id
 
             # Server startup push into a task to run in the backgroud.
             server_task = BackgroundTask(self.current_league.obj.server(server_id=available_server.data).start)
 
-            return response(backgroud=server_task, data=queue.data)
+            return response(backgroud=server_task, data=queue_create.data)
         else:
             return response(error="Over queue limit")
 
