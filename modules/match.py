@@ -251,10 +251,7 @@ class Match(object):
             
         values = {"match_id": self.match_id,}
 
-        players = []
-        players_append = players.append
-        async for row in self.current_league.obj.database.iterate(query=query, values=values):
-            players_append({**row})
+        players = await self.current_league.obj.database.fetch_all(query=query, values=values)
 
         return response(data=ScoreboardModel(match=match, players=players).full)
 
