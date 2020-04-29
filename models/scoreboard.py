@@ -27,25 +27,20 @@ class ScoreboardModel:
             raise Exception("Players dict not passed.")
 
         return_dict = {
-            "team_1": [],
-            "team_2": [],
-            "unassigned": [],
+            "team_1": {},
+            "team_2": {},
+            "unassigned": {},
         }
-
-        team_1_append = return_dict["team_1"].append
-        team_2_append = return_dict["team_2"].append
-        unassigned_append = return_dict["unassigned"].append
 
         for player in self.players_list:
             if player["team"] == 1:
-                team_append = team_1_append
+                current_team = return_dict["team_1"]
             elif player["team"] == 2:
-                team_append = team_2_append
+                current_team = return_dict["team_2"]
             else:
-                team_append = unassigned_append
+                current_team = return_dict["unassigned"]
 
-            team_append({
-                "user_id": player["user_id"],
+            current_team[player["user_id"]] = {
                 "name": player["name"],
                 "steam_id": player["steam_id"],
                 "discord_id": player["discord_id"],
@@ -67,6 +62,6 @@ class ScoreboardModel:
                     "shots_fired": player["shots_fired"],
                     "shots_hit": player["shots_hit"],
                 },
-            })
+            }
 
         return return_dict

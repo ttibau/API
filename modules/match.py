@@ -323,21 +323,23 @@ class Match(object):
             },
         }
 
-        for player in match_scoreboard.data["players"]["team_1"]:
-            match_data["players"]["list"][player["user_id"]] = 1
+        for user_id, user_data in match_scoreboard.data["players"][
+                "team_1"].items():
+            match_data["players"]["list"][user_id] = 1
 
-            if player["captain"]:
+            if user_data["captain"]:
                 match_data["players"]["options"]["param"]["capt_1"] = \
                     list(match_data["players"]["list"]
-                         .keys()).index(player["user_id"])
+                         .keys()).index(user_id)
 
-        for player in match_scoreboard.data["players"]["team_2"]:
-            match_data["players"]["list"][player["user_id"]] = 2
+        for user_id, user_data in match_scoreboard.data["players"][
+                "team_2"].items():
+            match_data["players"]["list"][user_id] = 2
 
-            if player["captain"]:
+            if user_data["captain"]:
                 match_data["players"]["options"]["param"]["capt_2"] = \
                     list(match_data["players"]["list"]
-                         .keys()).index(player["user_id"])
+                         .keys()).index(user_id)
 
         return await self.create(**match_data)
 
