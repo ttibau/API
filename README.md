@@ -11,10 +11,10 @@ Features are still being developed / tested & plugins haven't been released yet.
 
 # Index
 - [Documentation](/DOC.md)
+- [Roadmap](/ROADMAP.md)
 - [About](#about)
 - [Why use ModuleLIFT API?](#why-use-modulelift-api)
 - [Deploying](#deploying)
-- [What's coming](#whats-coming)
 - [Contributions](#contributions)
 
 # About
@@ -55,15 +55,6 @@ Heaps of online resources can help you with each one of these steps.
 You can adjust the host & port in ``run.py``
 
 Run ``run.py`` with python 3.
-
-## What's coming
-- Graphql
-- SM Plugins.
-- Example website.
-- Example discord bot.
-- Setup guide.
-- Python API client.
-- Documentation.
 
 ## Contributions
 ### Code Style
