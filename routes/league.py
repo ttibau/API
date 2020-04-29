@@ -26,5 +26,5 @@ class League(HTTPEndpoint):
         """ Updates league details. """
 
         return responder.render(
-            await request.state.league.update(args)
+            await request.state.league.update(**args)
         )

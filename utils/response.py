@@ -1,12 +1,15 @@
 class response:
     def __init__(self, data=None, error=False, status=200, backgroud=None):
-        if not data and status == 200:
-            error = "No data"
+        """ Response object. """
 
         # If an error is pased we ensure the correct status code is given.
         if status == 200 and error:
             self.status = 500
         else:
+            if not data and not error:
+                error = "No data"
+                self.status = 500
+
             self.status = status
 
         self.data = data

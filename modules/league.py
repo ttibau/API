@@ -43,11 +43,11 @@ class League(object):
     async def get_server(self):
         """ Finds a available server for the currnet league. """
 
-        if not self.obj.config.pterodactyl["regions"].get(self.region):
+        if not self.obj.config.server["regions"].get(self.region):
             return response(error="No server IDs for that region")
 
         region_servers = list(
-            self.obj.config.pterodactyl["regions"][self.region]
+            self.obj.config.server["regions"][self.region]
         )
         region_servers_remove = region_servers.remove
 
@@ -75,13 +75,14 @@ class League(object):
 
         query = """SELECT COUNT(score.status) AS active_queues,
                           IFNULL(info.queue_limit, 0) AS queue_limit
-                   FROM scoreboard_total AS score
-                    INNER JOIN league_info AS info
+                   FROM league_info AS info
+                    LEFT JOIN scoreboard_total AS score
                         ON score.league_id = info.league_id
-                   WHERE score.status != 0 AND score.league_id = :league_id"""
+                           AND score.status != 0
+                   WHERE info.league_id = :league_id"""
         row = await self.obj.database.fetch_one(
             query=query,
-            values={"league_id": self.league_id}
+            values={"league_id": self.league_id, }
         )
 
         if row:

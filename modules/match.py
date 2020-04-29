@@ -79,32 +79,31 @@ class Match(object):
                 in_memory_cache.started_queues[self.current_league.league_id] \
                      = 1
 
-            if not players.get("options") or type(players["options"]) != dict \
-                or not players["options"].get("type") \
-                    or not players.get("list") \
+            if "options" not in players or type(players["options"]) != dict \
+                or "type" not in players["options"] \
+                    or "list" not in players \
                     or type(players["list"]) != dict \
-                    or not players["options"].get("assiged_teams") \
-                    or not players["options"].get("selection") \
-                    or not players["options"].get("param") \
-                    or not players["options"].get("record_statistics"):
+                    or "assiged_teams" not in players["options"] \
+                    or "selection" not in players["options"] \
+                    or "record_statistics" not in players["options"]:
                 self.clear_cache()
 
                 return response(error="Players payload formatted incorrectly")
 
-            if len(maps) < 1 or not maps.get("options") \
+            if len(maps) < 1 or "options" not in maps \
                 or type(maps["options"]) != dict\
-                    or not maps["options"].get("type") \
-                    or not maps["options"].get("selection")\
-                    or not maps.get("list") \
+                    or "type" not in maps["options"] \
+                    or "selection" not in maps["options"] \
+                    or "list" not in maps \
                     or type(maps["list"]) != list:
                 self.clear_cache()
 
                 return response(error="Maps payload formatted incorrectly")
 
-            if not self.current_league.obj.config.pug["selection_types"].get(
-                players["options"]["selection"]) \
-                or not self.current_league.obj.config.\
-                    pug["selection_types"].get(maps["options"]["selection"]):
+            if players["options"]["selection"] not in \
+                self.current_league.obj.config.pug["selection_types"] \
+                or maps["options"]["selection"] not in \
+                    self.current_league.obj.config.pug["selection_types"]:
                 self.clear_cache()
 
                 return response(error="Invaild selection type")
@@ -116,7 +115,7 @@ class Match(object):
                 return response(error="""Odd amout of players or
                                          players is above 2 or below 10""")
 
-            available_server = await self.current_league.obj.get_server()
+            available_server = await self.current_league.get_server()
             if available_server.error:
                 self.clear_cache()
 

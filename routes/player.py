@@ -41,7 +41,7 @@ class PlayerList(HTTPEndpoint):
         """ List players. """
 
         return responder.render(
-            await request.state.league.list(args).players()
+            await request.state.league.list(**args).players()
         )
 
 

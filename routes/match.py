@@ -9,12 +9,12 @@ from utils.responder import responder
 class Match(HTTPEndpoint):
     @use_args({"players": fields.Dict(required=True),
                "maps": fields.Dict(required=True),
-               "team_names": fields.Dict(required=True), })
+               "team_names": fields.Dict(required=True), },)
     async def post(self, request, args):
         """ Creates match. """
 
         return responder.render(
-            await request.state.league.match().create(args)
+            await request.state.league.match().create(**args)
         )
 
     @use_args({"match_id": fields.String(required=True), })
@@ -35,5 +35,5 @@ class MatchList(HTTPEndpoint):
         """ Gets list of matches. """
 
         return responder.render(
-            await request.state.league.list(args).matches()
+            await request.state.league.list(**args).matches()
         )
