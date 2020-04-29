@@ -6,7 +6,8 @@
  | |  | | (_) | (_| | |_| | |  __/ |____ _| |_| |       | |     / ____ \| |    _| |_ 
  |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|    /_/    \_\_|   |_____|
 ```
-##### This project is NOT considered production ready.
+#### This project is NOT considered production ready.
+Features are still being developed / tested & plugins haven't been released yet.
 
 # About
 ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of pugging system. Recently I've decided to open source the project in hope to get support from other developers in the communitity.
