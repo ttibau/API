@@ -28,10 +28,10 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 - Statistics & Match recording.
 
 ## Index
+- [Documentation](/DOC.md)
 - [Deploying](#deploying)
-- [Planned Features](#planned-features)
-- [Contributions](#Contributions)
-- Documentation is planned.
+- [What's coming](#whats-coming)
+- [Contributions](#contributions)
 
 ## Deploying
 1st install the needed modules ``pip install -r /path/to/requirements.txt``
