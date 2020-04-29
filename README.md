@@ -9,6 +9,14 @@
 #### This project is NOT considered production ready.
 Features are still being developed / tested & plugins haven't been released yet.
 
+# Index
+- [Documentation](/DOC.md)
+- [About](#about)
+- [Why use ModuleLIFT API?](#why-use-modulelift-api)
+- [Deploying](#deploying)
+- [What's coming](#whats-coming)
+- [Contributions](#contributions)
+
 # About
 ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of pugging system. Recently I've decided to open source the project in hope to get support from other developers in the communitity.
 
@@ -26,12 +34,6 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 - Scalable, ModuleLIFT is written in Python Starlette with good coding practices what ensure this application scales well.
 - Elo system, measure how skillful players are.
 - Statistics & Match recording.
-
-## Index
-- [Documentation](/DOC.md)
-- [Deploying](#deploying)
-- [What's coming](#whats-coming)
-- [Contributions](#contributions)
 
 ## Deploying
 1st install the needed modules ``pip install -r /path/to/requirements.txt``
