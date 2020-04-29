@@ -112,8 +112,15 @@ class Match(object):
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
                 self.clear_cache()
 
-                return response(error="""Odd amout of players or
-                                         players is above 2 or below 10""")
+                return response(error="Odd amout of players or\
+                                         players is above 2 or below 10")
+
+            if not team_names.get("team_1") or not team_names.get("team_2") \
+                or type(team_names["team_1"]) != str\
+                    or type(team_names["team_2"]) != str:
+                self.clear_cache()
+
+                return response(error="Invalid team names")
 
             available_server = await self.current_league.get_server()
             if available_server.error:
@@ -123,15 +130,11 @@ class Match(object):
 
             in_memory_cache.temp_server_blacklist.append(available_server.data)
 
-            if not team_names.get("team_1") or not team_names.get("team_2") \
-                or type(team_names["team_1"]) != str\
-                    or type(team_names["team_2"]) != str:
-                self.clear_cache()
-
-                return response(error="Invalid team names")
-
-            queue = Queue(players=players, maps=maps, team_names=team_names,
-                          server_id=available_server.data, obj=self)
+            queue = Queue(players=players,
+                          maps=maps,
+                          team_names=team_names,
+                          server_id=available_server.data,
+                          obj=self)
 
             # Ensures valid user IDs are given
             # If errors returns response return with

@@ -13,12 +13,11 @@ class Queue:
 
     details = {}
 
-    def __init__(self, players, maps, team_names, server_id, obj):
+    def __init__(self, players, maps, team_names, server_id, obj,
+                 match_id=Misc.uuid4()):
         self.obj = obj
 
         current_league = self.obj.current_league
-
-        self.match_id = Misc.uuid4()
 
         self.players = players
         self.players_list = list(self.players["list"].keys())
@@ -28,7 +27,7 @@ class Queue:
 
         self.database = current_league.obj.database
 
-        self.details["match_id"] = self.match_id
+        self.details["match_id"] = match_id
         self.details["server_id"] = server_id
 
         self.details["league_id"] = current_league.league_id
@@ -46,7 +45,7 @@ class Queue:
         """ Assigns player to tell. """
 
         self.users_append({
-            "match_id": self.match_id,
+            "match_id": self.details["match_id"],
             "user_id": user_id,
             "captain": captain,
             "team": team,
@@ -76,7 +75,7 @@ class Queue:
             for map_name in self.maps:
                 map_pool_append({
                     "map": map_name,
-                    "match_id": self.match_id,
+                    "match_id": self.details["match_id"],
                 })
 
             if self.players["options"]["assiged_teams"]:
@@ -95,14 +94,20 @@ class Queue:
         else:
             self.details["record_statistics"] = 0
 
+        team_1_count = 0
+        team_2_count = 0
+
         for user_id, team in self.players["list"].items():
-            if team != 1 and team != 2 and team is not None:
+            if team is None:
+                team = 0
+            elif team == 1:
+                team_1_count += 1
+            elif team == 2:
+                team_2_count += 1
+            else:
                 return response(error="{} isn't a valid team side".format(
                     team
                 ))
-
-            if team is None:
-                team = 0
 
             if self.captains["team_1"] == user_id or \
                     self.captains["team_2"] == user_id:
@@ -111,6 +116,10 @@ class Queue:
                 captain = 0
 
             self.assign(user_id=user_id, team=team, captain=captain)
+
+        if team_1_count != team_2_count:
+            return response(error="Team 1 & 2 should have a\
+                                   even amount of players")
 
         query = """INSERT INTO scoreboard_total (match_id, league_id,
                                                  status, server_id,
@@ -139,6 +148,6 @@ class Queue:
                                      VALUES (:match_id, :map)"""
             await self.database.execute_many(query=query, values=map_pool)
 
-        self.obj.match_id = self.match_id
+        self.obj.match_id = self.details["match_id"]
 
         return await self.obj.scoreboard()
