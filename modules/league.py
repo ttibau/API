@@ -4,6 +4,7 @@ from .match import Match
 from .player import Player
 from .players import Players
 from .list import List
+from .api_key.api_key import ApiKey
 
 
 class League(object):
@@ -11,6 +12,14 @@ class League(object):
         self.obj = obj
         self.league_id = league_id
         self.region = region
+
+    @property
+    def api_key(self):
+        """ Object used for interacting
+            with api keys.
+        """
+
+        return ApiKey(current_league=self)
 
     def match(self, match_id=None):
         """ Match Object.

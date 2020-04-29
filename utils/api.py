@@ -21,9 +21,10 @@ class Api(object):
                             ON api_paths.path_id = api_permissions.path_id
                    WHERE api_keys.key = :api_key
                          AND api_keys.league_id = :league_id
-                         AND api_permissions.access_level
-                             >= api_keys.access_level
-                         AND api_paths.path = :path"""
+                         AND api_keys.access_level
+                             >= api_permissions.access_level
+                         AND api_paths.path = :path
+                         AND api_keys.active = 1"""
 
         row = await self.obj.database.fetch_val(query=query, values={
             "api_key": api_key,

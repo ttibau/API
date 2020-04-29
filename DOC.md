@@ -6,6 +6,8 @@
 #### modulelift.client
 Expects ``server_init()`` to be called after aiohttp session has been passed within loop context.
 
+- validate_user(self, user_id)
+
 #### modulelift.client.league(self, league_id, region)
 - get_server(self)
 - queue_allowed(self)
@@ -34,6 +36,15 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 ###### players(self, user_ids)
     - fetch(self, include_stats=False)
     - validate(self)
+
+###### api_key(self)
+    - paths(self)
+    - generate(self, user_id, access_level: int, active: bool = True)
+    - interact(self, api_key)
+        - validate(self)
+        - edit(self, access_level: int, active: bool = True)
+        - delete(self)
+        - paths(self)
 
 ## Routes
 Coming soon

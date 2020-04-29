@@ -50,7 +50,7 @@ class Player(object):
         if row:
             return response(data=PlayerModel(row).full)
         else:
-            return response(error="No such user")
+            return response(error="Invalid user")
 
     async def reset(self):
         """ Resets statistics for given user. """
@@ -78,7 +78,7 @@ class Player(object):
             values=self.values
         )
 
-        return response(data="Reset {}".format(self.values["user_id"]))
+        return response(data=True)
 
     async def delete(self):
         """ Deletes statistics for given user. """
@@ -92,4 +92,4 @@ class Player(object):
             values=self.values
         )
 
-        return response(data="Deleted {}".format(self.values["user_id"]))
+        return response(data=True)

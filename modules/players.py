@@ -68,7 +68,7 @@ class Players(object):
         user_ids = list(self.values["user_ids"])
         user_ids_remove = user_ids.remove
 
-        query = """SELECT * FROM users
+        query = """SELECT user_id FROM users
                    WHERE user_id IN :user_ids AND region = :region"""
 
         async for row in self.current_league.obj.database.iterate(
