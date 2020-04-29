@@ -379,7 +379,7 @@ class Match(object):
     async def end(self):
         """ Ends given match. """
 
-        match = self.get()
+        match = await self.get()
         if match.error:
             return match
 
