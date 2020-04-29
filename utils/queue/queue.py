@@ -56,7 +56,8 @@ class Queue:
             team & also inserts the data into the database.
         """
 
-        if self.maps["options"]["type"] == ("random" or "given"):
+        if self.maps["options"]["type"] == "random" or \
+           self.maps["options"]["type"] == "given":
             map_pool = None
 
             if self.players["options"]["assiged_teams"]:
