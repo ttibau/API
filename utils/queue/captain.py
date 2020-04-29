@@ -35,7 +35,8 @@ class Captain(object):
                         and not self.obj.captains["team_2"].get(
                             row["user_id"]):
                     self.obj.captains["team_2"] = row["user_id"]
-                elif self.obj.players[row["user_id"]] != (1 or 2):
+                elif self.obj.players[row["user_id"]] != 1 \
+                        and self.obj.players[row["user_id"]] != 2:
                     return response(error="{} should be None, 1 or 2".format(
                         self.obj.players[row["user_id"]]
                     ))
@@ -64,7 +65,8 @@ class Captain(object):
                 elif self.obj.players["list"][user_id] == 2 \
                         and not self.obj.captains["team_2"]:
                     self.obj.captains["team_2"] = user_id
-                elif self.obj.players["list"][user_id] != (1 or 2):
+                elif self.obj.players["list"][user_id] != 1 \
+                        and self.obj.players["list"][user_id] != 2:
                     return response(error="{} should be None, 1 or 2".format(
                         self.obj.players["list"][user_id]
                     ))

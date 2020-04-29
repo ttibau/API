@@ -57,7 +57,7 @@ class APIKeyValidation(BaseHTTPMiddleware):
 
                 request.state.league = self.obj.league(
                     league_id=league_id,
-                    region=request.query_params["region"]
+                    region=request.query_params["region"].lower()
                 )
             else:
                 return self.obj.api.unauthorized()

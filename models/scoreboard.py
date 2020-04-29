@@ -1,34 +1,24 @@
-from models.match import MatchModel
-
-
 class ScoreboardModel:
-    def __init__(self, match: dict = None, players: dict = None):
-        self.match = match
-        self.players = players
+    def __init__(self, match_data, players: list = None):
+        """ match_data expects data given from the match object. """
+
+        self.match_data = match_data
+        self.players_list = players
 
     @property
     def full(self):
         """ Formats and returns full response for scoreboard. """
 
         return {
-            **self.minimal,
+            **self.match_data,
             "players": self.players,
         }
-
-    @property
-    def minimal(self):
-        """ Scoreboard minimal. """
-
-        if not self.match:
-            raise Exception("Match dict not passed.")
-
-        return MatchModel(self.match).full
 
     @property
     def players(self):
         """ Formats players for scoreboard. """
 
-        if not self.players:
+        if not self.players_list:
             raise Exception("Players dict not passed.")
 
         return_dict = {
@@ -41,7 +31,7 @@ class ScoreboardModel:
         team_2_append = return_dict["team_2"].append
         spectator_append = return_dict["spectator"].append
 
-        for player in self.players:
+        for player in self.players_list:
             if player["team"] == 1:
                 team_append = team_1_append
             elif player["team"] == 2:

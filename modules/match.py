@@ -136,7 +136,7 @@ class Match(object):
             # Ensures valid user IDs are given
             # If errors returns response return with
             # data of incorrect user ids.
-            players_obj = self.current_league.obj.players(
+            players_obj = self.current_league.players(
                 user_ids=queue.players_list
             )
 
@@ -249,7 +249,7 @@ class Match(object):
     async def get(self):
         """ Gets base details about the match. """
 
-        query = """SELECT server_id, map_order, player_order, timestamp, status,
+        query = """SELECT match_id, server_id, map_order, player_order, timestamp, status,
                           map, team_1_name, team_2_name,
                           team_1_score, team_2_score,
                           team_1_side, team_2_side, record_statistics
@@ -266,6 +266,7 @@ class Match(object):
             query=query,
             values=values
         )
+
         if row:
             return response(data=MatchModel(row).full)
         else:
@@ -274,7 +275,7 @@ class Match(object):
     async def scoreboard(self):
         """ Match scoreboard. """
 
-        match = self.get()
+        match = await self.get()
         if match.error:
             return match
 
@@ -283,7 +284,7 @@ class Match(object):
         # valid already.
         query = """SELECT sb.user_id, sb.captain, sb.team, sb.alive,
                           sb.ping, sb.kills, sb.headshots, sb.assists,
-                          sb.deaths, sb.shots_fired, sb.shots_hit, sb.mvps
+                          sb.deaths, sb.shots_fired, sb.shots_hit, sb.mvps,
                           sb.score, sb.disconnected,
                           users.discord_id, users.name, users.pfp,
                           users.steam_id, users.joined
@@ -300,7 +301,7 @@ class Match(object):
         )
 
         return response(data=ScoreboardModel(
-            match=match,
+            match_data=match.data,
             players=players
         ).full)
 

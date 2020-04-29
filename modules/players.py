@@ -39,19 +39,19 @@ class Players(object):
                                 ON users.user_id = statistics.user_id
                                    AND statistics.league_id = :league_id
                     WHERE users.region = :region
-                          AND users.user_id IN (:user_ids)
+                          AND users.user_id IN :user_ids
                     ORDER BY statistics.elo DESC"""
 
             values["league_id"] = self.current_league.league_id
         else:
             query = """SELECT discord_id, name, pfp, user_id, steam_id, joined
                        FROM users WHERE region = :region
-                                        AND user_id IN (:user_ids)"""
+                                        AND user_id IN :user_ids"""
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(query=query,
-                                                                  values=values):
+        async for row in self.current_league.obj\
+                .database.iterate(query=query, values=values):
 
             player = PlayerModel(row)
 
@@ -66,15 +66,15 @@ class Players(object):
         """ Validates given users & returns data of users who aren't valid. """
 
         user_ids = list(self.values["user_ids"])
+        user_ids_remove = user_ids.remove
 
-        query = """SELECT user_id
-                   FROM users
-                   WHERE region = :region AND user_id IN (:user_ids)"""
+        query = """SELECT * FROM users
+                   WHERE user_id IN :user_ids AND region = :region"""
 
         async for row in self.current_league.obj.database.iterate(
                 query=query,
                 values=self.values):
-            user_ids.remove(row["user_id"])
+            user_ids_remove(row["user_id"])
 
         if len(user_ids) == 0:
             return response(data="Valid user IDs")

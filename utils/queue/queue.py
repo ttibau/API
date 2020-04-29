@@ -96,7 +96,7 @@ class Queue:
             self.details["record_statistics"] = 0
 
         for user_id, team in self.players["list"].items():
-            if team != 1 or team != 2 or team is not None:
+            if team != 1 and team != 2 and team is not None:
                 return response(error="{} isn't a valid team side".format(
                     team
                 ))
@@ -104,8 +104,8 @@ class Queue:
             if team is None:
                 team = 0
 
-            if self.captains["team_1"].get(user_id) or \
-                    self.captains["team_2"].get(user_id):
+            if self.captains["team_1"] == user_id or \
+                    self.captains["team_2"] == user_id:
                 captain = 1
             else:
                 captain = 0

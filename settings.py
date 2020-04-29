@@ -65,7 +65,8 @@ class Config(object):
         # Cached on boot and on change.
         "regions": {
             # Region code for that server.
-            "OCE": [
+            # SHOULD ALWAYS BE LOWER CASE.
+            "nz": [
                 # Unique ID for server
                 # given by host.
                 "server_id"
