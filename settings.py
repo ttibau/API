@@ -1,6 +1,8 @@
 class Config(object):
     debug = True
 
+    timestamp = "%d %B %Y @ %I:%M %p"
+
     database = {
         "username": "modulelift",
         "password": "Y2ZRSsje9qZHsxDu",
@@ -49,7 +51,7 @@ class Config(object):
 
             # Route to your pterodactyl panel ending in
             # /api
-            "route": "",
+            "route": "https://example.com/api",
         },
 
         # https://dathost.net/

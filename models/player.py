@@ -1,3 +1,5 @@
+from settings import Config as config
+
 class PlayerModel:
     def __init__(self, data: dict):
         self.data = data
@@ -48,6 +50,6 @@ class PlayerModel:
                 "user_id": self.data["user_id"],
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
-                "joined": self.data["joined"],
+                "joined": self.data["joined"].strftime(config.timestamp),
                 "pfp": self.data["pfp"],
         }

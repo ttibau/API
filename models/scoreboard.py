@@ -1,3 +1,9 @@
+# Because we know models don't need
+# anything cached from the db into the
+# config object it's fine to import it.
+from settings import Config as config
+
+
 class ScoreboardModel:
     def __init__(self, match_data, players: list = None):
         """ match_data expects data given from the match object. """
@@ -44,7 +50,7 @@ class ScoreboardModel:
                 "name": player["name"],
                 "steam_id": player["steam_id"],
                 "discord_id": player["discord_id"],
-                "joined": player["joined"],
+                "joined": player["joined"].strftime(config.timestamp),
                 "pfp": player["pfp"],
 
                 "captain": player["captain"] == 1,

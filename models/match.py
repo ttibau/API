@@ -1,3 +1,5 @@
+from settings import Config as config
+
 class MatchModel:
     def __init__(self, data: dict):
         self.data = data
@@ -21,7 +23,7 @@ class MatchModel:
                 "server_id": self.data["server_id"],
                 "map": self.data["map"],
                 "status": self.data["status"],
-                "timestamp": self.data["timestamp"],
+                "timestamp": self.data["timestamp"].strftime(config.timestamp),
                 "map_order": self.data["map_order"],
                 "player_order": self.data["player_order"],
                 "record_statistics": self.data["record_statistics"] == 1,
