@@ -25,6 +25,24 @@ class Match(HTTPEndpoint):
             await request.state.league.match(**args).end()
         )
 
+    @use_args({"match_id": fields.String(required=True), })
+    async def get(self, request, args):
+        """ Gets base details of match. """
+
+        return responder.render(
+            await request.state.league.match(**args).get()
+        )
+
+
+class MatchScoreboard(HTTPEndpoint):
+    @use_args({"match_id": fields.String(required=True), })
+    async def get(self, request, args):
+        """ Gets scoreboard of match. """
+
+        return responder.render(
+            await request.state.league.match(**args).scoreboard()
+        )
+
 
 class MatchClone(HTTPEndpoint):
     @use_args({"match_id": fields.String(required=True), })
@@ -33,17 +51,4 @@ class MatchClone(HTTPEndpoint):
 
         return responder.render(
             await request.state.league.match(**args).clone()
-        )
-
-
-class MatchList(HTTPEndpoint):
-    @use_args({"limit": fields.Integer(missing=25, min=1, max=50),
-               "offset": fields.Integer(missing=25, min=1, max=50),
-               "search": fields.String(),
-               "desc": fields.Bool(missing=True), })
-    async def get(self, request, args):
-        """ Gets list of matches. """
-
-        return responder.render(
-            await request.state.league.list(**args).matches()
         )
