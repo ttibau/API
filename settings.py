@@ -3,6 +3,9 @@ class Config(object):
 
     timestamp = "%d %B %Y @ %I:%M %p"
 
+    pfp_cdn = "https://cdn.discordapp.com/avatars/{}?size=1024"
+    pfp_cdn_unwated = pfp_cdn.split("{}")
+
     database = {
         "username": "modulelift",
         "password": "Y2ZRSsje9qZHsxDu",

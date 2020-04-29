@@ -51,7 +51,7 @@ class ScoreboardModel:
                 "steam_id": player["steam_id"],
                 "discord_id": player["discord_id"],
                 "joined": player["joined"].strftime(config.timestamp),
-                "pfp": player["pfp"],
+                "pfp": config.pfp_cdn.format(player["pfp"]),
 
                 "captain": player["captain"] == 1,
                 "alive": player["alive"] == 1,

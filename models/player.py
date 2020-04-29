@@ -52,5 +52,5 @@ class PlayerModel:
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
                 "joined": self.data["joined"].strftime(config.timestamp),
-                "pfp": self.data["pfp"],
+                "pfp": config.pfp_cdn.format(self.data["pfp"]),
         }
