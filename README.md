@@ -57,6 +57,7 @@ You can adjust the host & port in ``run.py``
 Run ``run.py`` with python 3.
 
 ## What's coming
+- Graphql
 - SM Plugins.
 - Example website.
 - Example discord bot.
