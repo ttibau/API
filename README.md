@@ -63,7 +63,7 @@ Run ``run.py`` with python 3.
 
 ## Contributions
 ### Code Style
-This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 120 character line limits.
+This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 80 character line limits.
 
 I recommend installing [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter) if you use VS Code.
 
