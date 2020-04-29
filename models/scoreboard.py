@@ -30,7 +30,7 @@ class ScoreboardModel:
         return_dict = {
             "team_1": [],
             "team_2": [],
-            "spectator": [],
+            "unassigned": [],
         }
 
         team_1_append = return_dict["team_1"].append

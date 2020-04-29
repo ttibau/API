@@ -12,7 +12,7 @@ class Match(object):
         self.current_league = current_league
         self.match_id = match_id
 
-    def clear_cache(self, server_id=None):
+    def _clear_cache(self, server_id=None):
         """ Clears cached data for current league out of memeory. """
 
         in_memory_cache = self.current_league.obj.in_memory_cache
@@ -86,7 +86,7 @@ class Match(object):
                     or "assiged_teams" not in players["options"] \
                     or "selection" not in players["options"] \
                     or "record_statistics" not in players["options"]:
-                self.clear_cache()
+                self._clear_cache()
 
                 return response(error="Players payload formatted incorrectly")
 
@@ -96,7 +96,7 @@ class Match(object):
                     or "selection" not in maps["options"] \
                     or "list" not in maps \
                     or type(maps["list"]) != list:
-                self.clear_cache()
+                self._clear_cache()
 
                 return response(error="Maps payload formatted incorrectly")
 
@@ -104,13 +104,13 @@ class Match(object):
                 self.current_league.obj.config.pug["selection_types"] \
                 or maps["options"]["selection"] not in \
                     self.current_league.obj.config.pug["selection_types"]:
-                self.clear_cache()
+                self._clear_cache()
 
                 return response(error="Invaild selection type")
 
             len_players = len(players["list"])
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
-                self.clear_cache()
+                self._clear_cache()
 
                 return response(error="Odd amout of players or\
                                          players is above 2 or below 10")
@@ -118,13 +118,13 @@ class Match(object):
             if not team_names.get("team_1") or not team_names.get("team_2") \
                 or type(team_names["team_1"]) != str\
                     or type(team_names["team_2"]) != str:
-                self.clear_cache()
+                self._clear_cache()
 
                 return response(error="Invalid team names")
 
             available_server = await self.current_league.get_server()
             if available_server.error:
-                self.clear_cache()
+                self._clear_cache()
 
                 return available_server
 
@@ -145,7 +145,7 @@ class Match(object):
 
             players_validate = await players_obj.validate()
             if players_validate.error:
-                self.clear_cache(server_id=available_server.data)
+                self._clear_cache(server_id=available_server.data)
 
                 return players_validate
 
@@ -155,14 +155,14 @@ class Match(object):
                 # If none isn't returned
                 # something has errored.
                 if assign_random:
-                    self.clear_cache(server_id=available_server.data)
+                    self._clear_cache(server_id=available_server.data)
 
                     return assign_random
 
             elif players["options"]["type"] == "elo" or\
                     players["options"]["type"] == "given":
                 if not players["options"].get("param"):
-                    self.clear_cache(server_id=available_server.data)
+                    self._clear_cache(server_id=available_server.data)
 
                     return response(
                         error="Param is required for type {}".format(
@@ -175,11 +175,11 @@ class Match(object):
                     if not players_elo.error:
                         assign_elo = queue.captain.elo(players_elo)
                         if assign_elo:
-                            self.clear_cache(server_id=available_server.data)
+                            self._clear_cache(server_id=available_server.data)
 
                             return assign_elo
                     else:
-                        self.clear_cache(server_id=available_server.data)
+                        self._clear_cache(server_id=available_server.data)
 
                         return response(error="""Something went
                                                  wrong during elo fetch""")
@@ -190,7 +190,7 @@ class Match(object):
                         or type(players["options"]["param"]["capt_1"]) != int \
                             or type(players["options"]["param"]["capt_2"]) \
                             != int:
-                        self.clear_cache(server_id=available_server.data)
+                        self._clear_cache(server_id=available_server.data)
 
                         return response(error="""Param payload
                                                  formatted incorrectly""")
@@ -200,17 +200,17 @@ class Match(object):
                         or players["options"]["param"]["capt_2"] \
                             > len_players - 1:
 
-                        self.clear_cache(server_id=available_server.data)
+                        self._clear_cache(server_id=available_server.data)
 
                         return response(error="Index is not within range")
 
                     assign_given = queue.captain.given()
                     if assign_given:
-                        self.clear_cache(server_id=available_server.data)
+                        self._clear_cache(server_id=available_server.data)
 
                         return assign_given
             else:
-                self.clear_cache(server_id=available_server.data)
+                self._clear_cache(server_id=available_server.data)
 
                 return response(error="{} isn't a valid player type".format(
                     players["options"]["type"]
@@ -225,7 +225,7 @@ class Match(object):
             elif maps["options"]["type"] == "veto":
                 queue.map.veto()
             else:
-                self.clear_cache(server_id=available_server.data)
+                self._clear_cache(server_id=available_server.data)
 
                 return response(error="{} isn't a valid map type".format(
                     maps["options"]["type"]
@@ -234,7 +234,7 @@ class Match(object):
             # Creating match from given data.
             queue_create = await queue.create()
 
-            self.clear_cache(server_id=available_server.data)
+            self._clear_cache(server_id=available_server.data)
 
             if queue_create.error:
                 return queue_create
@@ -274,6 +274,61 @@ class Match(object):
             return response(data=MatchModel(row).full)
         else:
             return response(error="No match with that ID")
+
+    async def clone(self):
+        """ Clones given match. """
+
+        match_scoreboard = await self.scoreboard()
+        if match_scoreboard.error:
+            return match_scoreboard
+
+        if match_scoreboard.data["status"] != 0:
+            return response(error="Active matches can't be cloned")
+
+        match_data = {
+            "players": {
+                "options": {
+                    "type": "given",
+                    "param": {"capt_1": None, "capt_2": None},
+                    "selection": match_scoreboard.data["selection"],
+                    "assiged_teams": True,
+                    "record_statistics": match_scoreboard.
+                    data["record_statistics"],
+                },
+                "list": {},
+            },
+            "maps": {
+                "options": {
+                    "type": "given",
+                    "selection": match_scoreboard.data["selection"],
+                },
+                "list": [
+                    match_scoreboard.data["map"]
+                ],
+            },
+            "team_names": {
+                "team_1": match_scoreboard.data["team_1"]["name"],
+                "team_2": match_scoreboard.data["team_2"]["name"],
+            },
+        }
+
+        for player in match_scoreboard.data["players"]["team_1"]:
+            match_data["players"]["list"][player["user_id"]] = 1
+
+            if player["captain"]:
+                match_data["players"]["options"]["param"]["capt_1"] = \
+                    list(match_data["players"]["list"]
+                         .keys()).index(player["user_id"])
+
+        for player in match_scoreboard.data["players"]["team_2"]:
+            match_data["players"]["list"][player["user_id"]] = 2
+
+            if player["captain"]:
+                match_data["players"]["options"]["param"]["capt_2"] = \
+                    list(match_data["players"]["list"]
+                         .keys()).index(player["user_id"])
+
+        return await self.create(**match_data)
 
     async def scoreboard(self):
         """ Match scoreboard. """
