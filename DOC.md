@@ -1,6 +1,6 @@
 # Documentation
-[Modules](#modules)
-[Routes](#routes)
+- [Modules](#modules)
+- [Routes](#routes)
 
 ## Modules 
 #### modulelift.client
