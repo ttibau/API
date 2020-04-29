@@ -15,10 +15,9 @@ class ScoreboardModel:
     def full(self):
         """ Formats and returns full response for scoreboard. """
 
-        return {
-            **self.match_data,
-            "players": self.players,
-        }
+        self.match_data["players"] = self.players
+
+        return self.match_data
 
     @property
     def players(self):
