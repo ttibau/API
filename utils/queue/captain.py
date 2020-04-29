@@ -14,8 +14,10 @@ class Captain(object):
         capt_2_index = self.obj.players["options"]["param"]["capt_2"]
 
         if self.obj.players["options"]["assiged_teams"]:
-            if self.obj.players[self.obj.players_list[capt_1_index]] == \
-                    self.obj.players[self.obj.players_list[capt_2_index]]:
+            if self.obj.players["list"][
+                self.obj.players_list[capt_1_index]] == \
+                    self.obj.players["list"][
+                        self.obj.players_list[capt_2_index]]:
                 return response(error="Both captains are on the same team")
 
         self.obj.captains["team_1"] = self.obj.players_list[capt_1_index]

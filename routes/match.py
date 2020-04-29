@@ -18,11 +18,21 @@ class Match(HTTPEndpoint):
         )
 
     @use_args({"match_id": fields.String(required=True), })
-    async def delete(self, request, match_id):
+    async def delete(self, request, args):
         """ Deletes match. """
 
         return responder.render(
-            await request.state.league.match(match_id=match_id).end()
+            await request.state.league.match(**args).end()
+        )
+
+
+class MatchClone(HTTPEndpoint):
+    @use_args({"match_id": fields.String(required=True), })
+    async def post(self, request, args):
+        """ Clones match. """
+
+        return responder.render(
+            await request.state.league.match(**args).clone()
         )
 
 

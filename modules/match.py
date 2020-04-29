@@ -41,7 +41,10 @@ class Match(object):
                             "param": None
                                     / ASC OR DESC
                                     / {"capt_1": index, "capt_2": index}
-                            "selection": "ABBAABBA" / "ABBABABA" / "ABABABAB",
+                            "selection": "ABBAABBA"
+                                          / "ABBABABA"
+                                          / "ABABABAB"
+                                          / None,
                             "assiged_teams": True / False,
                             "record_statistics": True / False,
                         },
@@ -53,7 +56,10 @@ class Match(object):
                     {
                         "options": {
                             "type": "veto" / "random" / "vote" / "given",
-                            "selection": "ABBAABBA" / "ABBABABA" / "ABABABAB",
+                            "selection": "ABBAABBA"
+                                          / "ABBABABA"
+                                          / "ABABABAB"
+                                          / None,
                         },
                         "list": [list of full map names],
                     }
@@ -84,7 +90,6 @@ class Match(object):
                     or "list" not in players \
                     or type(players["list"]) != dict \
                     or "assiged_teams" not in players["options"] \
-                    or "selection" not in players["options"] \
                     or "record_statistics" not in players["options"]:
                 self._clear_cache()
 
@@ -93,14 +98,22 @@ class Match(object):
             if len(maps) < 1 or "options" not in maps \
                 or type(maps["options"]) != dict\
                     or "type" not in maps["options"] \
-                    or "selection" not in maps["options"] \
                     or "list" not in maps \
                     or type(maps["list"]) != list:
                 self._clear_cache()
 
                 return response(error="Maps payload formatted incorrectly")
 
-            if players["options"]["selection"] not in \
+            if "selection" not in players["options"]\
+                    or "selection" not in maps["options"]:
+                if not players["options"]["assiged_teams"]\
+                    or (maps["options"]["type"] != "random"
+                        and maps["options"]["type"] != "given"):
+                    self._clear_cache()
+
+                    return response(error="Selection type must be passed")
+
+            elif players["options"]["selection"] not in \
                 self.current_league.obj.config.pug["selection_types"] \
                 or maps["options"]["selection"] not in \
                     self.current_league.obj.config.pug["selection_types"]:
@@ -290,7 +303,6 @@ class Match(object):
                 "options": {
                     "type": "given",
                     "param": {"capt_1": None, "capt_2": None},
-                    "selection": match_scoreboard.data["selection"],
                     "assiged_teams": True,
                     "record_statistics": match_scoreboard.
                     data["record_statistics"],
@@ -300,7 +312,6 @@ class Match(object):
             "maps": {
                 "options": {
                     "type": "given",
-                    "selection": match_scoreboard.data["selection"],
                 },
                 "list": [
                     match_scoreboard.data["map"]

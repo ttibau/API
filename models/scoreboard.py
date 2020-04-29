@@ -35,7 +35,7 @@ class ScoreboardModel:
 
         team_1_append = return_dict["team_1"].append
         team_2_append = return_dict["team_2"].append
-        spectator_append = return_dict["spectator"].append
+        unassigned_append = return_dict["unassigned"].append
 
         for player in self.players_list:
             if player["team"] == 1:
@@ -43,7 +43,7 @@ class ScoreboardModel:
             elif player["team"] == 2:
                 team_append = team_2_append
             else:
-                team_append = spectator_append
+                team_append = unassigned_append
 
             team_append({
                 "user_id": player["user_id"],
