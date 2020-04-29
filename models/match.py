@@ -1,5 +1,6 @@
 from settings import Config as config
 
+
 class MatchModel:
     def __init__(self, data: dict):
         self.data = data
