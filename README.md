@@ -53,7 +53,8 @@ You can adjust the host & port in ``run.py``
 
 Run ``run.py`` with python 3.
 
-## Planned Features
+## What's coming
+- SM Plugins.
 - Example website.
 - Example discord bot.
 - Setup guide.
