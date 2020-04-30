@@ -6,6 +6,8 @@
 - Testing payloads for match.create.
 - match.select_player & select_map.
     - Methods of selecting players & maps depending on the options provided in match.create.
+- Setup script.
+    - Script to automate production deploying.
 - Login module.
     - Attaching discord & steam accounts to a user id.
     - Deleting & editing logins.
