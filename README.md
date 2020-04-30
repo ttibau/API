@@ -1,6 +1,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/ModuleLIFT/API)](https://github.com/ModuleLIFT/API/issues)
 [![GitHub license](https://img.shields.io/github/license/ModuleLIFT/API)](https://github.com/ModuleLIFT/API/blob/master/LICENSE)
-[![GitHub Action](https://github.com/ModuleLIFT/API/workflows/Markdownlint%20Workflow/badge.svg)](https://github.com/ModuleLIFT/API)
+[![Actions Status](https://github.com/ModuleLIFT/API/workflows/Python%20application/badge.svg)](https://github.com/ModuleLIFT/API/actions)
 
 ```
   __  __           _       _      _      _____ ______ _______            _____ _____ 
