@@ -15,7 +15,14 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 - update(self, args: dict)
 
 ##### match(self, match_id=None)
-- create(self, players: dict, maps: dict, team_names: dict)
+
+---
+
+```python
+create(self, players: dict, maps: dict, team_names: dict)
+```
+
+**Parameters**
 ```
     - players
         {
@@ -54,6 +61,12 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
             "team_2": "",
         }
 ```
+**Response**
+
+[Full scoreboard Model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+
 - get(self)
 - clone(self)
 - scoreboard(self)
