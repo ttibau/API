@@ -23,7 +23,7 @@ create(self, players: dict, maps: dict, team_names: dict)
 ```
 
 **Parameters**
-```
+```json
     - players
         {
             "options": {
@@ -63,7 +63,7 @@ create(self, players: dict, maps: dict, team_names: dict)
 ```
 **Response**
 
-[Full scoreboard Model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+[Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
 
