@@ -16,6 +16,7 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 
 ###### match(self, match_id=None)
 - create(self, players: dict, maps: dict, team_names: dict)
+```
     - players
         {
             "options": {
@@ -52,7 +53,7 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
             "team_1": "Max 13 characters",
             "team_2": "",
         }
-
+```
 - get(self)
 - clone(self)
 - scoreboard(self)
