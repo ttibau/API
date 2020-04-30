@@ -16,6 +16,43 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 
 ###### match(self, match_id=None)
     - create(self, players: dict, maps: dict, team_names: dict)
+        - players
+            {
+                "options": {
+                    "type": "random"
+                            / "elo"
+                            / "given",
+                    "param": None
+                            / ASC OR DESC
+                            / {"capt_1": index, "capt_2": index}
+                    "selection": "ABBAABBA"
+                                    / "ABBABABA"
+                                    / "ABABABAB"
+                                    / None,
+                    "assiged_teams": True / False,
+                    "record_statistics": True / False,
+                },
+                "list": {
+                    "user_id": None / 1 / 2
+                },
+            }
+        - maps
+            {
+                "options": {
+                    "type": "veto" / "random" / "vote" / "given",
+                    "selection": "ABBAABBA"
+                                    / "ABBABABA"
+                                    / "ABABABAB"
+                                    / None,
+                },
+                "list": [list of full map names],
+            }
+        - team_names
+            {
+                "team_1": "Max 13 characters",
+                "team_2": "",
+            }
+
     - get(self)
     - clone(self)
     - scoreboard(self)
