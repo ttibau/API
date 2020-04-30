@@ -18,4 +18,3 @@ class Webhook:
                 return False
             else:
                 await websocket.recv()
-
