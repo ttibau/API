@@ -1,6 +1,6 @@
 # API Roadmap
 - Improving modules documentation.
-    - Explaining what what each function does.
+    - Explaining what each function does.
 - Routes documentation.
     - Explaining how each route operates, what data can be pushed, etc.
 - Testing payloads for match.create.
