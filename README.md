@@ -1,3 +1,7 @@
+[![GitHub issues](https://img.shields.io/github/issues/ModuleLIFT/API)](https://github.com/ModuleLIFT/API/issues)
+[![GitHub license](https://img.shields.io/github/license/ModuleLIFT/API)](https://github.com/ModuleLIFT/API/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/url?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2FModuleLIFT%2FAPI)
+
 ```
   __  __           _       _      _      _____ ______ _______            _____ _____ 
  |  \/  |         | |     | |    | |    |_   _|  ____|__   __|     /\   |  __ \_   _|
