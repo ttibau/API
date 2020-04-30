@@ -14,7 +14,7 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 - details(self)
 - update(self, args: dict)
 
-###### match(self, match_id=None)
+##### match(self, match_id=None)
 - create(self, players: dict, maps: dict, team_names: dict)
 ```
     - players
@@ -62,20 +62,20 @@ Expects ``server_init()`` to be called after aiohttp session has been passed wit
 - select_player(self, user_id: str) - being developed
 - select_map(self, map_id: str) - being developed
 
-###### list(self, limit: int, offset: int, desc: bool, search: str = "")
+##### list(self, limit: int, offset: int, desc: bool, search: str = "")
 - matches(self)
 - players(self)
 
-###### player(self, user_id)
+##### player(self, user_id)
 - get(self)
 - reset(self)
 - delete(self)
 
-###### players(self, user_ids)
+##### players(self, user_ids)
 - fetch(self, include_stats=False)
 - validate(self)
 
-###### api_key(self)
+##### api_key(self)
 - paths(self)
 - generate(self, user_id, access_level: int, active: bool = True)
 - interact(self, api_key)
