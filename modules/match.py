@@ -1,10 +1,11 @@
 from utils.response import response
 from utils.queue.queue import Queue
+from utils.websocket import Webhook
 
 from models.match import MatchModel
 from models.scoreboard import ScoreboardModel
 
-from starlette.background import BackgroundTask
+from starlette.background import BackgroundTask, BackgroundTasks
 
 
 class Match(object):
@@ -399,12 +400,22 @@ class Match(object):
             values=values
         )
 
-        server_task = BackgroundTask(
+        background_tasks = BackgroundTasks()
+
+        league_details = await self.current_league.details()
+        if not league_details.error:
+            background_tasks.add_task(
+                Webhook(uri=league_details["websocket_endpoint"],
+                        data=match.data).send
+            )
+
+        background_tasks.add_task(
             self.current_league.obj.server(
                 server_id=match.data["server_id"]
-            ).stop)
+            ).stop
+        )
 
-        return response(data=match.data, backgroud=server_task)
+        return response(data=match.data, backgroud=background_tasks)
 
     async def players(self):
         """ List players for given match. """
