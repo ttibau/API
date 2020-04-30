@@ -19,6 +19,7 @@
 - [Why use ModuleLIFT API?](#why-use-modulelift-api)
 - [Deploying](#deploying)
 - [Contributions](#contributions)
+- [Credits](#credits)
 
 # About
 ModuleLIFT was 1st created back in 2018 as a proof of concept for a new type of pugging system. Recently I've decided to open source the project in hope to get support from other developers in the communitity.
@@ -67,3 +68,7 @@ I recommend installing [cornflakes linter](https://marketplace.visualstudio.com/
 
 ### Branches
 Create a branch if you're working on an issue with the issue number and name like so: `100_Title-Separated-By-Dashes`.
+
+## Credits
+All the amazing developers who made the libraries this project is built on.
+- [WardPearce](https://github.com/WardPearce) - Lead developer & maintainer.
