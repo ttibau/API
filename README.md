@@ -11,7 +11,6 @@
  |_|  |_|\___/ \__,_|\__,_|_|\___|______|_____|_|       |_|    /_/    \_\_|   |_____|
 ```
 #### This project is NOT considered production ready.
-Features are still being developed / tested & plugins haven't been released yet.
 
 # Index
 - [Documentation](/DOC.md)
