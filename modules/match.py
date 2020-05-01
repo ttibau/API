@@ -5,8 +5,6 @@ from utils.misc import Misc
 from models.match import MatchModel
 from models.scoreboard import ScoreboardModel
 
-from settings import Config as config
-
 from starlette.background import BackgroundTask, BackgroundTasks
 
 import discord

@@ -19,6 +19,7 @@ import asyncio
 import aiohttp
 from aioproxyio import proxy_io
 
+
 class client:
     database_url = DatabaseURL(
         "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
