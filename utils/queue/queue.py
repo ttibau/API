@@ -95,6 +95,17 @@ class Queue:
         team_2_count = 0
 
         for user_id, team in self.players["list"].items():
+            if self.captains["team_1"] == user_id or \
+                    self.captains["team_2"] == user_id:
+                captain = 1
+
+                if self.captains["team_1"] == user_id:
+                    team = 1
+                else:
+                    team = 2
+            else:
+                captain = 0
+
             if team is None:
                 team = 0
             elif team == 1:
@@ -105,12 +116,6 @@ class Queue:
                 return response(error="{} isn't a valid team side".format(
                     team
                 ))
-
-            if self.captains["team_1"] == user_id or \
-                    self.captains["team_2"] == user_id:
-                captain = 1
-            else:
-                captain = 0
 
             self.assign(user_id=user_id, team=team, captain=captain)
 
