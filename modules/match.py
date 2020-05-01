@@ -221,16 +221,16 @@ class Match(MatchSelect):
                         return response(error="""Something went
                                                  wrong during elo fetch""")
                 else:
-                    if type(players["options"]["param"]) != dict\
-                        or not players["options"]["param"].get("capt_1") \
-                        or not players["options"]["param"].get("capt_2") \
+                    if type(players["options"]["param"]) != dict \
+                        or "capt_1" not in players["options"]["param"] \
+                        or "capt_2" not in players["options"]["param"] \
                         or type(players["options"]["param"]["capt_1"]) != int \
                             or type(players["options"]["param"]["capt_2"]) \
                             != int:
                         self._clear_cache(server_id=available_server.data)
 
-                        return response(error="""Param payload
-                                                 formatted incorrectly""")
+                        return response(error="Param payload\
+                                               formatted incorrectly")
 
                     if players["options"]["param"]["capt_1"] \
                         > len_players - 1 \
