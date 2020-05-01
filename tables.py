@@ -152,7 +152,8 @@ class Tables(object):
         ),
         sqlalchemy.Column(
             "websocket_endpoint",
-            sqlalchemy.String(length=255)
+            sqlalchemy.String(length=255),
+            nullable=True,
         ),
         sqlalchemy.Column(
             "discord_webhook",

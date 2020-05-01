@@ -431,11 +431,12 @@ class Match(MatchSelect):
 
         league_details = await self.current_league.details()
         if not league_details.error:
-            background_tasks.add_task(
-                self.current_league.obj.websocket.send,
-                uri=league_details.data["websocket_endpoint"],
-                data=match.data
-            )
+            if league_details.data["websocket_endpoint"]:
+                background_tasks.add_task(
+                    self.current_league.obj.websocket.send,
+                    uri=league_details.data["websocket_endpoint"],
+                    data=match.data
+                )
 
             if league_details.data["discord_webhook"]:
                 embed = discord.Embed(
