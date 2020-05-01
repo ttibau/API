@@ -4,6 +4,8 @@ import aiodathost
 
 import sys
 
+from settings import Config as config
+
 
 class Server:
     def find_client(obj):
@@ -19,28 +21,28 @@ class Server:
             and see if all those APIs support it.
         """
 
-        if obj.config.server["pterodactyl"]["enabled"]:
+        if config.server["pterodactyl"]["enabled"]:
             pterodactyl = aiodactyl.client(
-                api_key=obj.config.server["key"],
-                route=obj.config.server["pterodactyl"]["route"],
+                api_key=config.server["key"],
+                route=config.server["pterodactyl"]["route"],
                 session=obj.sessions.aiohttp
             )
 
             return pterodactyl.client
 
-        elif obj.config.server["pes"]["enabled"]:
+        elif config.server["pes"]["enabled"]:
             pes = aiopes.client(
-                api_key=obj.config.server["key"],
+                api_key=config.server["key"],
                 session=obj.sessions.aiohttp
             )
 
             return pes.server
 
-        elif obj.config.server["dathost"]["enabled"]:
-            if "/" not in obj.config.server["key"]:
+        elif config.server["dathost"]["enabled"]:
+            if "/" not in config.server["key"]:
                 sys.exit("Dathost key isn't formatted correctly.")
 
-            username, password = obj.config.server["key"].split("/")
+            username, password = config.server["key"].split("/")
 
             dathost = aiodathost.client(
                 username=username,

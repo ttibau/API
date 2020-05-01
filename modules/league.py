@@ -6,6 +6,8 @@ from .players import Players
 from .list import List
 from .api_key.api_key import ApiKey
 
+from settings import Config as config
+
 
 class League(object):
     def __init__(self, obj, league_id, region):
@@ -52,11 +54,11 @@ class League(object):
     async def get_server(self):
         """ Finds a available server for the currnet league. """
 
-        if not self.obj.config.server["regions"].get(self.region):
+        if not config.server["regions"].get(self.region):
             return response(error="No server IDs for that region")
 
         region_servers = list(
-            self.obj.config.server["regions"][self.region]
+            config.server["regions"][self.region]
         )
         region_servers_remove = region_servers.remove
 
@@ -112,7 +114,7 @@ class League(object):
         """ Gets basic details of league. """
 
         row = await self.obj.database.fetch_one(
-            query="""SELECT league_name, league_website,
+            query="""SELECT league_name, league_website, discord_webhook,
                             websocket_endpoint, queue_limit,
                             league_id, discord_prefix,
                             sm_message_prefix, knife_round,

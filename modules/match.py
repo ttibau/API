@@ -1,11 +1,16 @@
 from utils.response import response
 from utils.queue.queue import Queue
-from utils.websocket import Webhook
+from utils.misc import Misc
 
 from models.match import MatchModel
 from models.scoreboard import ScoreboardModel
 
+from settings import Config as config
+
 from starlette.background import BackgroundTask, BackgroundTasks
+
+import discord
+import re
 
 
 class Match(object):
@@ -105,6 +110,8 @@ class Match(object):
 
                 return response(error="Maps payload formatted incorrectly")
 
+            len_players = len(players["list"])
+
             if "selection" not in players["options"]\
                     or "selection" not in maps["options"]:
                 if not players["options"]["assiged_teams"]\
@@ -114,15 +121,27 @@ class Match(object):
 
                     return response(error="Selection type must be passed")
 
-            elif players["options"]["selection"] not in \
-                self.current_league.obj.config.pug["selection_types"] \
-                or maps["options"]["selection"] not in \
-                    self.current_league.obj.config.pug["selection_types"]:
-                self._clear_cache()
+            else:
+                if len(maps["options"]["selection"]) \
+                   != len(maps["list"]) \
+                   or len(players["options"]["selection"]) \
+                   != len_players - 2:
+                    self._clear_cache()
 
-                return response(error="Invaild selection type")
+                    return response(error="Invaild selection type")
 
-            len_players = len(players["list"])
+                maps["options"]["selection"] = maps["options"][
+                    "selection"].upper()
+                players["options"]["selection"] = players["options"][
+                    "selection"].upper()
+
+                if not re.match("^[AB]*$", maps["options"]["selection"]) \
+                    or not re.match("^[AB]*$",
+                                    players["options"]["selection"]):
+                    self._clear_cache()
+
+                    return response(error="Only A & B are valid")
+
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
                 self._clear_cache()
 
@@ -380,9 +399,12 @@ class Match(object):
     async def end(self):
         """ Ends given match. """
 
-        match = await self.get()
+        match = await self.scoreboard()
         if match.error:
             return match
+
+        if match.data["status"] == 0:
+            return response(error="Match already ended")
 
         values = {"match_id": self.match_id, }
 
@@ -400,14 +422,81 @@ class Match(object):
             values=values
         )
 
+        match.data["winner"] = Misc.determine_winner(
+            match.data["team_1"],
+            match.data["team_2"]
+        )
+
         background_tasks = BackgroundTasks()
 
         league_details = await self.current_league.details()
         if not league_details.error:
             background_tasks.add_task(
-                Webhook(uri=league_details["websocket_endpoint"],
-                        data=match.data).send
+                self.current_league.obj.websocket.send,
+                uri=league_details.data["websocket_endpoint"],
+                data=match.data
             )
+
+            if league_details.data["discord_webhook"]:
+                embed = discord.Embed(
+                    description="**Details:**\n\
+                                Map: {}\nScore: {}\n\
+                                    [Scoreboard]({})".format(
+                                        match.data["map"],
+                                        "{}:{}".format(
+                                            match.data["team_1"]["score"],
+                                            match.data["team_2"]["score"]
+                                        ),
+                                        "{}/scoreboard/{}".format(
+                                            league_details.data[
+                                                "league_website"],
+                                            match.data["match_id"]
+                                        )
+                                    ))
+
+                formatted_player_names = {
+                    "team_1": "",
+                    "team_2": "",
+                }
+
+                winner_mention = ""
+
+                for index in formatted_player_names.keys():
+                    for values in match.data["players"][index].values():
+                        if index == match.data["winner"]:
+                            winner_mention += "<@{}>".format(
+                                values["discord_id"]
+                            )
+
+                        formatted_player_names[index] += "{}\n".format(
+                            values["name"]
+                        )
+
+                embed.add_field(
+                    name=match.data["team_1"]["name"],
+                    value=formatted_player_names["team_1"],
+                    inline=True
+                )
+
+                embed.add_field(
+                    name=match.data["team_2"]["name"],
+                    value=formatted_player_names["team_2"],
+                    inline=True
+                )
+
+                if match.data["winner"] == "tie":
+                    match_message = "Congratulations everyone for tying!"
+                else:
+                    match_message = "Congratulations {} for winning!".format(
+                        winner_mention
+                    )
+
+                background_tasks.add_task(
+                    self.current_league.obj.webhook.send,
+                    url=league_details.data["discord_webhook"],
+                    content=match_message,
+                    embed=embed
+                )
 
         background_tasks.add_task(
             self.current_league.obj.server(
@@ -417,11 +506,8 @@ class Match(object):
 
         return response(data=match.data, backgroud=background_tasks)
 
-    async def players(self):
-        """ List players for given match. """
-        pass
-
     async def select_player(self, user_id: str):
+        """ Selects player. """
         pass
 
     async def select_map(self, map_id: str):

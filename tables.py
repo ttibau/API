@@ -155,6 +155,11 @@ class Tables(object):
             sqlalchemy.String(length=255)
         ),
         sqlalchemy.Column(
+            "discord_webhook",
+            sqlalchemy.String(length=255),
+            nullable=True,
+        ),
+        sqlalchemy.Column(
             "queue_limit",
             sqlalchemy.Integer
         ),
@@ -357,22 +362,6 @@ class Tables(object):
         ),
     )
 
-    # Selection Order
-    sqlalchemy.Table(
-        "selection_order",
-        metadata,
-        sqlalchemy.Column(
-            "id",
-            sqlalchemy.Integer,
-            primary_key=True,
-            autoincrement=True
-        ),
-        sqlalchemy.Column(
-            "type",
-            sqlalchemy.String(length=8)
-        ),
-    )
-
     # Scoreboard
     # Status codes
     # 0 - Finished
@@ -393,14 +382,12 @@ class Tables(object):
         ),
         sqlalchemy.Column(
             "map_order",
-            sqlalchemy.Integer,
-            sqlalchemy.ForeignKey("selection_order.id"),
+            sqlalchemy.String(length=20),
             nullable=True
         ),
         sqlalchemy.Column(
             "player_order",
-            sqlalchemy.Integer,
-            sqlalchemy.ForeignKey("selection_order.id"),
+            sqlalchemy.String(length=20),
             nullable=True
         ),
         sqlalchemy.Column(

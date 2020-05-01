@@ -1,6 +1,3 @@
-# Because we know models don't need
-# anything cached from the db into the
-# config object it's fine to import it.
 from settings import Config as config
 
 

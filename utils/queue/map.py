@@ -26,14 +26,10 @@ class Map(object):
         # type needs some different functionality later on.
 
         self.obj.details["map"] = None
-        self.obj.details["map_order"] = self.obj.selection_types[
-            self.obj.maps["options"]["selection"]
-        ]
+        self.obj.details["map_order"] = self.obj.maps["options"]["selection"]
 
     def vote(self):
         """ Sets map selection type to vote. """
 
         self.obj.details["map"] = None
-        self.obj.details["map_order"] = self.obj.selection_types[
-            self.obj.maps["options"]["selection"]
-        ]
+        self.obj.details["map_order"] = self.obj.maps["options"]["selection"]

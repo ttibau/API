@@ -1,20 +1,27 @@
 import websockets
 from websockets.exceptions import ConnectionClosed,\
-    InvalidHandshake, ProtocolError
+    InvalidHandshake, ProtocolError, InvalidURI
 
 
-class Webhook:
-    def __init__(self, uri, data):
-        self.url = uri
-        self.data = data
+class WebSocket:
+    def __init__(self, loop):
+        self.loop = loop
 
-    async def send(self):
-        """ Attempts to send data to given webhook. """
+    async def send(self, uri, data):
+        """ Attempts to send data to given WebSocket. """
 
-        async with websockets.connect(self.url) as websocket:
-            try:
-                await websocket.send(self.data)
-            except (ConnectionClosed, InvalidHandshake, ProtocolError):
-                return False
-            else:
-                await websocket.recv()
+        try:
+            async with websockets.connect(
+                uri,
+                timeout=3.0,
+                loop=self.loop) \
+                    as websocket:
+                try:
+                    await websocket.send(data)
+                except (ConnectionClosed, InvalidHandshake,
+                        ProtocolError, InvalidURI):
+                    return False
+                else:
+                    await websocket.recv()
+        except OSError:
+            pass

@@ -1,7 +1,7 @@
 from databases import Database, DatabaseURL
-
-from settings import Config
 from tables import Tables
+
+from settings import Config as config
 
 from routes.router import Routes
 from middlewares.middlewares import Middlewares
@@ -10,13 +10,16 @@ from utils.memory_cache import InMemoryCache
 from utils.sessions import Sessions
 from utils.api import Api
 from utils.server import Server
+from utils.webhook import WebhookSend
+from utils.websocket import WebSocket
 
 from modules.league import League
 
+import asyncio
+import aiohttp
+from aioproxyio import proxy_io
 
 class client:
-    config = Config
-
     database_url = DatabaseURL(
         "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
                                                 config.database["username"],
@@ -41,12 +44,26 @@ class client:
         self.api = Api(obj=self)
         self.tables = Tables(obj=self)
 
-    def server_init(self):
+    def context_init(self):
         """ Should be ran within context of the
-            loop after the aiohttp session is created.
+            loop.
+            Creates all needed sessions & functions what
+            require loop context.
         """
+        loop = asyncio.get_event_loop()
+
+        self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
+
+        self.sessions.proxy = proxy_io(api_key=config.proxyio["key"],
+                                       session=self.sessions.aiohttp)
+
+        self.websocket = WebSocket(loop=loop)
 
         self.server = Server.find_client(obj=self)
+
+    @property
+    def webhook(self):
+        return WebhookSend(aiohttp_session=self.sessions.aiohttp)
 
     def league(self, league_id, region):
 

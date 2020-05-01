@@ -23,7 +23,6 @@ class Queue:
         self.players_list = list(self.players["list"].keys())
 
         self.maps = maps
-        self.selection_types = current_league.obj.config.pug["selection_types"]
 
         self.database = current_league.obj.database
 
@@ -66,9 +65,8 @@ class Queue:
                 self.details["status"] = 1
             else:
                 # Setting match as player selection stage
-                self.details["player_order"] = self.selection_types[
-                    self.players["options"]["selection"]
-                ]
+                self.details["player_order"] = self.players[
+                    "options"]["selection"]
                 self.details["status"] = 3
         else:
             map_pool = []
@@ -85,9 +83,8 @@ class Queue:
                 self.details["status"] = 2
             else:
                 # Setting match as player selection stage
-                self.details["player_order"] = self.selection_types[
-                    self.players["options"]["selection"]
-                ]
+                self.details["player_order"] = self.players[
+                    "options"]["selection"]
                 self.details["status"] = 3
 
         if self.players["options"]["record_statistics"]:

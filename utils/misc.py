@@ -17,3 +17,17 @@ class Misc(object):
         given_string = escape_markdown(given_string)
 
         return given_string
+
+    def determine_winner(team_1: dict, team_2: dict):
+        """ Expects teams passed from match model. """
+
+        if team_1["score"] == team_2["score"]:
+            return "tie"
+
+        total_rounds = team_1["score"] + team_2["score"]
+        amount_to_win = total_rounds / 2
+
+        if team_1["score"] >= amount_to_win:
+            return "team_1"
+        else:
+            return "team_2"

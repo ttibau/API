@@ -78,12 +78,3 @@ class Config(object):
             ],
         },
     }
-
-    pug = {
-        # Caches selection ID types on boot.
-        "selection_types": {
-            "ABBAABBA": None,
-            "ABBABABA": None,
-            "ABABABAB": None,
-        },
-    }

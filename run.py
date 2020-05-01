@@ -1,11 +1,9 @@
 from starlette.applications import Starlette
 
 import uvicorn
-import asyncio
-import aiohttp
 import sys
 
-from aioproxyio import proxy_io
+from settings import Config as config
 
 import modulelift
 
@@ -25,16 +23,12 @@ print("-"*62)
 ml = modulelift.client()
 
 # Security checks.
-if len(ml.config.master_key) < 48 and not ml.config.debug:
+if len(config.master_key) < 48 and not config.debug:
     sys.exit("Master key must be 48 characters or longer.")
 
 
 async def startup_task():
-    ml.sessions.aiohttp = aiohttp.ClientSession(loop=asyncio.get_event_loop())
-    # Initializes our wrapper for different providers.
-    ml.server_init()
-    ml.sessions.proxy = proxy_io(api_key=ml.config.proxyio["key"],
-                                 session=ml.sessions.aiohttp)
+    ml.context_init()
     await ml.database.connect()
 
 
@@ -43,7 +37,7 @@ async def shutdown_task():
     await ml.database.disconnect()
 
 app = Starlette(
-    debug=ml.config.debug,
+    debug=config.debug,
     routes=ml.routes.list,
     middleware=ml.middlewares.list,
     exception_handlers=ml.routes.exception_handlers,
@@ -52,4 +46,4 @@ app = Starlette(
 )
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=80)
+    uvicorn.run(app, host="localhost", port=8888)
