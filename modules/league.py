@@ -25,7 +25,8 @@ class League(object):
 
     def match(self, match_id=None):
         """ Match Object.
-            If create passes match_id will be updated to that matches match ID.
+            If no match_id passed random UUID4 will be generated and used
+            for create function.
         """
 
         return Match(current_league=self, match_id=match_id)
