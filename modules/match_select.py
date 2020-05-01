@@ -46,11 +46,7 @@ class MatchSelect(object):
         stage_index = len(match_scoreboard.data["players"]["team_1"]) \
             + len(match_scoreboard.data["players"]["team_2"]) - 2
 
-        print(stage_index)
-
         stage_letter = match_scoreboard.data["player_order"][stage_index]
-
-        print(stage_letter)
 
         return_data = {
             "completed": False,
