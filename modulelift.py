@@ -54,17 +54,11 @@ class client:
         loop = asyncio.get_event_loop()
 
         self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
-
         self.sessions.proxy = proxy_io(api_key=config.proxyio["key"],
                                        session=self.sessions.aiohttp)
-
         self.websocket = WebSocket(loop=loop)
-
+        self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
         self.server = Server.find_client(obj=self)
-
-    @property
-    def webhook(self):
-        return WebhookSend(aiohttp_session=self.sessions.aiohttp)
 
     def league(self, league_id, region):
 

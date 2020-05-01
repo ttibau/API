@@ -16,7 +16,11 @@ import re
 class Match(MatchSelect):
     def __init__(self, current_league, match_id):
         self.current_league = current_league
-        self.match_id = match_id
+
+        if match_id:
+            self.match_id = match_id
+        else:
+            self.match_id = Misc.uuid4()
 
     def _clear_cache(self, server_id=None):
         """ Clears cached data for current league out of memeory. """

@@ -3,7 +3,7 @@ import uuid
 from discord.utils import escape_markdown
 
 
-class Misc(object):
+class Misc:
     def uuid4():
         """ Returns string version of uuid.uuid4(). """
         return str(uuid.uuid4())

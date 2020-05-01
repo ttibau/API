@@ -13,8 +13,7 @@ class Queue:
 
     details = {}
 
-    def __init__(self, players, maps, team_names, server_id, obj,
-                 match_id=Misc.uuid4()):
+    def __init__(self, players, maps, team_names, server_id, obj):
         self.obj = obj
 
         current_league = self.obj.current_league
@@ -26,7 +25,7 @@ class Queue:
 
         self.database = current_league.obj.database
 
-        self.details["match_id"] = match_id
+        self.details["match_id"] = self.obj.match_id
         self.details["server_id"] = server_id
 
         self.details["league_id"] = current_league.league_id
