@@ -2,4 +2,3 @@
 class Sessions(object):
     aiohttp = None
     proxy = None
-    dactyl = None
