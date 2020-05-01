@@ -28,6 +28,14 @@ class MatchSelect(object):
             values=values
         )
 
+    def _stage_letter_to_team(self, letter):
+        if letter == "A":
+            team = 1
+        else:
+            team = 2
+
+        return team
+
     async def select_player(self, user_id: str):
         """ Selects player. """
 
@@ -47,6 +55,8 @@ class MatchSelect(object):
         stage_index = len(match_scoreboard.data["players"]["team_1"]) \
             + len(match_scoreboard.data["players"]["team_2"]) - 3
 
+        stage_letter = match_scoreboard.data["player_order"][stage_index]
+
         return_data = {
             "completed": False,
             "next_turn": match_scoreboard.data["player_order"][
@@ -58,16 +68,11 @@ class MatchSelect(object):
             for unassigned_user_id in match_scoreboard.data["players"][
                     "unassigned"].keys():
                 if unassigned_user_id == user_id:
-                    stage_letter = match_scoreboard.data[
-                        "player_order"][stage_index]
+                    current_stage = stage_letter
                 else:
-                    stage_letter = match_scoreboard.data[
-                        "player_order"][stage_index + 1]
+                    current_stage = return_data["next_turn"]
 
-                if stage_letter == "A":
-                    team = 1
-                else:
-                    team = 2
+                team = self._stage_letter_to_team(current_stage)
 
                 await self._insert_player(unassigned_user_id, team)
 
@@ -90,11 +95,7 @@ class MatchSelect(object):
                 values=values
             )
         else:
-            stage_letter = match_scoreboard.data["player_order"][stage_index]
-            if stage_letter == "A":
-                team = 1
-            else:
-                team = 2
+            team = self._stage_letter_to_team(stage_letter)
 
             await self._insert_player(user_id, team)
 
@@ -146,7 +147,7 @@ class MatchSelect(object):
             values=values
         )
 
-        next_stage_letter = match_scoreboard.data["player_order"][
+        next_stage_letter = match_scoreboard.data["map_order"][
             maps_len]
 
         return_data = {
