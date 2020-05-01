@@ -2,20 +2,11 @@ from utils.response import response
 
 
 class MatchSelect(object):
-    async def _insert_player(self, user_id, team):
+    async def _update_player(self, user_id, team):
         """ Inserts player into team. """
 
-        query = """INSERT INTO
-                     scoreboard (
-                        match_id,
-                        user_id,
-                        team
-                     )
-                     VALUES (
-                        :match_id,
-                        :user_id,
-                        :team
-                     )"""
+        query = """UPDATE scoreboard SET team = :team
+                   WHERE match_id = :match_id AND user_id = :user_id"""
 
         values = {
             "match_id": self.match_id,
@@ -51,11 +42,15 @@ class MatchSelect(object):
 
         # Works out the current stage index.
         # Because the captains are already in the teams & we want the index
-        # we subtract 3 to the total len for both teams.
+        # we subtract 2 to the total len for both teams.
         stage_index = len(match_scoreboard.data["players"]["team_1"]) \
-            + len(match_scoreboard.data["players"]["team_2"]) - 3
+            + len(match_scoreboard.data["players"]["team_2"]) - 2
+
+        print(stage_index)
 
         stage_letter = match_scoreboard.data["player_order"][stage_index]
+
+        print(stage_letter)
 
         return_data = {
             "completed": False,
@@ -74,7 +69,7 @@ class MatchSelect(object):
 
                 team = self._stage_letter_to_team(current_stage)
 
-                await self._insert_player(unassigned_user_id, team)
+                await self._update_player(unassigned_user_id, team)
 
             return_data["completed"] = True
 
@@ -88,7 +83,7 @@ class MatchSelect(object):
             query = """UPDATE scoreboard_total
                        SET status = :next_status
                        WHERE match_id = :match_id"""
-            values = {"match_id": self.match_id, }
+            values = {"match_id": self.match_id, "next_status": next_status, }
 
             await self.current_league.obj.database.execute(
                 query=query,
@@ -97,7 +92,7 @@ class MatchSelect(object):
         else:
             team = self._stage_letter_to_team(stage_letter)
 
-            await self._insert_player(user_id, team)
+            await self._update_player(user_id, team)
 
         return response(data=return_data)
 

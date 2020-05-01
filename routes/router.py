@@ -4,7 +4,8 @@ from starlette.exceptions import HTTPException
 from webargs_starlette import WebargsHTTPException
 
 from .league import League
-from .match import Match, MatchClone, MatchScoreboard
+from .match import Match, MatchClone, MatchScoreboard, \
+    MatchSelectPlayer, MatchSelectMap
 from .player import Player, PlayerFetch, PlayerValidate
 from .list import PlayersList, MatchesList
 
@@ -20,6 +21,8 @@ class Routes(object):
             "match": Match,
             "match/clone": MatchClone,
             "match/scoreboard": MatchScoreboard,
+            "match/select/map": MatchSelectMap,
+            "match/select/player": MatchSelectPlayer,
 
             "player": Player,
             "player/fetch": PlayerFetch,

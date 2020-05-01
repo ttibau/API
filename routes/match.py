@@ -34,6 +34,36 @@ class Match(HTTPEndpoint):
         )
 
 
+class MatchSelectPlayer(HTTPEndpoint):
+    @use_args({"match_id": fields.String(required=True),
+               "user_id": fields.String(required=True), })
+    async def post(self, request, args):
+        """ Selects player for team. """
+
+        return responder.render(
+            await request.state.league.match(
+                match_id=args["match_id"]
+            ).select_player(
+                user_id=args["user_id"]
+            )
+        )
+
+
+class MatchSelectMap(HTTPEndpoint):
+    @use_args({"match_id": fields.String(required=True),
+               "map": fields.String(required=True), })
+    async def post(self, request, args):
+        """ Selects map. """
+
+        return responder.render(
+            await request.state.league.match(
+                match_id=args["match_id"]
+            ).select_map(
+                map_id=args["map"]
+            )
+        )
+
+
 class MatchScoreboard(HTTPEndpoint):
     @use_args({"match_id": fields.String(required=True), })
     async def get(self, request, args):
