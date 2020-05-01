@@ -2,7 +2,6 @@
 	"players": {
 		"options": {
 			"type": "random",
-			"selection": "ABBAABBA",
 			"assiged_teams": true,
 			"record_statistics": false
 		},
@@ -21,8 +20,7 @@
 	},
 	"maps": {
 		"options": {
-			"type": "random",
-			"selection": "ABBAABBA"
+			"type": "random"
 		},
 		"list": [
 			"de_mirage",
