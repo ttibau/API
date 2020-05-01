@@ -5,13 +5,15 @@ from utils.misc import Misc
 from models.match import MatchModel
 from models.scoreboard import ScoreboardModel
 
+from modules.match_select import MatchSelect
+
 from starlette.background import BackgroundTask, BackgroundTasks
 
 import discord
 import re
 
 
-class Match(object):
+class Match(MatchSelect):
     def __init__(self, current_league, match_id):
         self.current_league = current_league
         self.match_id = match_id
@@ -503,10 +505,3 @@ class Match(object):
         )
 
         return response(data=match.data, backgroud=background_tasks)
-
-    async def select_player(self, user_id: str):
-        """ Selects player. """
-        pass
-
-    async def select_map(self, map_id: str):
-        pass

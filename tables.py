@@ -467,7 +467,8 @@ class Tables(object):
         ),
         sqlalchemy.Column(
             "captain",
-            sqlalchemy.Integer
+            sqlalchemy.Integer,
+            server_default="0"
         ),
         sqlalchemy.Column(
             "team",
