@@ -51,8 +51,6 @@ class APIKeyValidation(BaseHTTPMiddleware):
                                 self.obj.in_memory_cache. \
                                 api_key_requests[api_key]["date"]:
 
-                            print("Cleared cache.")
-
                             # Clears api auth cache after x amount of seconds.
                             self.obj.in_memory_cache.api_key.remove(
                                 api_key_request
