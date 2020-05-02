@@ -419,13 +419,6 @@ class Match(MatchSelect):
             values=values
         )
 
-        # We just delete map pool for the given match.
-        query = "DELETE FROM map_pool WHERE match_id = :match_id"
-        await self.current_league.obj.database.execute(
-            query=query,
-            values=values
-        )
-
         match.data["winner"] = Misc.determine_winner(
             match.data["team_1"],
             match.data["team_2"]

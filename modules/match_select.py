@@ -19,6 +19,18 @@ class MatchSelect(object):
             values=values
         )
 
+    async def _delete_map(self, map_id):
+        """ Deletes map from pool. """
+
+        query = """DELETE FROM map_pool
+                   WHERE map = :map AND match_id = :match_id"""
+        values = {"match_id": self.match_id, "map": map_id, }
+
+        await self.current_league.obj.database.execute(
+            query=query,
+            values=values
+        )
+
     def _stage_letter_to_team(self, letter):
         if letter == "A":
             team = 1
@@ -130,17 +142,10 @@ class MatchSelect(object):
         if not valid_map:
             return response(error="Invalid map")
 
-        query = """DELETE FROM map_pool
-                   WHERE map = :map AND match_id = :match_id"""
-        values["map"] = map_id
-
-        await self.current_league.obj.database.execute(
-            query=query,
-            values=values
-        )
+        await self._delete_map(map_id)
 
         next_stage_letter = match_scoreboard.data["map_order"][::-1][
-            maps_len - 1]
+            maps_len - 2]
 
         return_data = {
             "completed": False,
@@ -149,6 +154,8 @@ class MatchSelect(object):
         }
 
         if maps_len == 2:
+            await self._delete_map(selected_map)
+
             if len(match_scoreboard.data["players"]["unassigned"]) == 0:
                 next_status = 1
             else:
