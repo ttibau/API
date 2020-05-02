@@ -2,7 +2,7 @@ from utils.response import response
 from utils.responder import responder
 
 
-class Api(object):
+class Api:
     def __init__(self, obj):
         self.obj = obj
 

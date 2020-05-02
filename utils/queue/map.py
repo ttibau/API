@@ -1,7 +1,7 @@
 from random import shuffle
 
 
-class Map(object):
+class Map:
     def __init__(self, obj):
         self.obj = obj
 

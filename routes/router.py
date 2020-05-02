@@ -13,7 +13,7 @@ from .errors import Errors
 
 
 # Routing
-class Routes(object):
+class Routes:
     def __init__(self, obj):
         routes = {
             "league": League,

@@ -5,7 +5,7 @@ import sqlalchemy
 # sqlalchemy.dialects.mysql.VARBINARY
 
 
-class Tables(object):
+class Tables:
     metadata = sqlalchemy.MetaData()
 
     # API tables

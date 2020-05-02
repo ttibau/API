@@ -1,7 +1,7 @@
 from utils.response import response
 
 
-class MatchSelect(object):
+class MatchSelect:
     async def _update_player(self, user_id, team):
         """ Inserts player into team. """
 

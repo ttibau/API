@@ -4,7 +4,7 @@ from models.match import MatchModel
 from models.player import PlayerModel
 
 
-class List(object):
+class List:
     def __init__(self, current_league, limit, offset, search, desc):
         self.current_league = current_league
 

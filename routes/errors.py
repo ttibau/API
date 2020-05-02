@@ -2,7 +2,7 @@ from utils.response import response
 from utils.responder import responder
 
 
-class Errors(object):
+class Errors:
     async def http_exception(request, exc):
         return responder.render(
             response(error=exc.detail, status=exc.status_code)

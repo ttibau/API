@@ -1,4 +1,4 @@
-class Config(object):
+class Config:
     debug = True
 
     timestamp = "%d %B %Y @ %I:%M %p"

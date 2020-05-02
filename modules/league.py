@@ -9,7 +9,7 @@ from .api_key.api_key import ApiKey
 from settings import Config as config
 
 
-class League(object):
+class League:
     def __init__(self, obj, league_id, region):
         self.obj = obj
         self.league_id = league_id

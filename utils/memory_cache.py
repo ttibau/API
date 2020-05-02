@@ -1,4 +1,4 @@
-class InMemoryCache(object):
+class InMemoryCache:
     api_key = []
     api_key_requests = {}
 

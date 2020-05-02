@@ -5,7 +5,7 @@ from utils.response import response
 from modules.api_key.interact import Interact
 
 
-class ApiKey(object):
+class ApiKey:
     def __init__(self, current_league):
         self.current_league = current_league
 

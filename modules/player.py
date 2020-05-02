@@ -3,7 +3,7 @@ from utils.response import response
 from models.player import PlayerModel
 
 
-class Player(object):
+class Player:
     def __init__(self, current_league, user_id):
         self.current_league = current_league
 
