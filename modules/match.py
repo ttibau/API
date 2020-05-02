@@ -509,4 +509,7 @@ class Match(MatchSelect):
             ).stop
         )
 
+        # Forcing status to be correct.
+        match.data["status"] = 0
+
         return response(data=match.data, backgroud=background_tasks)

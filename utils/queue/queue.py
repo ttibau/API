@@ -70,7 +70,7 @@ class Queue:
         else:
             map_pool = []
             map_pool_append = map_pool.append
-            for map_name in self.maps:
+            for map_name in self.maps["list"]:
                 map_pool_append({
                     "map": map_name,
                     "match_id": self.details["match_id"],

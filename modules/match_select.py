@@ -56,6 +56,7 @@ class MatchSelect(object):
         }
 
         if len(match_scoreboard.data["players"]["unassigned"]) == 2:
+            # Auto selecting the last player.
             for unassigned_user_id in match_scoreboard.data["players"][
                     "unassigned"].keys():
                 if unassigned_user_id == user_id:
@@ -69,7 +70,7 @@ class MatchSelect(object):
 
             return_data["completed"] = True
 
-            if not match_scoreboard.data["map"]:
+            if match_scoreboard.data["map"] is None:
                 next_status = 2
             else:
                 next_status = 1
@@ -138,8 +139,8 @@ class MatchSelect(object):
             values=values
         )
 
-        next_stage_letter = match_scoreboard.data["map_order"][
-            maps_len]
+        next_stage_letter = match_scoreboard.data["map_order"][::-1][
+            maps_len - 1]
 
         return_data = {
             "completed": False,
@@ -158,7 +159,8 @@ class MatchSelect(object):
 
             query = """UPDATE scoreboard_total SET map = :map, status = :next_status
                        WHERE match_id = :match_id"""
-            values = {"map": selected_map, "next_status": next_status}
+            values["map"] = selected_map
+            values["next_status"] = next_status
 
             await self.current_league.obj.database.execute(
                 query=query,
