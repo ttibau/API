@@ -24,17 +24,21 @@ class List:
     async def matches(self):
         """ Pulls matches """
 
-        query = """SELECT match_id, timestamp, status, map, server_id,
-                          team_1_name, team_2_name, team_1_score, team_2_score,
-                          team_1_side, team_2_side,
-                          map_order, player_order, record_statistics
-                    FROM scoreboard_total
-                    WHERE region = :region AND league_id = :league_id
-                        AND (timestamp LIKE :search
-                             OR team_1_name LIKE :search
-                             OR team_2_name LIKE :search
-                             OR map LIKE :search OR match_id = :search)
-                        ORDER BY timestamp {}
+        query = """SELECT st.match_id, st.timestamp, st.status, st.map, st.server_id,
+                          st.team_1_name, st.team_2_name, st.team_1_score,
+                          st.team_2_score, st.team_1_side, st.team_2_side,
+                          st.map_order, st.player_order, st.record_statistics
+                    FROM scoreboard_total AS st
+                        LEFT JOIN scoreboard as s
+                            ON st.match_id = s.match_id
+                    WHERE st.region = :region AND st.league_id = :league_id
+                        AND (st.timestamp LIKE :search
+                             OR st.team_1_name LIKE :search
+                             OR st.team_2_name LIKE :search
+                             OR st.map LIKE :search
+                             OR st.match_id = :search
+                             OR s.user_id = :search)
+                        ORDER BY st.timestamp {}
                         LIMIT :limit, :offset""".format(self.order_by)
 
         rows_formatted = []
@@ -67,11 +71,11 @@ class List:
                     FROM users
                         INNER JOIN statistics
                                 ON users.user_id = statistics.user_id
-                    WHERE users.region = :region
-                          AND users.league_id = :league_id
-                    AND (users.user_id = :search OR users.steam_id = :search
+                                   AND statistics.region = :region
+                                   AND statistics.league_id = :league_id
+                    WHERE users.user_id = :search OR users.steam_id = :search
                          OR users.discord_id = :search
-                         OR users.name LIKE :search)
+                         OR users.name LIKE :search
                     ORDER BY statistics.elo {}
                     LIMIT :limit, :offset""".format(self.order_by)
 

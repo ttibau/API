@@ -270,7 +270,6 @@ class Tables:
     )
 
     # User account details
-    # Region here is the users most recent region.
     sqlalchemy.Table(
         "users",
         metadata,
@@ -290,11 +289,6 @@ class Tables:
             sqlalchemy.BigInteger,
             primary_key=True,
             nullable=True
-        ),
-        sqlalchemy.Column(
-            "region",
-            sqlalchemy.String(length=4),
-            sqlalchemy.ForeignKey("region.region")
         ),
         sqlalchemy.Column(
             "name",

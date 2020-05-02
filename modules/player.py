@@ -34,19 +34,20 @@ class Player:
                           IFNULL(statistics.ties, 0) AS ties,
                           IFNULL(statistics.losses, 0) AS losses
                         FROM users
-                        LEFT JOIN statistics
-                            ON statistics.user_id = users.user_id
-                    WHERE (users.steam_id = :user_id
-                           OR users.discord_id = :user_id
-                           OR users.user_id = :user_id)
-                          AND statistics.region = :region
-                          AND statistics.league_id = :league_id
+                            LEFT JOIN statistics
+                                ON statistics.user_id = users.user_id
+                                AND statistics.region = :region
+                                AND statistics.league_id = :league_id
+                    WHERE users.steam_id = :user_id
+                          OR users.discord_id = :user_id
+                          OR users.user_id = :user_id
                 """
 
         row = await self.current_league.obj.database.fetch_one(
             query=query,
             values=self.values
         )
+
         if row:
             return response(data=PlayerModel(row).full)
         else:

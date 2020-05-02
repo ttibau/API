@@ -9,7 +9,6 @@ class Players:
 
         self.values = {
             "user_ids": user_ids,
-            "region": current_league.region,
         }
 
     async def fetch(self, include_stats=False):
@@ -38,15 +37,15 @@ class Players:
                         LEFT JOIN statistics
                                 ON users.user_id = statistics.user_id
                                    AND statistics.league_id = :league_id
-                    WHERE users.region = :region
-                          AND users.user_id IN :user_ids
+                                   AND statistics.region = :region
+                    WHERE users.user_id IN :user_ids
                     ORDER BY statistics.elo DESC"""
 
             values["league_id"] = self.current_league.league_id
+            values["region"] = self.current_league.region
         else:
             query = """SELECT discord_id, name, pfp, user_id, steam_id, joined
-                       FROM users WHERE region = :region
-                                        AND user_id IN :user_ids"""
+                       FROM users WHERE user_id IN :user_ids"""
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
@@ -69,7 +68,7 @@ class Players:
         user_ids_remove = user_ids.remove
 
         query = """SELECT user_id FROM users
-                   WHERE user_id IN :user_ids AND region = :region"""
+                   WHERE user_id IN :user_ids"""
 
         async for row in self.current_league.obj.database.iterate(
                 query=query,

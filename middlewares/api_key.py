@@ -24,19 +24,19 @@ class APIKeyValidation(BaseHTTPMiddleware):
                             request_path=request.url.path
                         )
 
+                        if not validate:
+                            return self.obj.api.unauthorized()
+
+                        self.obj.in_memory_cache.api_key.append(
+                            api_key_request
+                        )
+
                         self.obj.in_memory_cache.api_key_requests[api_key] = {
                             "date": datetime.now()
                             + timedelta(
                                 seconds=config.cache["max_age"]
                             ),
                         }
-
-                        if not validate:
-                            return self.obj.api.unauthorized()
-                        else:
-                            self.obj.in_memory_cache.api_key.append(
-                                api_key_request
-                            )
                     else:
                         if len(self.obj.in_memory_cache.api_key_requests) > \
                                 config.cache["max_amount"]:
@@ -45,9 +45,13 @@ class APIKeyValidation(BaseHTTPMiddleware):
 
                             self.obj.in_memory_cache.api_key_requests = {}
                             self.obj.in_memory_cache.api_key = {}
-                        elif datetime.now() >= \
+                        elif api_key in self.obj.in_memory_cache. \
+                                api_key_requests and \
+                                datetime.now() >= \
                                 self.obj.in_memory_cache. \
                                 api_key_requests[api_key]["date"]:
+
+                            print("Cleared cache.")
 
                             # Clears api auth cache after x amount of seconds.
                             self.obj.in_memory_cache.api_key.remove(
