@@ -4,8 +4,6 @@
 
 ## Modules 
 #### modulelift.client
-Expects ``server_init()`` to be called after aiohttp session has been passed within loop context.
-
 - validate_user(self, user_id)
 
 #### modulelift.client.league(self, league_id, region)
