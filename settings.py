@@ -3,9 +3,6 @@ class Config:
 
     timestamp = "%d %B %Y @ %I:%M %p"
 
-    pfp_cdn = "https://cdn.discordapp.com/avatars/{}?size=1024"
-    pfp_cdn_unwated = pfp_cdn.split("{}")
-
     database = {
         "username": "modulelift",
         "password": "Y2ZRSsje9qZHsxDu",
@@ -77,4 +74,32 @@ class Config:
                 "server_id"
             ],
         },
+    }
+
+    cdn = {
+        # Link to CDN, ENDING IN A SLASH!!
+        "link": "",
+        # For b2 this should be the bucket ID.
+        # For s3 this should be the bucket name.
+        # Bucket needs to be public.
+        "bucket": "",
+        "b2": {
+            "enabled": True,
+            "application_key_id": "",
+            "application_key": "",
+        },
+        "s3": {
+            "enabled": False,
+            "secret_access_key": "",
+            "access_key_id": "",
+            "region_name": "",
+            "endpoint_url": "",
+        },
+        "paths": {
+            # Folder to store under in the bucket
+            # {} is where the filename will go.
+            # key shouldn't change.
+            "pfps": "pfps/{}",
+            "demos": "demos/{}",
+        }
     }

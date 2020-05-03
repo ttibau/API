@@ -9,6 +9,7 @@ from utils.api import Api
 from utils.server import Server
 from utils.webhook import WebhookSend
 from utils.websocket import WebSocket
+from utils.cdn import Cdn
 
 from memory_cache import InMemoryCache
 from sessions import Sessions
@@ -23,7 +24,6 @@ from aioproxyio import proxy_io
 class client:
     in_memory_cache = InMemoryCache
     sessions = Sessions
-    database = None
 
     def __init__(self):
         """ This client assumes the developer has taken
@@ -50,7 +50,9 @@ class client:
                                        session=self.sessions.aiohttp)
         self.websocket = WebSocket(loop=loop)
         self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
-        self.server = Server.find_client(obj=self)
+
+        Server(obj=self)
+        Cdn(obj=self)
 
     def league(self, league_id, region):
 

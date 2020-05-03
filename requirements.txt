@@ -9,6 +9,7 @@ discord.py>=1.1.0
 webargs-starlette>=1.2.0
 websockets>=8.1
 aiob2>=0.1.0
+aiobotocore>=1.0.0
 aiodactyl>=0.0.1
 aiopes>=0.1.0
 aiodathost>=4.0.0

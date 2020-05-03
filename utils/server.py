@@ -8,7 +8,7 @@ from settings import Config as config
 
 
 class Server:
-    def find_client(obj):
+    def __init__(self, obj):
         """ Working out what server provider we are using.
 
             For safetly reason only use identical
@@ -28,7 +28,7 @@ class Server:
                 session=obj.sessions.aiohttp
             )
 
-            return pterodactyl.client
+            obj.server = pterodactyl.client
 
         elif config.server["pes"]["enabled"]:
             pes = aiopes.client(
@@ -36,7 +36,7 @@ class Server:
                 session=obj.sessions.aiohttp
             )
 
-            return pes.server
+            obj.server = pes.server
 
         elif config.server["dathost"]["enabled"]:
             if "/" not in config.server["key"]:
@@ -50,6 +50,6 @@ class Server:
                 session=obj.sessions.aiohttp
             )
 
-            return dathost.server
+            obj.server = dathost.server
         else:
             sys.exit("No server provider given.")
