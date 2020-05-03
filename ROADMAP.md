@@ -3,6 +3,8 @@
     - Explaining what each function does.
 - Routes documentation.
     - Explaining how each route operates, what data can be pushed, etc.
+- Move to using [orm](https://github.com/encode/orm)
+    - Sadly we won't be using [dashboard](https://github.com/encode/dashboard) due to it's early development & some records in the database being directly edited could cause issues, e.g. if the edited record is cached somewhere else or needs validation from a third party.
 - Setup script.
     - Script to automate production deploying.
 - Login module.
