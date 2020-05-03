@@ -15,6 +15,7 @@ class League(HTTPEndpoint):
     @use_args({"league_name": fields.Str(min=3, max=32),
                "league_website": fields.Str(min=3, max=255),
                "websocket_endpoint": fields.Str(min=3, max=255),
+               "discord_webhook": fields.Str(min=3, max=255),
                "discord_prefix": fields.Str(min=1, max=3),
                "sm_message_prefix": fields.Str(min=1, max=24),
                "knife_round": fields.Bool(),
