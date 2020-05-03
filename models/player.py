@@ -27,8 +27,8 @@ class PlayerModel:
                 "hits": self.data["hits"],
                 "damage": self.data["damage"],
                 "headshots": self.data["headshots"],
-                "roundswon": self.data["roundswon"],
-                "roundslost": self.data["roundslost"],
+                "rounds_won": self.data["rounds_won"],
+                "rounds_lost": self.data["rounds_lost"],
                 "wins": self.data["wins"],
                 "ties": self.data["ties"],
                 "loses": self.data["loses"],
@@ -52,5 +52,4 @@ class PlayerModel:
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
                 "joined": self.data["joined"].strftime(config.timestamp),
-                "pfp": config.pfp_cdn.format(self.data["pfp"]),
         }

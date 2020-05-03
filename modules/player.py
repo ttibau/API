@@ -18,7 +18,7 @@ class Player:
 
         query = """SELECT users.user_id, users.steam_id,
                           users.discord_id, users.name,
-                          users.pfp, users.joined,
+                          users.joined,
                           IFNULL(statistics.total_time, 0) AS total_time,
                           IFNULL(statistics.elo, 0) AS elo,
                           IFNULL(statistics.kills, 0) AS kills,
@@ -28,8 +28,8 @@ class Player:
                           IFNULL(statistics.hits, 0) AS hits,
                           IFNULL(statistics.damage, 0) AS damage,
                           IFNULL(statistics.headshots, 0) AS headshots,
-                          IFNULL(statistics.roundswon, 0) AS roundswon,
-                          IFNULL(statistics.roundslost, 0) AS roundslost,
+                          IFNULL(statistics.rounds_won, 0) AS rounds_won,
+                          IFNULL(statistics.rounds_lost, 0) AS rounds_lost,
                           IFNULL(statistics.wins, 0) AS wins,
                           IFNULL(statistics.ties, 0) AS ties,
                           IFNULL(statistics.loses, 0) AS loses
@@ -66,8 +66,8 @@ class Player:
                    hits = 0,
                    damage = 0,
                    headshots = 0,
-                   roundswon = 0,
-                   roundslost = 0,
+                   rounds_won = 0,
+                   rounds_lost = 0,
                    wins = 0,
                    ties = 0,
                    loses = 0

@@ -25,13 +25,13 @@ class Players:
                               IFNULL(statistics.hits, 0) AS hits,
                               IFNULL(statistics.damage, 0) AS damage,
                               IFNULL(statistics.headshots, 0) AS headshots,
-                              IFNULL(statistics.roundswon, 0) AS roundswon,
-                              IFNULL(statistics.roundslost, 0) AS roundslost,
+                              IFNULL(statistics.rounds_won, 0) AS rounds_won,
+                              IFNULL(statistics.rounds_lost, 0) AS rounds_lost,
                               IFNULL(statistics.wins, 0) AS wins,
                               IFNULL(statistics.ties, 0) AS ties,
                               IFNULL(statistics.loses, 0) AS loses,
                               users.discord_id, users.name,
-                              users.pfp, users.user_id,
+                              users.user_id,
                               users.steam_id, users.joined
                     FROM users
                         LEFT JOIN statistics
@@ -44,7 +44,7 @@ class Players:
             values["league_id"] = self.current_league.league_id
             values["region"] = self.current_league.region
         else:
-            query = """SELECT discord_id, name, pfp, user_id, steam_id, joined
+            query = """SELECT discord_id, name, user_id, steam_id, joined
                        FROM users WHERE user_id IN :user_ids"""
 
         rows_formatted = []

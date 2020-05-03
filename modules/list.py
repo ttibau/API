@@ -60,13 +60,13 @@ class List:
                           IFNULL(statistics.hits, 0) AS hits,
                           IFNULL(statistics.damage, 0) AS damage,
                           IFNULL(statistics.headshots, 0) AS headshots,
-                          IFNULL(statistics.roundswon, 0) AS roundswon,
-                          IFNULL(statistics.roundslost, 0) AS roundslost,
+                          IFNULL(statistics.rounds_won, 0) AS rounds_won,
+                          IFNULL(statistics.rounds_lost, 0) AS rounds_lost,
                           IFNULL(statistics.wins, 0) AS wins,
                           IFNULL(statistics.ties, 0) AS ties,
-                          IFNULL(statistics.losses, 0) AS losses,
+                          IFNULL(statistics.loses, 0) AS loses,
                           users.steam_id, users.discord_id,
-                          users.name,users.pfp,
+                          users.name,
                           users.user_id, users.joined
                     FROM users
                         INNER JOIN statistics
