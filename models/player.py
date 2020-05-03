@@ -31,7 +31,7 @@ class PlayerModel:
                 "roundslost": self.data["roundslost"],
                 "wins": self.data["wins"],
                 "ties": self.data["ties"],
-                "losses": self.data["losses"],
+                "loses": self.data["loses"],
         }
 
     @property

@@ -29,7 +29,7 @@ class Players:
                               IFNULL(statistics.roundslost, 0) AS roundslost,
                               IFNULL(statistics.wins, 0) AS wins,
                               IFNULL(statistics.ties, 0) AS ties,
-                              IFNULL(statistics.losses, 0) AS losses,
+                              IFNULL(statistics.loses, 0) AS loses,
                               users.discord_id, users.name,
                               users.pfp, users.user_id,
                               users.steam_id, users.joined

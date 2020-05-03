@@ -32,7 +32,7 @@ class Player:
                           IFNULL(statistics.roundslost, 0) AS roundslost,
                           IFNULL(statistics.wins, 0) AS wins,
                           IFNULL(statistics.ties, 0) AS ties,
-                          IFNULL(statistics.losses, 0) AS losses
+                          IFNULL(statistics.loses, 0) AS loses
                         FROM users
                             LEFT JOIN statistics
                                 ON statistics.user_id = users.user_id
@@ -70,7 +70,7 @@ class Player:
                    roundslost = 0,
                    wins = 0,
                    ties = 0,
-                   losses = 0
+                   loses = 0
                    WHERE user_id = :user_id AND region = :region
                          AND league_id = :league_id"""
 

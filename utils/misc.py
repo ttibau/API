@@ -1,4 +1,5 @@
 import uuid
+import secrets
 
 from discord.utils import escape_markdown
 
@@ -7,6 +8,9 @@ class Misc:
     def uuid4():
         """ Returns string version of uuid.uuid4(). """
         return str(uuid.uuid4())
+
+    def api_key():
+        return secrets.token_urlsafe(24)
 
     def sanitation(given_string: str, limit=13):
         """ Sanitation for discord markdown and inforces a string limit. """

@@ -1,4 +1,3 @@
-from databases import Database, DatabaseURL
 from tables import Tables
 
 from settings import Config as config
@@ -6,12 +5,13 @@ from settings import Config as config
 from routes.router import Routes
 from middlewares.middlewares import Middlewares
 
-from utils.memory_cache import InMemoryCache
-from utils.sessions import Sessions
 from utils.api import Api
 from utils.server import Server
 from utils.webhook import WebhookSend
 from utils.websocket import WebSocket
+
+from memory_cache import InMemoryCache
+from sessions import Sessions
 
 from modules.league import League
 
@@ -21,29 +21,21 @@ from aioproxyio import proxy_io
 
 
 class client:
-    database_url = DatabaseURL(
-        "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
-                                                config.database["username"],
-                                                config.database["password"],
-                                                config.database["servername"],
-                                                config.database["port"],
-                                                config.database["dbname"])
-    )
-
-    database = Database(database_url)
-
     in_memory_cache = InMemoryCache
     sessions = Sessions
+    database = None
 
     def __init__(self):
         """ This client assumes the developer has taken
             the initiative to correctly initialize the needed sessions.
         """
 
+        # Creating tables & returning ORM objects back.
+        self.tables = Tables(obj=self)
+
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)
         self.api = Api(obj=self)
-        self.tables = Tables(obj=self)
 
     def context_init(self):
         """ Should be ran within context of the

@@ -21,7 +21,8 @@ class APIKeyValidation(BaseHTTPMiddleware):
                         validate = await self.obj.api.validate(
                             api_key=api_key,
                             league_id=league_id,
-                            request_path=request.url.path
+                            request_path=request.url.path,
+                            request_method=request.method
                         )
 
                         if not validate:
