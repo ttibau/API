@@ -28,6 +28,7 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 
 # Why use ModuleLIFT API?
 - We provide support for multiple server hosts, including [Pterodactyl](https://pterodactyl.io/) (self hosting), [Dathost](https://dathost.net/) & [Pacifices Cloud](https://www.pacifices.cloud/).
+- CDN support for both [s3](https://aws.amazon.com/s3/) (this includes something like [spaces](https://www.digitalocean.com/products/spaces/)) and [b2](https://www.backblaze.com/b2/cloud-storage.html).
 - Full-featured API, want to write your own completely custom PUG / Tournament system? Well, ModuleLIFT won't limit you.
 - Region support, make it easy to write a system what supports players from different regions.
 - League support, own multiple communities or want to use ModuleLIFT API for your Business? Well, you don't have to bother setting up multiple instances of this script.
