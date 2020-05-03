@@ -7,10 +7,10 @@ aiohttp>=3.6.2
 discord.py>=1.1.0
 webargs-starlette>=1.2.0
 websockets>=8.1
-git+https://github.com/WardPearce/aiob2.git
-git+https://github.com/MertYakupBaykan/aioproxyio.git
-git+https://github.com/WardPearce/aiodactyl.git
-git+https://github.com/WardPearce/aiopes.git
-git+https://github.com/WardPearce/aiodathost.git
+aiob2>=0.1.0
+aiodactyl>=0.0.1
+aiopes>=0.1.0
+aiodathost>=4.0.0
 python-multipart
 cryptography
+git+https://github.com/MertYakupBaykan/aioproxyio.git
