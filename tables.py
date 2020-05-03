@@ -109,30 +109,6 @@ class Regions(orm.Model):
     )
 
 
-class LeagueDiscords(orm.Model):
-    __tablename__ = "league_discords"
-    __database__ = database
-    __metadata__ = metadata
-
-    guild_id = orm.Integer(
-        primary_key=True
-    )
-    region = orm.ForeignKey(Regions)
-    league_id = orm.ForeignKey(LeagueInfo)
-
-
-class LeagueQueues(orm.Model):
-    __tablename__ = "league_queues"
-    __database__ = database
-    __metadata__ = metadata
-
-    channel_id = orm.Integer(
-        primary_key=True
-    )
-    queue_size = orm.Integer()
-    guild_id = orm.ForeignKey(LeagueDiscords)
-
-
 class IpDetails(orm.Model):
     __tablename__ = "ip_details"
     __database__ = database
@@ -616,29 +592,6 @@ sqlalchemy.Table(
     ),
 )
 
-# Queue Channels
-# queue_type
-# 0 - bot interface
-# 1 - website interface
-sqlalchemy.Table(
-    "league_queues",
-    metadata,
-    sqlalchemy.Column(
-        "channel_id",
-        sqlalchemy.BigInteger,
-        primary_key=True
-    ),
-    sqlalchemy.Column(
-        "guild_id",
-        sqlalchemy.BigInteger,
-        sqlalchemy.ForeignKey("league_discords.guild_id")
-    ),
-    sqlalchemy.Column(
-        "queue_size",
-        sqlalchemy.Integer
-    ),
-)
-
 # Admins & Owners
 # Access Levels
 # 0 = Owner
@@ -711,27 +664,6 @@ sqlalchemy.Table(
         "region",
         sqlalchemy.String(length=4),
         primary_key=True
-    ),
-)
-
-# League Discords
-sqlalchemy.Table(
-    "league_discords",
-    metadata,
-    sqlalchemy.Column(
-        "guild_id",
-        sqlalchemy.BigInteger,
-        primary_key=True
-    ),
-    sqlalchemy.Column(
-        "region",
-        sqlalchemy.String(length=4),
-        sqlalchemy.ForeignKey("regions.region")
-    ),
-    sqlalchemy.Column(
-        "league_id",
-        sqlalchemy.String(length=4),
-        sqlalchemy.ForeignKey("league_info.league_id")
     ),
 )
 
@@ -1070,8 +1002,6 @@ class Tables:
             Regions,
             EloSettings,
             LeagueInfo,
-            LeagueDiscords,
-            LeagueQueues,
             LeagueAdmins,
             ScoreboardTotal,
             Scoreboard,
