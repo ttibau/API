@@ -43,6 +43,7 @@ class client:
             Creates all needed sessions & functions what
             require loop context.
         """
+
         loop = asyncio.get_event_loop()
 
         self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
@@ -57,21 +58,3 @@ class client:
     def league(self, league_id, region):
 
         return League(obj=self, league_id=league_id, region=region)
-
-    async def validate_user(self, user_id):
-        """ Returns true or false depending if the
-            user exists, context of region or league
-            doesn't matter. """
-
-        query = """SELECT COUNT(*)
-                FROM users
-                WHERE users.user_id = :user_id"""
-
-        values = {"user_id": user_id, }
-
-        count = await self.database.fetch_val(
-            query=query,
-            values=values,
-        )
-
-        return count == 1

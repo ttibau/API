@@ -38,9 +38,7 @@ class Player:
                                 ON statistics.user_id = users.user_id
                                 AND statistics.region = :region
                                 AND statistics.league_id = :league_id
-                    WHERE users.steam_id = :user_id
-                          OR users.discord_id = :user_id
-                          OR users.user_id = :user_id
+                    WHERE users.user_id = :user_id
                 """
 
         row = await self.current_league.obj.database.fetch_one(
