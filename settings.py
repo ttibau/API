@@ -84,12 +84,12 @@ class Config:
         # Bucket needs to be public.
         "bucket": "",
         "b2": {
-            "enabled": True,
+            "enabled": False,
             "application_key_id": "",
             "application_key": "",
         },
         "s3": {
-            "enabled": False,
+            "enabled": True,
             "secret_access_key": "",
             "access_key_id": "",
             "region_name": "",
