@@ -6,11 +6,10 @@ from .api_key import APIKeyValidation
 class Middlewares:
     def __init__(self, obj):
         middlewares = [
-            APIKeyValidation,
+            APIKeyValidation
         ]
 
         self.list = []
-
-        for middleware_obj in middlewares:
-            middleware_obj.obj = obj
-            self.list.append(Middleware(middleware_obj))
+        for middleware in middlewares:
+            middleware.obj = obj
+            self.list.append(Middleware(middleware))

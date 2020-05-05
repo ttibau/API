@@ -2,8 +2,8 @@ import sys
 
 from settings import Config as config
 
-from utils.cdn_clients.s3 import S3
-from utils.cdn_clients.b2 import B2
+from utils.cdn.s3 import S3
+from utils.cdn.b2 import B2
 
 
 class Cdn:

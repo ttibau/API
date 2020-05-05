@@ -1,4 +1,8 @@
 class Config:
+    # Human friendly address for the API.
+    # must end in a slash.
+    website = "http://localhost:8888/"
+
     debug = True
 
     timestamp = "%d %B %Y @ %I:%M %p"
@@ -10,10 +14,6 @@ class Config:
         "port": 3306,
         "dbname": "modulelift",
     }
-
-    auth_bypass = [
-        "/api/version/"
-    ]
 
     # Anyone with access to this key
     # can bypass all authorization.
@@ -98,8 +98,26 @@ class Config:
         "paths": {
             # Folder to store under in the bucket
             # {} is where the filename will go.
-            # key shouldn't change.
+            # key should NEVER change.
             "pfps": "pfps/{}",
             "demos": "demos/{}",
+        }
+    }
+
+    login = {
+        # If discord enabled
+        # 1st time users ever log in
+        # they will have to login with both
+        # steam & discord, discord will be used
+        # for caching name & pfp onto b2/s3.
+        "discord": {
+            "enabled": True,
+            "endpoint": "",
+            # Found at https://discordapp.com/developers/
+            "client_id": "",
+            "client_secret": "",
+        },
+        "steam": {
+            "endpoint": "",
         }
     }

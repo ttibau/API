@@ -15,4 +15,5 @@ aiopes>=0.1.0
 aiodathost>=4.0.0
 python-multipart
 cryptography
+authlib>=0.14.1
 git+https://github.com/MertYakupBaykan/aioproxyio.git

@@ -28,13 +28,12 @@ if len(config.master_key) < 48 and not config.debug:
 
 
 async def startup_task():
-    ml.context_init()
-    await ml.database.connect()
+    await ml.context_init()
 
 
 async def shutdown_task():
-    await ml.sessions.aiohttp.close()
-    await ml.database.disconnect()
+    await ml.clean_up()
+
 
 app = Starlette(
     debug=config.debug,

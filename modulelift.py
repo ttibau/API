@@ -18,6 +18,7 @@ from modules.league import League
 
 import asyncio
 import aiohttp
+
 from aioproxyio import proxy_io
 
 
@@ -37,12 +38,14 @@ class client:
         self.middlewares = Middlewares(obj=self)
         self.api = Api(obj=self)
 
-    def context_init(self):
+    async def context_init(self):
         """ Should be ran within context of the
             loop.
             Creates all needed sessions & functions what
             require loop context.
         """
+
+        await self.database.connect()
 
         loop = asyncio.get_event_loop()
 
@@ -54,6 +57,12 @@ class client:
 
         Server(obj=self)
         Cdn(obj=self)
+
+    async def clean_up(self):
+        """ Cleans up sessions created in context_init. """
+
+        await self.sessions.aiohttp.close()
+        await self.database.disconnect()
 
     def league(self, league_id, region):
 

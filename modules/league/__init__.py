@@ -1,16 +1,16 @@
 from utils.response import response
 
-from .match import Match
-from .player import Player
-from .players import Players
-from .list import List
-from .api_key.api_key import ApiKey
+from modules.league.match import Match
+from modules.league.player import Player
+from modules.league.players import Players
+from modules.league.list import List
+from modules.league.api_key import ApiKey
 
 from settings import Config as config
 
 
 class League:
-    def __init__(self, obj, league_id, region):
+    def __init__(self, obj, league_id, region=None):
         self.obj = obj
         self.league_id = league_id
         self.region = region
