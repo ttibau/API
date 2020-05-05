@@ -7,15 +7,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 class APIKeyValidation(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        if "Authorization" not in request.headers:
+        if "Authorization" not in request.headers or \
+                "league_id" not in request.query_params:
             return self.obj.api.unauthorized()
 
         api_key = request.headers["Authorization"]
-
-        if "league_id" in request.query_params:
-            league_id = request.query_params["league_id"]
-        else:
-            league_id = None
+        league_id = request.query_params["league_id"]
 
         if config.master_key != api_key:
             in_memory_cache = self.obj.in_memory_cache.api_key_requests
