@@ -1,4 +1,5 @@
 # API Roadmap
+- Improve authentication flow.
 - Improving modules documentation.
     - Explaining what each function does.
 - Routes documentation.
