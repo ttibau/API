@@ -66,10 +66,10 @@ class List:
                           IFNULL(statistics.ties, 0) AS ties,
                           IFNULL(statistics.loses, 0) AS loses,
                           users.steam_id, users.discord_id,
-                          users.name,
+                          users.name, users.file_type,
                           users.user_id, users.joined
                     FROM users
-                        INNER JOIN statistics
+                        LEFT JOIN statistics
                                 ON users.user_id = statistics.user_id
                                    AND statistics.region = :region
                                    AND statistics.league_id = :league_id
