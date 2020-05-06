@@ -382,7 +382,8 @@ class Match(MatchSelect):
                           sb.deaths, sb.shots_fired, sb.shots_hit, sb.mvps,
                           sb.score, sb.disconnected,
                           users.discord_id, users.name,
-                          users.steam_id, users.joined
+                          users.steam_id, users.joined,
+                          users.file_type
                    FROM scoreboard AS sb
                         LEFT JOIN users
                             ON users.user_id = sb.user_id

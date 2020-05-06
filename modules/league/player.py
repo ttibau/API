@@ -18,7 +18,7 @@ class Player:
 
         query = """SELECT users.user_id, users.steam_id,
                           users.discord_id, users.name,
-                          users.joined,
+                          users.joined, users.file_type,
                           IFNULL(statistics.total_time, 0) AS total_time,
                           IFNULL(statistics.elo, 0) AS elo,
                           IFNULL(statistics.kills, 0) AS kills,

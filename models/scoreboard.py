@@ -41,6 +41,9 @@ class ScoreboardModel:
                 "name": player["name"],
                 "steam_id": player["steam_id"],
                 "discord_id": player["discord_id"],
+                "pfp": config.cdn["link"] + config.cdn["paths"]["pfps"].format(
+                    player["user_id"]
+                ) + player["file_type"],
                 "joined": player["joined"].strftime(config.timestamp),
 
                 "captain": player["captain"] == 1,

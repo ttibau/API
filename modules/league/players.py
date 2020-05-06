@@ -31,7 +31,7 @@ class Players:
                               IFNULL(statistics.ties, 0) AS ties,
                               IFNULL(statistics.loses, 0) AS loses,
                               users.discord_id, users.name,
-                              users.user_id,
+                              users.user_id, users.file_type,
                               users.steam_id, users.joined
                     FROM users
                         LEFT JOIN statistics
