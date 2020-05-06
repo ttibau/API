@@ -33,12 +33,12 @@ ROUTES = {
         "list/matches": MatchesList,
     },
 
-    "steam/login": SteamLogin,
+    config.login["steam"]["route"]: SteamLogin,
     config.login["steam"]["return"]: SteamValidate,
 }
 
 AUTH_BYPASS = [
-    "steam/login",
+    config.login["steam"]["route"],
     config.login["steam"]["return"],
 ]
 
@@ -62,7 +62,12 @@ class Routes:
 
     def _format_bypass(self):
         for bypass in AUTH_BYPASS:
-            self.auth_bypass.append("/" + bypass)
+            if bypass[0] != "/":
+                forward_slash = "/"
+            else:
+                forward_slash = ""
+
+            self.auth_bypass.append(forward_slash + bypass)
 
     def _route_format(self, routes, mount=None):
         for route, route_object in routes.items():
@@ -74,9 +79,14 @@ class Routes:
     def _route_append(self, route, route_object, mount):
         route_object.obj = self.obj
 
-        if mount:
-            route = "/{}/{}".format(mount, route)
+        if route[0] != "/":
+            forward_slash = "/"
         else:
-            route = "/" + route
+            forward_slash = ""
+
+        if mount:
+            route = "{}{}/{}".format(forward_slash, mount, route)
+        else:
+            route = forward_slash + route
 
         self.list.append(Route(route, endpoint=route_object))

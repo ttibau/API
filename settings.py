@@ -122,6 +122,7 @@ class Config:
             "client_secret": "",
         },
         "steam": {
+            "route": "steam/login",
             "return": "steam/validate",
         }
     }
