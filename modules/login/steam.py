@@ -12,10 +12,10 @@ class Steam:
 
     open_id_params = {
         "openid.ns": "http://specs.openid.net/auth/2.0",
-        "openid.identity": "http://specs.openid.net\
-            /auth/2.0/identifier_select",
-        "openid.claimed_id": "http://specs.openid.net\
-            /auth/2.0/identifier_select",
+        "openid.identity":
+        "http://specs.openid.net/auth/2.0/identifier_select",
+        "openid.claimed_id":
+        "http://specs.openid.net/auth/2.0/identifier_select",
         "openid.mode": "checkid_setup",
         "openid.return_to": config.website + config.login["steam"]["return"],
         "openid.realm": config.website,
@@ -35,11 +35,23 @@ class Steam:
                 and "openid.signed" in kwargs \
                 and "openid.claimed_id" in kwargs:
 
-            kwargs["openid.mode"] = "check_authentication"
+            validation = {
+                "openid.sig": kwargs["openid.sig"],
+                "openid.ns": kwargs["openid.ns"],
+            }
 
-            async with self.obj.sessions.aiohttp.get(
-                    self.open_url, data=kwargs) as resp:
-                if resp == 200:
+            signed = kwargs["openid.signed"].split(",")
+            for name in signed:
+                formatted_name = "openid.{}".format(name)
+
+                if formatted_name in kwargs:
+                    validation[formatted_name] = kwargs[formatted_name]
+
+            validation["openid.mode"] = "check_authentication"
+
+            async with self.obj.sessions.aiohttp.post(
+                    self.open_url, data=validation) as resp:
+                if resp.status == 200:
                     resp_text = await resp.text()
 
                     if "is_valid:true" in resp_text:

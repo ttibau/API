@@ -11,12 +11,14 @@ class SteamValidate(HTTPEndpoint):
         validate = await self.obj.login.steam.validate(**request.query_params)
 
         if validate.error:
-            pass
+            print(validate.error)
 
         # Here we'll need to work out
         # if we require discord oauth
         # or if we should cache the user.
         # return responder()
+
+        return RedirectResponse("https://google.com")
 
 
 class SteamLogin(HTTPEndpoint):
