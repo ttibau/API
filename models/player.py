@@ -51,8 +51,9 @@ class PlayerModel:
                 "user_id": self.data["user_id"],
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
-                "pfp": config.cdn["link"] + config.cdn["paths"]["pfps"].format(
-                    self.data["user_id"]
-                ) + self.data["file_type"],
+                "pfp": "{}{}{}".format(
+                    config.cdn["link"],
+                    config.cdn["paths"]["pfps"].format(self.data["user_id"]),
+                    self.data["file_type"]),
                 "joined": self.data["joined"].strftime(config.timestamp),
         }
