@@ -39,11 +39,11 @@ class ApiKey:
     async def generate(self, user_id, access_level: int, active: bool = True):
         """ Generates API key """
 
-        user_validate = await self.current_league.obj.validate_user(
+        user_validate = await self.current_league.obj.user(
             user_id=user_id
-        )
+        ).exists()
 
-        if not user_validate:
+        if user_validate.error:
             return response(data="Invalid user")
 
         if active:

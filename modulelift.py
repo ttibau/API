@@ -15,6 +15,7 @@ from memory_cache import InMemoryCache
 from sessions import Sessions
 
 from modules.league import League
+from modules.user import User
 
 import asyncio
 import aiohttp
@@ -68,20 +69,6 @@ class client:
 
         return League(obj=self, league_id=league_id, region=region)
 
-    async def validate_user(self, user_id):
-        """ Returns true or false depending if the
-            user exists, context of region or league
-            doesn't matter. """
+    def user(self, user_id):
 
-        query = """SELECT COUNT(*)
-                FROM users
-                WHERE users.user_id = :user_id"""
-
-        values = {"user_id": user_id, }
-
-        count = await self.database.fetch_val(
-            query=query,
-            values=values,
-        )
-
-        return count == 1
+        return User(obj=self, user_id=user_id)
