@@ -104,6 +104,10 @@ class Config:
         }
     }
 
+    steam = {
+        "endpoint": "https://steamcommunity.com/",
+    }
+
     login = {
         # If discord enabled
         # 1st time users ever log in
@@ -118,6 +122,6 @@ class Config:
             "client_secret": "",
         },
         "steam": {
-            "endpoint": "",
+            "return": "steam/validate",
         }
     }

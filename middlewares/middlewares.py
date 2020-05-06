@@ -3,13 +3,15 @@ from starlette.middleware import Middleware
 from .api_key import APIKeyValidation
 
 
-class Middlewares:
-    def __init__(self, obj):
-        middlewares = [
-            APIKeyValidation
-        ]
+MIDDLEWARES = [
+    APIKeyValidation,
+]
 
-        self.list = []
-        for middleware in middlewares:
+
+class Middlewares:
+    list = []
+
+    def __init__(self, obj):
+        for middleware in MIDDLEWARES:
             middleware.obj = obj
             self.list.append(Middleware(middleware))
