@@ -1,7 +1,11 @@
 from utils.response import response
 
 
-class MatchSelect:
+class Select:
+    def __init__(self, current_league, current_match):
+        self.current_league = current_league
+        self.current_match = current_match
+
     async def _update_player(self, user_id, team):
         """ Inserts player into team. """
 
@@ -9,7 +13,7 @@ class MatchSelect:
                    WHERE match_id = :match_id AND user_id = :user_id"""
 
         values = {
-            "match_id": self.match_id,
+            "match_id": self.current_match.match_id,
             "user_id": user_id,
             "team": team,
         }
@@ -24,7 +28,7 @@ class MatchSelect:
 
         query = """DELETE FROM map_pool
                    WHERE map = :map AND match_id = :match_id"""
-        values = {"match_id": self.match_id, "map": map_id, }
+        values = {"match_id": self.current_match.match_id, "map": map_id, }
 
         await self.current_league.obj.database.execute(
             query=query,
@@ -39,10 +43,10 @@ class MatchSelect:
 
         return team
 
-    async def select_player(self, user_id: str):
+    async def player(self, user_id: str):
         """ Selects player. """
 
-        match_scoreboard = await self.scoreboard()
+        match_scoreboard = await self.current_match.scoreboard()
         if match_scoreboard.error:
             return match_scoreboard
 
@@ -92,7 +96,10 @@ class MatchSelect:
             query = """UPDATE scoreboard_total
                        SET status = :next_status
                        WHERE match_id = :match_id"""
-            values = {"match_id": self.match_id, "next_status": next_status, }
+            values = {
+                "match_id": self.current_match.match_id,
+                "next_status": next_status,
+            }
 
             await self.current_league.obj.database.execute(
                 query=query,
@@ -105,10 +112,10 @@ class MatchSelect:
 
         return response(data=return_data)
 
-    async def select_map(self, map_id: str):
+    async def map(self, map_id: str):
         """ Selects map. """
 
-        match_scoreboard = await self.scoreboard()
+        match_scoreboard = await self.current_match.scoreboard()
         if match_scoreboard.error:
             return match_scoreboard
 
@@ -116,7 +123,7 @@ class MatchSelect:
             return response(error="This match isn't at map selection stage")
 
         query = "SELECT map FROM map_pool WHERE match_id = :match_id"
-        values = {"match_id": self.match_id, }
+        values = {"match_id": self.current_match.match_id, }
 
         maps = await self.current_league.obj.database.fetch_all(
             query=query,

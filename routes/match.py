@@ -43,7 +43,7 @@ class MatchSelectPlayer(HTTPEndpoint):
         return responder.render(
             await request.state.league.match(
                 match_id=args["match_id"]
-            ).select_player(
+            ).select.player(
                 user_id=args["user_id"]
             )
         )
@@ -58,7 +58,7 @@ class MatchSelectMap(HTTPEndpoint):
         return responder.render(
             await request.state.league.match(
                 match_id=args["match_id"]
-            ).select_map(
+            ).select.map(
                 map_id=args["map"]
             )
         )
