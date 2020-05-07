@@ -103,26 +103,3 @@ class Config:
             "demos": "demos/{}",
         }
     }
-
-    steam = {
-        "endpoint": "https://steamcommunity.com/",
-    }
-
-    login = {
-        # If discord enabled
-        # 1st time users ever log in
-        # they will have to login with both
-        # steam & discord, discord will be used
-        # for caching name & pfp onto b2/s3.
-        "discord": {
-            "enabled": True,
-            "endpoint": "",
-            # Found at https://discordapp.com/developers/
-            "client_id": "",
-            "client_secret": "",
-        },
-        "steam": {
-            "route": "steam/login",
-            "return": "steam/validate",
-        }
-    }

@@ -16,7 +16,6 @@ from sessions import Sessions
 
 from modules.league import League
 from modules.user import User
-from modules.login import Login
 
 import asyncio
 import aiohttp
@@ -39,7 +38,6 @@ class client:
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)
         self.api = Api(obj=self)
-        self.login = Login(obj=self)
 
     async def context_init(self):
         """ Should be ran within context of the

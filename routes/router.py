@@ -8,11 +8,8 @@ from .match import Match, MatchClone, MatchScoreboard, \
     MatchSelectPlayer, MatchSelectMap
 from .player import Player, PlayerFetch, PlayerValidate
 from .list import PlayersList, MatchesList
-from .login import SteamValidate, SteamLogin
 
 from .errors import Errors
-
-from settings import Config as config
 
 
 ROUTES = {
@@ -32,15 +29,9 @@ ROUTES = {
         "list/players": PlayersList,
         "list/matches": MatchesList,
     },
-
-    config.login["steam"]["route"]: SteamLogin,
-    config.login["steam"]["return"]: SteamValidate,
 }
 
-AUTH_BYPASS = [
-    config.login["steam"]["route"],
-    config.login["steam"]["return"],
-]
+AUTH_BYPASS = []
 
 
 # Routing

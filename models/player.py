@@ -51,7 +51,7 @@ class PlayerModel:
                 "user_id": self.data["user_id"],
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
-                "pfp": "{}{}{}".format(
+                "pfp": "{}{}.{}".format(
                     config.cdn["link"],
                     config.cdn["paths"]["pfps"].format(self.data["user_id"]),
                     self.data["file_type"]),
