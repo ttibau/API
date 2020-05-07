@@ -253,22 +253,28 @@ sqlalchemy.Table(
     sqlalchemy.Column(
         "steam_id",
         sqlalchemy.String(length=64),
-        primary_key=True,
-        nullable=True
+        unique=True,
+        nullable=True,
+        server_default=sqlalchemy.text("NULL")
     ),
     sqlalchemy.Column(
         "discord_id",
         sqlalchemy.BigInteger,
-        primary_key=True,
-        nullable=True
+        unique=True,
+        nullable=True,
+        server_default=sqlalchemy.text("NULL")
     ),
     sqlalchemy.Column(
         "file_type",
-        sqlalchemy.String(length=4)
+        sqlalchemy.String(length=4),
+        nullable=True,
+        server_default=sqlalchemy.text("NULL")
     ),
     sqlalchemy.Column(
         "name",
-        sqlalchemy.String(length=36)
+        sqlalchemy.String(length=36),
+        nullable=True,
+        server_default=sqlalchemy.text("NULL")
     ),
     sqlalchemy.Column(
         "joined",
