@@ -1,3 +1,5 @@
+import os
+
 from tables import Tables
 
 from settings import Config as config
@@ -12,6 +14,7 @@ from utils.websocket import WebSocket
 from utils.cdn import Cdn
 from utils.steam import Steam
 from utils.proxy import Proxy
+from utils.masterkey import MasterKey
 
 from memory_cache import InMemoryCache
 from sessions import Sessions
@@ -28,6 +31,7 @@ from aioproxyio import proxy_io
 class client:
     in_memory_cache = InMemoryCache
     sessions = Sessions
+    current_path = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self):
         """ This client assumes the developer has taken
@@ -59,6 +63,8 @@ class client:
         self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
 
         self.steam = Steam(obj=self)
+
+        await MasterKey(obj=self).load()
 
         Server(obj=self)
         Cdn(obj=self)

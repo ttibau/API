@@ -1,7 +1,6 @@
 from starlette.applications import Starlette
 
 import uvicorn
-import sys
 
 from settings import Config as config
 
@@ -21,10 +20,6 @@ print("https://github.com/ModuleLIFT\n")
 print("-"*62)
 
 ml = modulelift.client()
-
-# Security checks.
-if len(config.master_key) < 48 and not config.debug:
-    sys.exit("Master key must be 48 characters or longer.")
 
 
 async def startup_task():
