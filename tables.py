@@ -282,9 +282,9 @@ sqlalchemy.Table(
         server_default=sqlalchemy.text("CURRENT_TIMESTAMP()")
     ),
     sqlalchemy.Column(
-        "ip_id",
-        sqlalchemy.String(length=36),
-        sqlalchemy.ForeignKey("ip_details.ip_id")
+        "ip",
+        sqlalchemy.String(length=39),
+        sqlalchemy.ForeignKey("ip_details.ip")
     ),
 )
 
@@ -304,18 +304,9 @@ sqlalchemy.Table(
     "ip_details",
     metadata,
     sqlalchemy.Column(
-        "ip_id",
-        sqlalchemy.String(length=36),
-        primary_key=True
-    ),
-    sqlalchemy.Column(
         "ip",
-        sqlalchemy.String(length=39)
-    ),
-    sqlalchemy.Column(
-        "region",
-        sqlalchemy.String(length=4),
-        sqlalchemy.ForeignKey("regions.region")
+        sqlalchemy.String(length=39),
+        unique=True,
     ),
     sqlalchemy.Column(
         "proxy",
@@ -323,15 +314,18 @@ sqlalchemy.Table(
     ),
     sqlalchemy.Column(
         "provider",
-        sqlalchemy.String(length=124)
+        sqlalchemy.String(length=124),
+        nullable=True,
     ),
     sqlalchemy.Column(
         "city",
-        sqlalchemy.String(length=64)
+        sqlalchemy.String(length=64),
+        nullable=True,
     ),
     sqlalchemy.Column(
         "country",
-        sqlalchemy.String(length=64)
+        sqlalchemy.String(length=64),
+        nullable=True,
     ),
 )
 

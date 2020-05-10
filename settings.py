@@ -26,7 +26,16 @@ class Config:
         "max_amount": 50,
     }
 
+    # https://proxycheck.io/pricing/
+    # If left blank you're limited to
+    # 1,000 daily queries.
+
+    # 10,000 daily queries only costs $3 a month.
     proxyio = {
+        "key": "",
+    }
+
+    steam = {
         "key": "",
     }
 

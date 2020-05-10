@@ -10,6 +10,8 @@ from utils.server import Server
 from utils.webhook import WebhookSend
 from utils.websocket import WebSocket
 from utils.cdn import Cdn
+from utils.steam import Steam
+from utils.proxy import Proxy
 
 from memory_cache import InMemoryCache
 from sessions import Sessions
@@ -56,6 +58,8 @@ class client:
         self.websocket = WebSocket(loop=loop)
         self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
 
+        self.steam = Steam(obj=self)
+
         Server(obj=self)
         Cdn(obj=self)
 
@@ -69,6 +73,10 @@ class client:
 
         return League(obj=self, league_id=league_id, region=region)
 
-    def user(self, user_id):
+    def user(self, user_id=None):
+        """ Handles interactions with users. """
 
         return User(obj=self, user_id=user_id)
+
+    def proxy(self, ip):
+        return Proxy(obj=self, ip=ip)
