@@ -15,7 +15,7 @@ class APIKeyValidation(BaseHTTPMiddleware):
             api_key = request.headers["Authorization"]
             league_id = request.query_params["league_id"]
 
-            if config.master_key != api_key:
+            if api_key != self.obj.master_key:
                 in_memory_cache = self.obj.in_memory_cache.api_key_requests
 
                 api_key_request = "{}{}{}{}".format(
