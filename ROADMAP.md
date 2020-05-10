@@ -8,9 +8,9 @@
 - Setup script
     - Script to automate production deploying.
 - Login module.
-    - Attaching discord & steam accounts to a user id.
+    - ~~Attaching discord & steam accounts to a user id.~~
     - Deleting & editing logins.
-    - Alt detection & VPN blocking using [proxycheck.io](https://proxycheck.io/)
+    - ~~Alt detection & VPN blocking using [proxycheck.io](https://proxycheck.io/)~~
     - Logging events using Websocket.
 - Ban module.
     - Adding a ban to a user id, ban length is based off the ban severity value and the rep loss value assigned to the ban type.
