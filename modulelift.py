@@ -52,9 +52,10 @@ class client:
             require loop context.
         """
 
-        await self.database.connect()
-
         loop = asyncio.get_event_loop()
+
+        await self.database.connect()
+        await MasterKey(obj=self).load()
 
         self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
         self.sessions.proxy = proxy_io(api_key=config.proxyio["key"],
@@ -63,8 +64,6 @@ class client:
         self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
 
         self.steam = Steam(obj=self)
-
-        await MasterKey(obj=self).load()
 
         Server(obj=self)
         Cdn(obj=self)
