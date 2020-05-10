@@ -1,3 +1,7 @@
+from aiohttp.client_exceptions import ClientError
+
+from starlette.background import BackgroundTask
+
 from datetime import datetime
 
 from urllib.parse import urlparse
@@ -10,6 +14,13 @@ from models.player import PlayerModel
 
 
 class User:
+    accepted_pfp_types = [
+        "gif",
+        "jpg",
+        "jpeg",
+        "png",
+    ]
+
     def __init__(self, obj, user_id):
         self.obj = obj
         self.user_id = user_id
@@ -63,6 +74,15 @@ class User:
         if steam.error:
             return steam
 
+        if not pfp:
+            pfp = steam.data["avatarfull"]
+
+        path = urlparse(pfp).path
+        file_type = splitext(path)[1][1:]
+
+        if file_type not in self.accepted_pfp_types:
+            return response(error="File type not supported")
+
         if ip:
             alt_detection = await self.obj.proxy(ip).alt_detection()
 
@@ -75,18 +95,29 @@ class User:
         if not name:
             name = steam.data["personaname"]
 
-        if not pfp:
-            pfp = steam.data["avatarfull"]
+        try:
+            async with self.obj.sessions.aiohttp.get(pfp) as resp:
+                if resp.status == 200:
+                    resp_data = await resp.read()
 
-        path = urlparse(pfp).path
-        file_type = splitext(path)[1][1:]
+                    background_task = BackgroundTask(
+                        self.obj.cdn.upload,
+                        path_key="pfps",
+                        data=resp_data,
+                        file_name="{}.{}".format(self.user_id, file_type)
+                    )
+                else:
+                    return response(error="Invalid pfp")
+        except ClientError:
+            return response(error="Invalid url")
 
         return response(data={
             "steam_id": steam_id,
             "discord_id": discord_id,
             "name": name,
             "file_type": file_type,
-        })
+            "ip": ip,
+        }, backgroud=background_task)
 
     async def create(self, steam_id,
                      ip=None, name=None,
@@ -98,8 +129,10 @@ class User:
             If name, discord_id or pfp not passed then info from
             steam API will be used instead.
 
-            If IP isn't passed now alt detection is done.
+            If IP isn't passed then alt detection isn't done.
         """
+
+        self.user_id = Misc.uuid4()
 
         validate = await self._validate_and_format(
             steam_id,
@@ -111,8 +144,6 @@ class User:
 
         if validate.error:
             return validate
-
-        self.user_id = Misc.uuid4()
 
         validate.data["user_id"] = self.user_id
 
@@ -128,7 +159,8 @@ class User:
                        discord_id,
                        name,
                        file_type,
-                       joined
+                       joined,
+                       ip
                    )
                    VALUES (
                        :user_id,
@@ -136,9 +168,13 @@ class User:
                        :discord_id,
                        :name,
                        :file_type,
-                       :joined
+                       :joined,
+                       :ip
                    )"""
 
         await self.obj.database.execute(query=query, values=validate.data)
 
-        return response(data=PlayerModel(validate.data).minimal)
+        return response(
+            data=PlayerModel(validate.data).minimal,
+            backgroud=validate.backgroud
+        )

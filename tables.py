@@ -284,7 +284,8 @@ sqlalchemy.Table(
     sqlalchemy.Column(
         "ip",
         sqlalchemy.String(length=39),
-        sqlalchemy.ForeignKey("ip_details.ip")
+        sqlalchemy.ForeignKey("ip_details.ip"),
+        nullable=True
     ),
 )
 

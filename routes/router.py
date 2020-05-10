@@ -8,6 +8,7 @@ from .match import Match, MatchClone, MatchScoreboard, \
     MatchSelectPlayer, MatchSelectMap
 from .player import Player, PlayerFetch, PlayerValidate
 from .list import PlayersList, MatchesList
+from .user import User
 
 from .errors import Errors
 
@@ -28,6 +29,8 @@ ROUTES = {
 
         "list/players": PlayersList,
         "list/matches": MatchesList,
+
+        "user": User,
     },
 }
 
