@@ -6,7 +6,7 @@ class response:
         if status == 200 and error:
             self.status = 500
         else:
-            if not data and not error:
+            if data is None and not error:
                 error = "No data"
                 self.status = 500
 
