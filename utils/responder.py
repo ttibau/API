@@ -2,7 +2,8 @@ from starlette.responses import JSONResponse
 
 
 class responder:
-    def render(response: object):
+    @staticmethod
+    def render(response):
         """ Renders API json
                 - response, response object.
         """
