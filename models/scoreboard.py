@@ -1,4 +1,4 @@
-from settings import Config as config
+from settings import Config
 
 
 class ScoreboardModel:
@@ -42,10 +42,10 @@ class ScoreboardModel:
                 "steam_id": player["steam_id"],
                 "discord_id": player["discord_id"],
                 "pfp": "{}{}.{}".format(
-                    config.cdn["link"],
-                    config.cdn["paths"]["pfps"].format(player["user_id"]),
+                    Config.cdn["link"],
+                    Config.cdn["paths"]["pfps"].format(player["user_id"]),
                     player["file_type"]),
-                "joined": player["joined"].strftime(config.timestamp),
+                "joined": player["joined"].strftime(Config.timestamp),
 
                 "captain": player["captain"] == 1,
                 "alive": player["alive"] == 1,

@@ -1,6 +1,6 @@
 from utils.response import response
 
-from settings import Config as config
+from settings import Config
 
 
 class Steam:
@@ -8,7 +8,7 @@ class Steam:
 
     profile_url = base_url +\
         "ISteamUser/GetPlayerSummaries/v2/?key=" +\
-        config.steam["key"] + "&steamids={}"
+        Config.steam["key"] + "&steamids={}"
 
     def __init__(self, obj):
         self.obj = obj

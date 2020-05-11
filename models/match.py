@@ -1,4 +1,4 @@
-from settings import Config as config
+from settings import Config
 
 
 class MatchModel:
@@ -24,7 +24,7 @@ class MatchModel:
                 "server_id": self.data["server_id"],
                 "map": self.data["map"],
                 "status": self.data["status"],
-                "timestamp": self.data["timestamp"].strftime(config.timestamp),
+                "timestamp": self.data["timestamp"].strftime(Config.timestamp),
                 "map_order": self.data["map_order"],
                 "player_order": self.data["player_order"],
                 "record_statistics": self.data["record_statistics"] == 1,

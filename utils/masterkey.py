@@ -13,9 +13,9 @@ class MasterKey:
 
         if os.path.exists(self.master_key_path):
             async with aiofiles.open(self.master_key_path, mode="r") as file:
-                self.obj.master_key = await file.read()
+                return await file.read()
         else:
-            self.obj.master_key = await self.generate()
+            return await self.generate()
 
     async def generate(self):
         """ Generates master key file with key. """

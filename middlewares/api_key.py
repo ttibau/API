@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from settings import Config as config
+from settings import Config
 
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -38,11 +38,11 @@ class APIKeyValidation(BaseHTTPMiddleware):
                     if not valid:
                         return self.obj.api.unauthorized()
                     else:
-                        if len(in_memory_cache) > config.cache["max_amount"]:
+                        if len(in_memory_cache) > Config.cache["max_amount"]:
                             in_memory_cache = {}
 
                         in_memory_cache[api_key_request] = datetime.now() \
-                            + timedelta(seconds=config.cache["max_age"])
+                            + timedelta(seconds=Config.cache["max_age"])
 
             if "region" in request.query_params:
                 region = request.query_params["region"].lower()

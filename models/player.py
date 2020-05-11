@@ -1,4 +1,4 @@
-from settings import Config as config
+from settings import Config
 
 
 class PlayerModel:
@@ -52,8 +52,8 @@ class PlayerModel:
                 "steam_id": self.data["steam_id"],
                 "discord_id": self.data["discord_id"],
                 "pfp": "{}{}.{}".format(
-                    config.cdn["link"],
-                    config.cdn["paths"]["pfps"].format(self.data["user_id"]),
+                    Config.cdn["link"],
+                    Config.cdn["paths"]["pfps"].format(self.data["user_id"]),
                     self.data["file_type"]),
-                "joined": self.data["joined"].strftime(config.timestamp),
+                "joined": self.data["joined"].strftime(Config.timestamp),
         }

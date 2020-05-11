@@ -6,7 +6,7 @@ from modules.league.players import Players
 from modules.league.list import List
 from modules.league.api_key import ApiKey
 
-from settings import Config as config
+from settings import Config
 
 
 class League:
@@ -55,11 +55,11 @@ class League:
     async def get_server(self):
         """ Finds a available server for the currnet league. """
 
-        if not config.server["regions"].get(self.region):
+        if not Config.server["regions"].get(self.region):
             return response(error="No server IDs for that region")
 
         region_servers = list(
-            config.server["regions"][self.region]
+            Config.server["regions"][self.region]
         )
         region_servers_remove = region_servers.remove
 

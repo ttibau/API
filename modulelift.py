@@ -2,7 +2,7 @@ import os
 
 from tables import Tables
 
-from settings import Config as config
+from settings import Config
 
 from routes.router import Routes
 from middlewares.middlewares import Middlewares
@@ -33,19 +33,28 @@ class client:
     sessions = Sessions
     current_path = os.path.dirname(os.path.realpath(__file__))
 
+    websocket = None
+    webhook = None
+    steam = None
+    master_key = None
+    database = None
+    server = None
+    cdn = None
+
     def __init__(self):
         """ This client assumes the developer has taken
             the initiative to correctly initialize the needed sessions.
         """
 
         # Creating tables & returning ORM objects back.
-        self.tables = Tables(obj=self)
+        self.tables = Tables()
+        self.database = self.tables.load()
 
         self.routes = Routes(obj=self)
         self.middlewares = Middlewares(obj=self)
         self.api = Api(obj=self)
 
-    async def context_init(self):
+    async def startup(self):
         """ Should be ran within context of the
             loop.
             Creates all needed sessions & functions what
@@ -55,20 +64,18 @@ class client:
         loop = asyncio.get_event_loop()
 
         await self.database.connect()
-        await MasterKey(obj=self).load()
 
         self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
-        self.sessions.proxy = proxy_io(api_key=config.proxyio["key"],
+        self.sessions.proxy = proxy_io(api_key=Config.proxyio["key"],
                                        session=self.sessions.aiohttp)
         self.websocket = WebSocket(loop=loop)
         self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
-
         self.steam = Steam(obj=self)
+        self.master_key = await MasterKey(obj=self).load()
+        self.server = Server(obj=self).load()
+        self.cdn = Cdn(obj=self).load()
 
-        Server(obj=self)
-        Cdn(obj=self)
-
-    async def clean_up(self):
+    async def shutdown(self):
         """ Cleans up sessions created in context_init. """
 
         await self.sessions.aiohttp.close()

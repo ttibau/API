@@ -5,13 +5,16 @@ from discord.utils import escape_markdown
 
 
 class Misc:
+    @staticmethod
     def uuid4():
         """ Returns string version of uuid.uuid4(). """
         return str(uuid.uuid4())
 
+    @staticmethod
     def api_key():
         return secrets.token_urlsafe(24)
 
+    @staticmethod
     def sanitation(given_string: str, limit=13):
         """ Sanitation for discord markdown and inforces a string limit. """
 
@@ -22,6 +25,7 @@ class Misc:
 
         return given_string
 
+    @staticmethod
     def determine_winner(team_1: dict, team_2: dict):
         """ Expects teams passed from match model. """
 

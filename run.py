@@ -2,7 +2,7 @@ from starlette.applications import Starlette
 
 import uvicorn
 
-from settings import Config as config
+from settings import Config
 
 import modulelift
 
@@ -22,21 +22,13 @@ print("-"*62)
 ml = modulelift.client()
 
 
-async def startup_task():
-    await ml.context_init()
-
-
-async def shutdown_task():
-    await ml.clean_up()
-
-
 app = Starlette(
-    debug=config.debug,
+    debug=Config.debug,
     routes=ml.routes.list,
     middleware=ml.middlewares.list,
     exception_handlers=ml.routes.exception_handlers,
-    on_startup=[startup_task],
-    on_shutdown=[shutdown_task],
+    on_startup=[ml.startup],
+    on_shutdown=[ml.shutdown],
 )
 
 if __name__ == "__main__":
