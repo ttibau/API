@@ -544,13 +544,15 @@ class Tables:
             ),
             sqlalchemy.Column(
                 "region",
-                sqlalchemy.String(length=4), sqlalchemy.ForeignKey("regions.region")
+                sqlalchemy.String(length=4),
+                sqlalchemy.ForeignKey("regions.region")
             ),
             sqlalchemy.Column(
                 "last_connected",
                 sqlalchemy.types.TIMESTAMP,
-                server_default=sqlalchemy.text("""CURRENT_TIMESTAMP()
-                                                    ON UPDATE CURRENT_TIMESTAMP()""")
+                server_default=sqlalchemy.text(
+                    """CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"""
+                )
             ),
             sqlalchemy.Column(
                 "total_time",
