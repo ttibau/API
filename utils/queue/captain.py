@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 from random import shuffle
 
@@ -18,7 +18,7 @@ class Captain:
                 self.obj.players_list[capt_1_index]] == \
                     self.obj.players["list"][
                         self.obj.players_list[capt_2_index]]:
-                return response(error="Both captains are on the same team")
+                return Response(error="Both captains are on the same team")
 
         self.obj.captains["team_1"] = self.obj.players_list[capt_1_index]
         self.obj.captains["team_2"] = self.obj.players_list[capt_2_index]
@@ -39,7 +39,7 @@ class Captain:
                     self.obj.captains["team_2"] = row["user_id"]
                 elif self.obj.players["list"][row["user_id"]] != 1 \
                         and self.obj.players["list"][row["user_id"]] != 2:
-                    return response(error="{} should be None, 1 or 2".format(
+                    return Response(error="{} should be None, 1 or 2".format(
                         self.obj.players["list"][row["user_id"]]
                     ))
                 else:
@@ -69,7 +69,7 @@ class Captain:
                     self.obj.captains["team_2"] = user_id
                 elif self.obj.players["list"][user_id] != 1 \
                         and self.obj.players["list"][user_id] != 2:
-                    return response(error="{} should be None, 1 or 2".format(
+                    return Response(error="{} should be None, 1 or 2".format(
                         self.obj.players["list"][user_id]
                     ))
                 else:

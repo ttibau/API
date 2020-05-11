@@ -1,16 +1,16 @@
-from utils.response import response
-from utils.responder import responder
+from utils.response import Response
+from utils.responder import Responder
 
 
 class Errors:
     @staticmethod
     async def http_exception(request, exc):
-        return responder.render(
-            response(error=exc.detail, status=exc.status_code)
-        )
+        return Responder(
+            Response(error=exc.detail, status=exc.status_code)
+        ).ujson()
 
     @staticmethod
     async def arg_expection(request, exc):
-        return responder.render(
-            response(error=exc.messages, status=exc.status_code)
-        )
+        return Responder(
+            Response(error=exc.messages, status=exc.status_code)
+        ).ujson()

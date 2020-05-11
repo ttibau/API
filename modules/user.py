@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 from os.path import splitext
 
-from utils.response import response
+from utils.response import Response
 from utils.misc import Misc
 
 from models.player import PlayerModel
@@ -38,7 +38,7 @@ class User:
             values=values,
         )
 
-        return response(data=bool(count))
+        return Response(data=bool(count))
 
     async def external_exists(self, steam_id, discord_id):
         """ Validates if external ID has been used before. """
@@ -57,9 +57,9 @@ class User:
         )
 
         if count == 0:
-            return response(data=True)
+            return Response(data=True)
         else:
-            return response(error="Steam or Discord ID already in use.")
+            return Response(error="Steam or Discord ID already in use.")
 
     async def _validate_and_format(self, steam_id,
                                    ip, name,
@@ -81,7 +81,7 @@ class User:
         file_type = splitext(path)[1][1:]
 
         if file_type not in self.accepted_pfp_types:
-            return response(error="File type not supported")
+            return Response(error="File type not supported")
 
         if ip:
             alt_detection = await self.obj.proxy(ip).alt_detection()
@@ -90,7 +90,7 @@ class User:
                 return alt_detection
 
             if alt_detection.data:
-                return response(error="Alt account")
+                return Response(error="Alt account")
 
         if not name:
             name = steam.data["personaname"]
@@ -107,11 +107,11 @@ class User:
                         file_name="{}.{}".format(self.user_id, file_type)
                     )
                 else:
-                    return response(error="Invalid pfp")
+                    return Response(error="Invalid pfp")
         except ClientError:
-            return response(error="Invalid url")
+            return Response(error="Invalid url")
 
-        return response(data={
+        return Response(data={
             "steam_id": steam_id,
             "discord_id": discord_id,
             "name": name,
@@ -174,7 +174,7 @@ class User:
 
         await self.obj.database.execute(query=query, values=validate.data)
 
-        return response(
+        return Response(
             data=PlayerModel(validate.data).minimal,
             backgroud=validate.backgroud
         )

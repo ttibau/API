@@ -3,7 +3,7 @@ from starlette.endpoints import HTTPEndpoint
 from webargs import fields
 from webargs_starlette import use_args
 
-from utils.responder import responder
+from utils.responder import Responder
 
 
 class Player(HTTPEndpoint):
@@ -11,25 +11,25 @@ class Player(HTTPEndpoint):
     async def get(self, request, args):
         """ Get user. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.player(**args).get()
-        )
+        ).json()
 
     @use_args({"user_id": fields.String(required=True), })
     async def delete(self, request, args):
         """ Delete user. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.player(**args).delete()
-        )
+        ).ujson()
 
     @use_args({"user_id": fields.String(required=True), })
     async def patch(self, request, args):
         """ Reset user. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.player(**args).reset()
-        )
+        ).ujson()
 
 
 class PlayerValidate(HTTPEndpoint):
@@ -37,9 +37,9 @@ class PlayerValidate(HTTPEndpoint):
                 fields.String(), min=1, max=25, required=True
               ), })
     async def post(self, request, args):
-        return responder.render(
+        return Responder(
             await request.state.league.players(**args).validate()
-        )
+        ).ujson()
 
 
 class PlayerFetch(HTTPEndpoint):
@@ -50,7 +50,10 @@ class PlayerFetch(HTTPEndpoint):
     async def get(self, request, args):
         """ List info about given players. """
 
-        return responder.render(
-            await request.state.league.players(user_ids=args["user_ids"]).
-            fetch(include_stats=args["include_stats"])
-        )
+        return Responder(
+            await request.state.league.players(
+                user_ids=args["user_ids"]
+                ).fetch(
+                    include_stats=args["include_stats"]
+                    )
+        ).ujson()

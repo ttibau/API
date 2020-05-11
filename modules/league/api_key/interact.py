@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 
 class Interact(object):
@@ -23,9 +23,9 @@ class Interact(object):
         )
 
         if count == 1:
-            return response(data="Valid key")
+            return Response(data="Valid key")
         else:
-            return response(error="No such key")
+            return Response(error="No such key")
 
     async def edit(self, access_level: int, active: bool = True):
         """ Edit API Key """
@@ -55,7 +55,7 @@ class Interact(object):
             values=values
         )
 
-        return response(data=True)
+        return Response(data=True)
 
     async def delete(self):
         """ Deletes API Key """
@@ -68,7 +68,7 @@ class Interact(object):
             values=self.values
         )
 
-        return response(data=True)
+        return Response(data=True)
 
     async def paths(self):
         """ Gets all paths this key can access. """
@@ -90,4 +90,4 @@ class Interact(object):
                 query=query, values=self.values):
             rows_formatted_append(row["path"])
 
-        return response(data=rows_formatted)
+        return Response(data=rows_formatted)

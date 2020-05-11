@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 
 class Proxy:
@@ -11,16 +11,16 @@ class Proxy:
 
         exists = await self.exists()
         if exists.data:
-            return response(data=True)
+            return Response(data=True)
 
         ip_details = await self.get()
         if ip_details.error:
             return ip_details
 
         if ip_details.data["proxy"]:
-            return response(data=True)
+            return Response(data=True)
 
-        return response(data=False)
+        return Response(data=False)
 
     async def exists(self):
         """ Checks if IP already exists in our cache. """
@@ -33,7 +33,7 @@ class Proxy:
             values=self.values,
         )
 
-        return response(data=bool(count))
+        return Response(data=bool(count))
 
     async def get(self):
         """ Get's details about IP from proxycheck.io or cache. """
@@ -50,7 +50,7 @@ class Proxy:
             row_formatted = {**row}
             row_formatted["proxy"] == 1
 
-            return response(data=row_formatted)
+            return Response(data=row_formatted)
 
         ip_details = await self.obj.sessions.proxy.get(
             ip=self.values["ip"],
@@ -58,7 +58,7 @@ class Proxy:
         )
 
         if not ip_details or "proxy" not in ip_details:
-            return response(error="Invalid proxy request")
+            return Response(error="Invalid proxy request")
 
         values = {
             "ip": self.values["ip"],
@@ -96,5 +96,6 @@ class Proxy:
                    )"""
         await self.obj.database.execute(query=query, values=values)
 
-        values["proxy"] = bool(values["proxy"])
-        return response(data=values)
+        values["proxy"] = ip_details["proxy"]
+
+        return Response(data=values)

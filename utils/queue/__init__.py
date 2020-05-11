@@ -1,5 +1,5 @@
 from utils.misc import Misc
-from utils.response import response
+from utils.response import Response
 
 from utils.queue.captain import Captain
 from utils.queue.map import Map
@@ -113,14 +113,14 @@ class Queue:
             elif team == 2:
                 team_2_count += 1
             else:
-                return response(error="{} isn't a valid team side".format(
+                return Response(error="{} isn't a valid team side".format(
                     team
                 ))
 
             self.assign(user_id=user_id, team=team, captain=captain)
 
         if team_1_count != team_2_count:
-            return response(error="Team 1 & 2 should have a\
+            return Response(error="Team 1 & 2 should have a\
                                    even amount of players")
 
         query = """INSERT INTO scoreboard_total (match_id, league_id,

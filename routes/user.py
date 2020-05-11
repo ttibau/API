@@ -3,7 +3,7 @@ from starlette.endpoints import HTTPEndpoint
 from webargs import fields
 from webargs_starlette import use_args
 
-from utils.responder import responder
+from utils.responder import Responder
 
 
 class User(HTTPEndpoint):
@@ -15,6 +15,6 @@ class User(HTTPEndpoint):
     async def post(self, request, args):
         """ Get user. """
 
-        return responder.render(
+        return Responder(
             await self.obj.user().create(**args)
-        )
+        ).json()

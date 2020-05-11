@@ -1,14 +1,32 @@
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, UJSONResponse
 
 
-class responder:
-    @staticmethod
-    def render(response):
-        """ Renders API json
-                - response, response object.
+class Responder:
+    def __init__(self, response):
+        self.response = response
+
+    def json(self):
+        """ Renders json response
         """
 
-        return JSONResponse({
-            "data": response.data,
-            "error": response.error,
-        }, status_code=response.status, background=response.backgroud)
+        return JSONResponse(
+            {
+                "data": self.response.data,
+                "error": self.response.error,
+            },
+            status_code=self.response.status,
+            background=self.response.backgroud
+        )
+
+    def ujson(self):
+        """ Renders json response
+        """
+
+        return UJSONResponse(
+            {
+                "data": self.response.data,
+                "error": self.response.error,
+            },
+            status_code=self.response.status,
+            background=self.response.backgroud
+        )

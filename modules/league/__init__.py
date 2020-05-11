@@ -1,9 +1,9 @@
-from utils.response import response
+from utils.response import Response
 
 from modules.league.match import Match
 from modules.league.player import Player
 from modules.league.players import Players
-from modules.league.list import List
+from modules.league.list_info import List
 from modules.league.api_key import ApiKey
 
 from settings import Config
@@ -56,7 +56,7 @@ class League:
         """ Finds a available server for the currnet league. """
 
         if not Config.server["regions"].get(self.region):
-            return response(error="No server IDs for that region")
+            return Response(error="No server IDs for that region")
 
         region_servers = list(
             Config.server["regions"][self.region]
@@ -78,9 +78,9 @@ class League:
                 region_servers_remove(server_id)
 
         if len(region_servers) > 0:
-            return response(data=region_servers[0])
+            return Response(data=region_servers[0])
         else:
-            return response(error="No available servers")
+            return Response(error="No available servers")
 
     async def queue_allowed(self):
         """ Checks if over the active queue limit. """
@@ -107,9 +107,9 @@ class League:
             else:
                 active_queues = row["active_queues"]
 
-            return response(data=row["queue_limit"] > active_queues)
+            return Response(data=row["queue_limit"] > active_queues)
         else:
-            return response(error=True)
+            return Response(error=True)
 
     async def details(self):
         """ Gets basic details of league. """
@@ -135,9 +135,9 @@ class League:
                 formatted_row["warmup_commands_only"] == 1
             formatted_row["knife_round"] = formatted_row["knife_round"] == 1
 
-            return response(data=formatted_row)
+            return Response(data=formatted_row)
 
-        return response(error="No such league")
+        return Response(error="No such league")
 
     async def update(self, args: dict):
         """ Updates details of league. """
@@ -164,6 +164,6 @@ class League:
 
             await self.obj.database.execute(query=query, values=values)
 
-            return response(data=args)
+            return Response(data=args)
 
-        return response(error="No arguments")
+        return Response(error="No arguments")

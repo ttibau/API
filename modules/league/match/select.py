@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 
 class Select:
@@ -51,10 +51,10 @@ class Select:
             return match_scoreboard
 
         if match_scoreboard.data["status"] != 3:
-            return response(error="This match isn't at player selection stage")
+            return Response(error="This match isn't at player selection stage")
 
         if user_id not in match_scoreboard.data["players"]["unassigned"]:
-            return response(error="Player isn't in unassigned")
+            return Response(error="Player isn't in unassigned")
 
         # Works out the current stage index.
         # Because the captains are already in the teams & we want the index
@@ -110,7 +110,7 @@ class Select:
 
             await self._update_player(user_id, team)
 
-        return response(data=return_data)
+        return Response(data=return_data)
 
     async def map(self, map_id: str):
         """ Selects map. """
@@ -120,7 +120,7 @@ class Select:
             return match_scoreboard
 
         if match_scoreboard.data["status"] != 2:
-            return response(error="This match isn't at map selection stage")
+            return Response(error="This match isn't at map selection stage")
 
         query = "SELECT map FROM map_pool WHERE match_id = :match_id"
         values = {"match_id": self.current_match.match_id, }
@@ -147,7 +147,7 @@ class Select:
                     selected_map = value["map"]
 
         if not valid_map:
-            return response(error="Invalid map")
+            return Response(error="Invalid map")
 
         await self._delete_map(map_id)
 
@@ -181,4 +181,4 @@ class Select:
                 values=values
             )
 
-        return response(data=return_data)
+        return Response(data=return_data)

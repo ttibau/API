@@ -1,5 +1,5 @@
-from utils.response import response
-from utils.responder import responder
+from utils.response import Response
+from utils.responder import Responder
 
 
 class Api:
@@ -40,6 +40,6 @@ class Api:
     def unauthorized(self):
         """ Handles unauthorized requests """
 
-        return responder.render(
-            response(error="Unauthorized", status=401)
-        )
+        return Responder(
+            Response(error="Unauthorized", status=401)
+        ).ujson()

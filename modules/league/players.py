@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 from models.player import PlayerModel
 
@@ -59,7 +59,7 @@ class Players:
             else:
                 rows_formatted_append(player.minimal)
 
-        return response(data=rows_formatted)
+        return Response(data=rows_formatted)
 
     async def validate(self):
         """ Validates given users & returns data of users who aren't valid. """
@@ -76,6 +76,6 @@ class Players:
             user_ids_remove(row["user_id"])
 
         if len(user_ids) == 0:
-            return response(data="Valid user IDs")
+            return Response(data="Valid user IDs")
         else:
-            return response(data=user_ids, error="Invalid user IDs")
+            return Response(data=user_ids, error="Invalid user IDs")

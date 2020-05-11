@@ -3,7 +3,7 @@ from starlette.endpoints import HTTPEndpoint
 from webargs import fields
 from webargs_starlette import use_args
 
-from utils.responder import responder
+from utils.responder import Responder
 
 
 class PlayersList(HTTPEndpoint):
@@ -14,9 +14,9 @@ class PlayersList(HTTPEndpoint):
     async def get(self, request, args):
         """ List players. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.list(**args).players()
-        )
+        ).json()
 
 
 class MatchesList(HTTPEndpoint):
@@ -27,6 +27,6 @@ class MatchesList(HTTPEndpoint):
     async def get(self, request, args):
         """ Gets list of matches. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.list(**args).matches()
-        )
+        ).json()

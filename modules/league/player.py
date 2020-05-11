@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 from models.player import PlayerModel
 
@@ -47,9 +47,9 @@ class Player:
         )
 
         if row:
-            return response(data=PlayerModel(row).full)
+            return Response(data=PlayerModel(row).full)
         else:
-            return response(error="Invalid user")
+            return Response(error="Invalid user")
 
     async def reset(self):
         """ Resets statistics for given user. """
@@ -77,7 +77,7 @@ class Player:
             values=self.values
         )
 
-        return response(data=True)
+        return Response(data=True)
 
     async def delete(self):
         """ Deletes statistics for given user. """
@@ -91,4 +91,4 @@ class Player:
             values=self.values
         )
 
-        return response(data=True)
+        return Response(data=True)

@@ -1,4 +1,4 @@
-class response:
+class Response:
     def __init__(self, data=None, error=False, status=200, backgroud=None):
         """ Response object. """
 

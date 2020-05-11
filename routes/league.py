@@ -3,14 +3,16 @@ from starlette.endpoints import HTTPEndpoint
 from webargs import fields
 from webargs_starlette import use_args
 
-from utils.responder import responder
+from utils.responder import Responder
 
 
 class League(HTTPEndpoint):
     async def get(self, request):
         """ Pulls details of map. """
 
-        return responder.render(await request.state.league.details())
+        return Responder(
+            await request.state.league.details()
+        ).ujson()
 
     @use_args({"league_name": fields.Str(min=3, max=32),
                "league_website": fields.Str(min=3, max=255),
@@ -26,6 +28,6 @@ class League(HTTPEndpoint):
     async def post(self, request, args):
         """ Updates league details. """
 
-        return responder.render(
+        return Responder(
             await request.state.league.update(**args)
-        )
+        ).ujson()

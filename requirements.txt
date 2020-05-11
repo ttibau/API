@@ -16,4 +16,5 @@ python-multipart
 cryptography
 authlib>=0.14.1
 aiofiles>=0.5.0
+ujson>=2.0.3
 git+https://github.com/MertYakupBaykan/aioproxyio.git

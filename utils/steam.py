@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 from settings import Config
 
@@ -24,6 +24,6 @@ class Steam:
                 if "response" in resp_json \
                         and "players" in resp_json["response"] \
                         and len(resp_json["response"]["players"]) == 1:
-                    return response(data=resp_json["response"]["players"][0])
+                    return Response(data=resp_json["response"]["players"][0])
 
-        return response(error="Invalid user or API key")
+        return Response(error="Invalid user or API key")

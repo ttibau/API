@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 
 from models.match import MatchModel
 from models.player import PlayerModel
@@ -47,7 +47,7 @@ class List:
                 query=query, values=self.values):
             rows_formatted_append(MatchModel(row).full)
 
-        return response(data=rows_formatted)
+        return Response(data=rows_formatted)
 
     async def players(self):
         """ Pulls players """
@@ -85,4 +85,4 @@ class List:
                 query=query, values=self.values):
             rows_formatted_append(PlayerModel(row).full)
 
-        return response(data=rows_formatted)
+        return Response(data=rows_formatted)

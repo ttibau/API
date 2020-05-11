@@ -1,4 +1,4 @@
-from utils.response import response
+from utils.response import Response
 from utils.queue import Queue
 from utils.misc import Misc
 
@@ -111,7 +111,7 @@ class Match:
                     or "record_statistics" not in players["options"]:
                 self._clear_cache()
 
-                return response(error="Players payload formatted incorrectly")
+                return Response(error="Players payload formatted incorrectly")
 
             if len(maps) < 1 or "options" not in maps \
                 or type(maps["options"]) != dict\
@@ -120,7 +120,7 @@ class Match:
                     or type(maps["list"]) != list:
                 self._clear_cache()
 
-                return response(error="Maps payload formatted incorrectly")
+                return Response(error="Maps payload formatted incorrectly")
 
             len_players = len(players["list"])
 
@@ -131,7 +131,7 @@ class Match:
                         and maps["options"]["type"] != "given"):
                     self._clear_cache()
 
-                    return response(error="Selection type must be passed")
+                    return Response(error="Selection type must be passed")
 
             else:
                 if len(maps["options"]["selection"]) \
@@ -140,7 +140,7 @@ class Match:
                    != len_players - 2:
                     self._clear_cache()
 
-                    return response(error="Invaild selection type")
+                    return Response(error="Invaild selection type")
 
                 maps["options"]["selection"] = maps["options"][
                     "selection"].upper()
@@ -152,12 +152,12 @@ class Match:
                                     players["options"]["selection"]):
                     self._clear_cache()
 
-                    return response(error="Only A & B are valid")
+                    return Response(error="Only A & B are valid")
 
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
                 self._clear_cache()
 
-                return response(error="Odd amout of players or\
+                return Response(error="Odd amout of players or\
                                          players is above 2 or below 10")
 
             if not team_names.get("team_1") or not team_names.get("team_2") \
@@ -165,7 +165,7 @@ class Match:
                     or type(team_names["team_2"]) != str:
                 self._clear_cache()
 
-                return response(error="Invalid team names")
+                return Response(error="Invalid team names")
 
             available_server = await self.current_league.get_server()
             if available_server.error:
@@ -209,7 +209,7 @@ class Match:
                 if not players["options"].get("param"):
                     self._clear_cache(server_id=available_server.data)
 
-                    return response(
+                    return Response(
                         error="Param is required for type {}".format(
                             players["options"]["type"],
                         ))
@@ -226,7 +226,7 @@ class Match:
                     else:
                         self._clear_cache(server_id=available_server.data)
 
-                        return response(error="""Something went
+                        return Response(error="""Something went
                                                  wrong during elo fetch""")
                 else:
                     if type(players["options"]["param"]) != dict \
@@ -237,7 +237,7 @@ class Match:
                             != int:
                         self._clear_cache(server_id=available_server.data)
 
-                        return response(error="Param payload\
+                        return Response(error="Param payload\
                                                formatted incorrectly")
 
                     if players["options"]["param"]["capt_1"] \
@@ -247,7 +247,7 @@ class Match:
 
                         self._clear_cache(server_id=available_server.data)
 
-                        return response(error="Index is not within range")
+                        return Response(error="Index is not within range")
 
                     assign_given = queue.captain.given()
                     if assign_given:
@@ -257,7 +257,7 @@ class Match:
             else:
                 self._clear_cache(server_id=available_server.data)
 
-                return response(error="{} isn't a valid player type".format(
+                return Response(error="{} isn't a valid player type".format(
                     players["options"]["type"]
                 ))
 
@@ -272,7 +272,7 @@ class Match:
             else:
                 self._clear_cache(server_id=available_server.data)
 
-                return response(error="{} isn't a valid map type".format(
+                return Response(error="{} isn't a valid map type".format(
                     maps["options"]["type"]
                 ))
 
@@ -290,9 +290,9 @@ class Match:
                 ).start
             )
 
-            return response(backgroud=server_task, data=queue_create.data)
+            return Response(backgroud=server_task, data=queue_create.data)
         else:
-            return response(error="Over queue limit")
+            return Response(error="Over queue limit")
 
     async def get(self):
         """ Gets base details about the match. """
@@ -316,9 +316,9 @@ class Match:
         )
 
         if row:
-            return response(data=MatchModel(row).full)
+            return Response(data=MatchModel(row).full)
         else:
-            return response(error="No match with that ID")
+            return Response(error="No match with that ID")
 
     async def clone(self):
         """ Clones given match. """
@@ -328,7 +328,7 @@ class Match:
             return match_scoreboard
 
         if match_scoreboard.data["status"] != 0:
-            return response(error="Active matches can't be cloned")
+            return Response(error="Active matches can't be cloned")
 
         match_data = {
             "players": {
@@ -404,7 +404,7 @@ class Match:
             values=values
         )
 
-        return response(data=ScoreboardModel(
+        return Response(data=ScoreboardModel(
             match_data=match.data,
             players=players
         ).full)
@@ -417,7 +417,7 @@ class Match:
             return match
 
         if match.data["status"] == 0:
-            return response(error="Match already ended")
+            return Response(error="Match already ended")
 
         values = {"match_id": self.match_id, }
 
@@ -514,4 +514,4 @@ class Match:
         # Forcing status to be correct.
         match.data["status"] = 0
 
-        return response(data=match.data, backgroud=background_tasks)
+        return Response(data=match.data, backgroud=background_tasks)

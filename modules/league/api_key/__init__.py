@@ -1,6 +1,6 @@
 import secrets
 
-from utils.response import response
+from utils.response import Response
 
 from modules.league.api_key.interact import Interact
 
@@ -34,7 +34,7 @@ class ApiKey:
                 query=query, values=values):
             rows_formatted_append(row["path"])
 
-        return response(data=rows_formatted)
+        return Response(data=rows_formatted)
 
     async def generate(self, user_id, access_level: int, active: bool = True):
         """ Generates API key """
@@ -44,7 +44,7 @@ class ApiKey:
         ).exists()
 
         if user_validate.error:
-            return response(data="Invalid user")
+            return Response(data="Invalid user")
 
         if active:
             active = 1
@@ -78,4 +78,4 @@ class ApiKey:
             values=values
         )
 
-        return response(data=True)
+        return Response(data=True)
