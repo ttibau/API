@@ -290,7 +290,7 @@ class Match:
                 ).start
             )
 
-            return Response(backgroud=server_task, data=queue_create.data)
+            return Response(background=server_task, data=queue_create.data)
         else:
             return Response(error="Over queue limit")
 
@@ -514,4 +514,4 @@ class Match:
         # Forcing status to be correct.
         match.data["status"] = 0
 
-        return Response(data=match.data, backgroud=background_tasks)
+        return Response(data=match.data, background=background_tasks)

@@ -1,5 +1,5 @@
 class Response:
-    def __init__(self, data=None, error=False, status=200, backgroud=None):
+    def __init__(self, data=None, error=False, status=200, background=None):
         """ Response object. """
 
         # If an error is pased we ensure the correct status code is given.
@@ -14,4 +14,4 @@ class Response:
 
         self.data = data
         self.error = error
-        self.backgroud = backgroud
+        self.background = background

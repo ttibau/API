@@ -117,7 +117,7 @@ class User:
             "name": name,
             "file_type": file_type,
             "ip": ip,
-        }, backgroud=background_task)
+        }, background=background_task)
 
     async def create(self, steam_id,
                      ip=None, name=None,
@@ -176,5 +176,5 @@ class User:
 
         return Response(
             data=PlayerModel(validate.data).minimal,
-            backgroud=validate.backgroud
+            background=validate.background
         )

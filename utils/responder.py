@@ -15,7 +15,7 @@ class Responder:
                 "error": self.response.error,
             },
             status_code=self.response.status,
-            background=self.response.backgroud
+            background=self.response.background
         )
 
     def ujson(self):
@@ -28,5 +28,5 @@ class Responder:
                 "error": self.response.error,
             },
             status_code=self.response.status,
-            background=self.response.backgroud
+            background=self.response.background
         )
