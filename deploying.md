@@ -1,7 +1,6 @@
 # Deploying
-1st install the needed modules ``pip install -r /path/to/requirements.txt``
-
-Edit ``settings.py``
+- 1st install the needed modules ``pip install -r /path/to/requirements.txt``
+- Edit ``settings.py``
 
 ### Production
 - Read [Running behind Nginx](https://www.uvicorn.org/deployment/#running-behind-nginx).

@@ -48,9 +48,8 @@ Before contributing make sure to do the following:
 - Understand awaiting code.
 
 ### Code Style
-This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 80 character line limits.
-
-I recommend installing [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter) if you use VS Code.
+- [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 80 character line limits.
+- [Cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter) is an helpful VS Code extension for PEP8.
 
 ## Credits
 All the amazing developers who made the libraries this project is built on.
