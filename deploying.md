@@ -8,6 +8,5 @@ Edit ``settings.py``
 - Planning to add more detailed documentation about deploying & possibly some automated solutions.
 
 ### Development / Testing
-You can adjust the host & port in ``run.py``
-
-Run ``run.py`` with python 3.
+- You can adjust the host & port in ``run.py``
+- Run ``run.py`` with python 3.
