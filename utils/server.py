@@ -14,7 +14,7 @@ class Server:
     def load(self):
         """ Working out what server provider we are using.
 
-            For safetly reason only use identical
+            For safety reason only use identical
             functions what all given wrappers provide.
 
             Before adding any new functionality, look over

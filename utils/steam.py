@@ -14,7 +14,7 @@ class Steam:
         self.obj = obj
 
     async def get_user(self, steam_id):
-        """ Get's details from steam API about given steam ID. """
+        """ Gets details from steam API about given steam ID. """
 
         async with self.obj.sessions.aiohttp.get(
                 self.profile_url.format(steam_id)) as resp:
