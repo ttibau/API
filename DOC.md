@@ -17,7 +17,7 @@
 ---
 
 ```python
-create(self, players: dict, maps: dict, team_names: dict)
+match(self, match_id=None).create(self, players: dict, maps: dict, team_names: dict)
 ```
 
 **Parameters**
@@ -51,15 +51,104 @@ create(self, players: dict, maps: dict, team_names: dict)
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+```python
+match(self, match_id=None).get(self)
+```
 
-- get(self)
-- clone(self)
-- scoreboard(self)
-- end(self)
-- players(self) - being developed
-- select_player(self, user_id: str) - being developed
-- select_map(self, map_id: str) - being developed
+**Parameters**
+```
+None
+```
 
+**Response**
+
+[Full match model](https://github.com/ModuleLIFT/API/blob/master/models/match.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```py
+match(self, match_id=None).clone(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+[Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```py
+match(self, match_id=None).scoreboard(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+[Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+match(self, match_id=None).end(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+[Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+match(self, match_id=None).select.player(self, user_id: str)
+```
+
+**Parameters**
+```
+- user_id: str
+    - Valid User ID.
+```
+
+**Response**
+
+```python
+{
+    "completed": bool,
+    "next_turn": str,
+    "status": int,
+}
+```
+
+---
+```python
+match(self, match_id=None).select.map(self, map_id: str)
+```
+
+**Parameters**
+```
+- map_id: str
+    - Valid Map ID.
+```
+
+**Response**
+
+```python
+{
+    "completed": bool,
+    "next_turn": str,
+    "status": int,
+}
+```
+
+---
 ##### list(self, limit: int, offset: int, desc: bool, search: str = "")
 - matches(self)
 - players(self)
