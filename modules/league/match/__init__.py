@@ -5,7 +5,7 @@ from utils.misc import Misc
 from models.match import MatchModel
 from models.scoreboard import ScoreboardModel
 
-from modules.league.match.select import Select
+from .select import Select
 
 from starlette.background import BackgroundTask, BackgroundTasks
 

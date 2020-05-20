@@ -2,7 +2,7 @@ import secrets
 
 from utils.response import Response
 
-from modules.league.api_key.interact import Interact
+from .interact import Interact
 
 
 class ApiKey:

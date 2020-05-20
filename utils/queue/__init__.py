@@ -1,8 +1,8 @@
 from utils.misc import Misc
 from utils.response import Response
 
-from utils.queue.captain import Captain
-from utils.queue.map import Map
+from .captain import Captain
+from .map import Map
 
 
 class Queue:

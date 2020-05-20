@@ -1,10 +1,10 @@
 from utils.response import Response
 
-from modules.league.match import Match
-from modules.league.player import Player
-from modules.league.players import Players
-from modules.league.list_info import List
-from modules.league.api_key import ApiKey
+from .match import Match
+from .player import Player
+from .players import Players
+from .list_info import List
+from .api_key import ApiKey
 
 from settings import Config
 
