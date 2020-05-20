@@ -1,3 +1,6 @@
+### Notice
+This API is only design to be used internally for the system, if you're looking at developing a system using ModuleLIFT check out the route documentation or check out [this wrapper](https://github.com/ModuleLIFT/aiomodulelift).
+
 # Module's Documentation
 - [User](#moduleliftclientuserself-user_idnone)
     - [exists(self)](#existsself)
