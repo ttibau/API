@@ -13,7 +13,7 @@
 #### This project is NOT considered production ready.
 
 # Index
-- [Documentation](/DOC.md)
+- [Documentation](/docs/index.md)
 - [Roadmap](/ROADMAP.md)
 - [About](#about)
 - [Why use ModuleLIFT API?](#why-use-modulelift-api)
