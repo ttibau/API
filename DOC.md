@@ -11,7 +11,7 @@
 
 # Modules 
 ## modulelift.client.user(self, user_id=None)
----
+##### exists(self)
 ```python
 user(self, user_id=None).exists(self)
 ```
@@ -28,6 +28,7 @@ None
 Response object with data being a bool.
 
 ---
+##### external_exists(self, steam_id, discord_id)
 ```python
 user(self, user_id=None).external_exists(self, steam_id, discord_id)
 ```
@@ -45,6 +46,7 @@ Checks if external IDs exists / have been used by other users. Mainly for alt de
 Response object with data being a bool.
 
 ---
+##### create(self, steam_id, ip=None, name=None, discord_id=None, pfp=None)
 ```python
 user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=None, pfp=None)
 ```
@@ -448,6 +450,7 @@ Otherwise
 [Minimal player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L46) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### validate(self)
 ```python
 players(self, user_ids).validate(self)
 ```
@@ -468,6 +471,7 @@ Any IDs returned in data when response errors are invalid IDs.
 ---
 
 ### api_key(self)
+##### paths(self)
 ```python
 api_key(self).paths(self)
 ```
@@ -486,6 +490,7 @@ None
 List
 
 ---
+##### generate(self, user_id, access_level: int, active: bool = True)
 ```python
 api_key(self).generate(self, user_id, access_level: int, active: bool = True)
 ```
@@ -510,6 +515,7 @@ Generates a new api key for a user ID.
 
 ---
 #### interact(self, api_key)
+##### validate(self)
 ```python
 interact(self, api_key).validate(self)
 ```
@@ -527,6 +533,7 @@ None
 Bool
 
 ---
+##### edit(self, access_level: int, active: bool = True)
 ```python
 interact(self, api_key).edit(self, access_level: int, active: bool = True)
 ```
@@ -545,6 +552,7 @@ Edits given API Key.
 Bool
 
 ---
+##### delete(self)
 ```python
 interact(self, api_key).delete(self)
 ```
@@ -562,6 +570,7 @@ None
 Bool
 
 ---
+##### paths(self)
 ```python
 interact(self, api_key).paths(self)
 ```
