@@ -15,9 +15,9 @@
 # Index
 - [Documentation](/docs)
 - [Roadmap](/ROADMAP.md)
+- [Deploying](/deploying.md)
 - [About](#about)
 - [Why use ModuleLIFT API?](#why-use-modulelift-api)
-- [Deploying](#deploying)
 - [Contributions](#contributions)
 - [Credits](#credits)
 
@@ -40,35 +40,17 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 - Elo system, measure how skillful players are.
 - Statistics & Match recording.
 
-## Deploying
-1st install the needed modules ``pip install -r /path/to/requirements.txt``
-
-Edit ``settings.py``
-
-### Production
-I recommend deploying [Starlette](https://www.starlette.io/) using [Uvicorn](http://www.uvicorn.org/) in a containerized environment with [Nginx](https://www.nginx.com/) acting as a reverse proxy, then using [pm2](https://pm2.keymetrics.io/) to manage running processes.
-
-[Uvicorn](http://www.uvicorn.org/) will interact with [Nginx](https://www.nginx.com/) using a UNIX domain socket what can be set like this ``uvicorn.run(app, uds="path/to/uds")`` in ``run.py`` or can be done via the [Uvicorn Command Line](http://www.uvicorn.org/#command-line-options).
-
-I like to use [Certbot](https://certbot.eff.org/) for automatizing [LetsEncrypt](https://letsencrypt.org/) certificates.
-
-Make sure to run ``run.py`` with python 3 using [pm2](https://pm2.keymetrics.io/) before wondering why it isn't responding.
-
-Heaps of online resources can help you with each one of these steps.
-
-### Development / Testing
-You can adjust the host & port in ``run.py``
-
-Run ``run.py`` with python 3.
-
 ## Contributions
+Before contributing make sure to do the following:
+- Read [this documentation](/docs/modules.md), developing an idea for the internal design is important to limit security concerns, repetitive code & consistent API design.
+- Look over the [Starlette documentation](https://www.starlette.io/).
+- Have a peek at the [Databases documentation](https://github.com/encode/databases).
+- Understand awaiting code.
+
 ### Code Style
 This project adheres to the [PEP8 style guide](https://www.python.org/dev/peps/pep-0008/) with 80 character line limits.
 
 I recommend installing [cornflakes linter](https://marketplace.visualstudio.com/items?itemName=kevinglasson.cornflakes-linter) if you use VS Code.
-
-### Branches
-Create a branch if you're working on an issue with the issue number and name like so: `100_Title-Separated-By-Dashes`.
 
 ## Credits
 All the amazing developers who made the libraries this project is built on.
