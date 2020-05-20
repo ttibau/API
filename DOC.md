@@ -1,5 +1,12 @@
 # Documentation
 - [Modules](#modules)
+    - [User](#moduleliftclientuserself-user_idnone)
+    - [League](#moduleliftclientleagueself-league_id-region)
+        - [Match](#matchself-match_idnone)
+        - [List](#listself-limit-int-offset-int-desc-bool-search-str--)
+        - [Players](#playersself-user_ids)
+        - [API Key](#api_keyself)
+
 - [Routes](#routes)
 
 # Modules 
@@ -8,6 +15,9 @@
 ```python
 user(self, user_id=None).exists(self)
 ```
+**Functionality**
+
+Checks if the given ID exists outside of league context.
 
 **Parameters**
 ```
@@ -21,6 +31,9 @@ Response object with data being a bool.
 ```python
 user(self, user_id=None).external_exists(self, steam_id, discord_id)
 ```
+**Functionality**
+
+Checks if external IDs exists / have been used by other users. Mainly for alt detection.
 
 **Parameters**
 ```
@@ -35,6 +48,9 @@ Response object with data being a bool.
 ```python
 user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=None, pfp=None)
 ```
+**Functionality**
+
+Attempts to create a user from the given information, if IP is passed alt detection will be done.
 
 **Parameters**
 ```
@@ -50,10 +66,13 @@ user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=N
 
 ---
 ## modulelift.client.league(self, league_id, region)
-
+##### get_server(self)
 ```python
 league(self, league_id, region).get_server(self)
 ```
+**Functionality**
+
+Finds a free server for a match to use, takes memory cache into consideration.
 
 **Parameters**
 ```
@@ -64,9 +83,13 @@ None
 Response object with data being server ID.
 
 ---
+##### queue_allowed(self)
 ```python
 league(self, league_id, region).queue_allowed(self)
 ```
+**Functionality**
+
+Checks if the current league is over the queue limit, takes memory cache into consideration.
 
 **Parameters**
 ```
@@ -77,9 +100,14 @@ None
 Response object with data telling us if the queue is allowed.
 
 ---
+##### details(self)
 ```python
 league(self, league_id, region).details(self)
 ```
+
+**Functionality**
+
+Returns details about the current league.
 
 **Parameters**
 ```
@@ -106,9 +134,13 @@ None
 ```
 
 ---
+##### update(self, args: dict)
 ```python
 league(self, league_id, region).update(self, args: dict)
 ```
+**Functionality**
+
+Updates details about the league.
 
 **Parameters**
 ```
@@ -131,10 +163,13 @@ Response object with whatever you passed to it.
 ---
 
 ### match(self, match_id=None)
-
+##### create(self, players: dict, maps: dict, team_names: dict)
 ```python
 match(self, match_id=None).create(self, players: dict, maps: dict, team_names: dict)
 ```
+**Functionality**
+
+Attempts to create a match off the given data. If successful it sets the match_id to the match ID it just created.
 
 **Parameters**
 ```
@@ -167,9 +202,13 @@ match(self, match_id=None).create(self, players: dict, maps: dict, team_names: d
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### get(self)
 ```python
 match(self, match_id=None).get(self)
 ```
+**Functionality**
+
+Gets base details about current match.
 
 **Parameters**
 ```
@@ -181,9 +220,13 @@ None
 [Full match model](https://github.com/ModuleLIFT/API/blob/master/models/match.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### clone(self)
 ```py
 match(self, match_id=None).clone(self)
 ```
+**Functionality**
+
+Attempts to clone match from current ID, returns the same data as if to create a match.
 
 **Parameters**
 ```
@@ -195,10 +238,15 @@ None
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### scoreboard(self)
 ```py
 match(self, match_id=None).scoreboard(self)
 ```
 
+**Functionality**
+
+Gets scoreboard data for match.
+
 **Parameters**
 ```
 None
@@ -209,9 +257,17 @@ None
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### end(self)
 ```python
 match(self, match_id=None).end(self)
 ```
+**Functionality**
+
+Ends the current match.
+
+If discord webhook is configured for the current league it attempts to send a fancy embed about the match.
+
+If websocket is configured for the current league it attempts to send the match data to it.
 
 **Parameters**
 ```
@@ -223,9 +279,13 @@ None
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### select.player(self, user_id: str)
 ```python
 match(self, match_id=None).select.player(self, user_id: str)
 ```
+**Functionality**
+
+Selects player for team depending off captain turn.
 
 **Parameters**
 ```
@@ -244,9 +304,13 @@ match(self, match_id=None).select.player(self, user_id: str)
 ```
 
 ---
+##### select.map(self, map_id: str)
 ```python
 match(self, match_id=None).select.map(self, map_id: str)
 ```
+**Functionality**
+
+Veto's map depending off captain turn.
 
 **Parameters**
 ```
@@ -266,10 +330,13 @@ match(self, match_id=None).select.map(self, map_id: str)
 
 ---
 ### list(self, limit: int, offset: int, desc: bool, search: str = "")
-
+##### matches(self)
 ```python
 list(self, limit: int, offset: int, desc: bool, search: str = "").matches(self)
 ```
+**Functionality**
+
+Pulls matches what match ;) given parameters.
 
 **Parameters**
 ```
@@ -281,9 +348,14 @@ None
 [Full match model](https://github.com/ModuleLIFT/API/blob/master/models/match.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### players(self)
 ```python
 list(self, limit: int, offset: int, desc: bool, players: str = "").players(self)
 ```
+
+**Functionality**
+
+Pulls players what match given parameters.
 
 **Parameters**
 ```
@@ -297,9 +369,13 @@ None
 ---
 
 ### player(self, user_id)
+##### get(self)
 ```python
 player(self, user_id).get(self)
 ```
+**Functionality**
+
+Gets full details about that player for the current league.
 
 **Parameters**
 ```
@@ -311,9 +387,13 @@ None
 [Full player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### reset(self)
 ```python
 player(self, user_id).reset(self)
 ```
+**Functionality**
+
+Resets the stats for the given player for the given league.
 
 **Parameters**
 ```
@@ -325,9 +405,14 @@ None
 Bool inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
+##### delete(self)
 ```python
 player(self, user_id).delete(self)
 ```
+
+**Functionality**
+
+Deletes given player for the current league.
 
 **Parameters**
 ```
@@ -341,9 +426,13 @@ Bool inside the [response object](https://github.com/ModuleLIFT/API/blob/master/
 ---
 
 ### players(self, user_ids)
+##### fetch(self, include_stats=False)
 ```python
 players(self, user_ids).fetch(self, include_stats=False)
 ```
+**Functionality**
+
+Pulls details about list of IDs given.
 
 **Parameters**
 ```
@@ -362,6 +451,9 @@ Otherwise
 ```python
 players(self, user_ids).validate(self)
 ```
+**Functionality**
+
+Validates if given IDs are valid and returns invalid IDs. 
 
 **Parameters**
 ```
@@ -380,6 +472,10 @@ Any IDs returned in data when response errors are invalid IDs.
 api_key(self).paths(self)
 ```
 
+**Functionality**
+
+Lists all paths the league can access.
+
 **Parameters**
 ```
 None
@@ -387,12 +483,15 @@ None
 
 **Response**
 
-List of paths the given API key can access.
+List
 
 ---
 ```python
 api_key(self).generate(self, user_id, access_level: int, active: bool = True)
 ```
+**Functionality**
+
+Generates a new api key for a user ID.
 
 **Parameters**
 ```
@@ -414,6 +513,9 @@ api_key(self).generate(self, user_id, access_level: int, active: bool = True)
 ```python
 interact(self, api_key).validate(self)
 ```
+**Functionality**
+
+Validates given API Key.
 
 **Parameters**
 ```
@@ -428,6 +530,9 @@ Bool
 ```python
 interact(self, api_key).edit(self, access_level: int, active: bool = True)
 ```
+**Functionality**
+
+Edits given API Key.
 
 **Parameters**
 ```
@@ -443,6 +548,9 @@ Bool
 ```python
 interact(self, api_key).delete(self)
 ```
+**Functionality**
+
+Deletes current API Key.
 
 **Parameters**
 ```
@@ -457,6 +565,9 @@ Bool
 ```python
 interact(self, api_key).paths(self)
 ```
+**Functionality**
+
+Lists paths this key can access.
 
 **Parameters**
 ```
@@ -465,7 +576,7 @@ None
 
 **Response**
 
-Bool
+List
 
 ---
 

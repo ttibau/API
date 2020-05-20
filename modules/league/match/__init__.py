@@ -23,7 +23,7 @@ class Match:
             self.match_id = Misc.uuid4()
 
     def _clear_cache(self, server_id=None):
-        """ Clears cached data for current league out of memeory. """
+        """ Clears cached data for current league out of memory. """
 
         in_memory_cache = self.current_league.obj.in_memory_cache
 
