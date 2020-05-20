@@ -78,4 +78,4 @@ class ApiKey:
             values=values
         )
 
-        return Response(data=True)
+        return Response(data=values)

@@ -267,8 +267,6 @@ class Match:
                 queue.map.given()
             elif maps["options"]["type"] == "random":
                 queue.map.random()
-            elif maps["options"]["type"] == "vote":
-                queue.map.vote()
             elif maps["options"]["type"] == "veto":
                 queue.map.veto()
             else:

@@ -22,14 +22,5 @@ class Map:
     def veto(self):
         """ Sets map selection type to veto. """
 
-        # Decided to keep veto and vote seperate functions in case if each
-        # type needs some different functionality later on.
-
-        self.obj.details["map"] = None
-        self.obj.details["map_order"] = self.obj.maps["options"]["selection"]
-
-    def vote(self):
-        """ Sets map selection type to vote. """
-
         self.obj.details["map"] = None
         self.obj.details["map_order"] = self.obj.maps["options"]["selection"]
