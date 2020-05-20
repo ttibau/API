@@ -50,7 +50,7 @@ user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=N
 
 ---
 #### modulelift.client.league(self, league_id, region)
----
+
 ```python
 league(self, league_id, region).get_server(self)
 ```
@@ -131,8 +131,6 @@ Response object with whatever you passed to it.
 ---
 
 ##### match(self, match_id=None)
-
----
 
 ```python
 match(self, match_id=None).create(self, players: dict, maps: dict, team_names: dict)
