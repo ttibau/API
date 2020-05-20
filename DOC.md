@@ -2,8 +2,8 @@
 - [Modules](#modules)
 - [Routes](#routes)
 
-## Modules 
-#### modulelift.client.user(self, user_id=None)
+# Modules 
+## modulelift.client.user(self, user_id=None)
 ---
 ```python
 user(self, user_id=None).exists(self)
@@ -49,7 +49,7 @@ user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=N
 [Minimal player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L46) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
-#### modulelift.client.league(self, league_id, region)
+## modulelift.client.league(self, league_id, region)
 
 ```python
 league(self, league_id, region).get_server(self)
@@ -130,7 +130,7 @@ Response object with whatever you passed to it.
 
 ---
 
-##### match(self, match_id=None)
+### match(self, match_id=None)
 
 ```python
 match(self, match_id=None).create(self, players: dict, maps: dict, team_names: dict)
@@ -265,27 +265,209 @@ match(self, match_id=None).select.map(self, map_id: str)
 ```
 
 ---
-##### list(self, limit: int, offset: int, desc: bool, search: str = "")
-- matches(self)
-- players(self)
+### list(self, limit: int, offset: int, desc: bool, search: str = "")
 
-##### player(self, user_id)
-- get(self)
-- reset(self)
-- delete(self)
+```python
+list(self, limit: int, offset: int, desc: bool, search: str = "").matches(self)
+```
 
-##### players(self, user_ids)
-- fetch(self, include_stats=False)
-- validate(self)
+**Parameters**
+```
+None
+```
 
-##### api_key(self)
-- paths(self)
-- generate(self, user_id, access_level: int, active: bool = True)
-- interact(self, api_key)
-    - validate(self)
-    - edit(self, access_level: int, active: bool = True)
-    - delete(self)
-    - paths(self)
+**Response**
+
+[Full match model](https://github.com/ModuleLIFT/API/blob/master/models/match.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+list(self, limit: int, offset: int, desc: bool, players: str = "").players(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+[Full player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+
+### player(self, user_id)
+```python
+player(self, user_id).get(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+[Full player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+player(self, user_id).reset(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Bool inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+player(self, user_id).delete(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Bool inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+
+### players(self, user_ids)
+```python
+players(self, user_ids).fetch(self, include_stats=False)
+```
+
+**Parameters**
+```
+- include_stats, If we should include player stats.
+```
+
+**Response**
+
+If include_stats equals true
+[Full player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L9) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+Otherwise
+[Minimal player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L46) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
+```python
+players(self, user_ids).validate(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Returns bool if valid.
+Any IDs returned in data when response errors are invalid IDs.
+
+---
+
+### api_key(self)
+```python
+api_key(self).paths(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+List of paths the given API key can access.
+
+---
+```python
+api_key(self).generate(self, user_id, access_level: int, active: bool = True)
+```
+
+**Parameters**
+```
+- user_id, valid user ID.
+- access_level, access level to grand this user.
+- active, if the key should be active or not.
+```
+
+**Response**
+
+```python
+{
+    "key": str,
+}
+```
+
+---
+#### interact(self, api_key)
+```python
+interact(self, api_key).validate(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Bool
+
+---
+```python
+interact(self, api_key).edit(self, access_level: int, active: bool = True)
+```
+
+**Parameters**
+```
+- access_level, New access level.
+- active, If key should be active.
+```
+
+**Response**
+
+Bool
+
+---
+```python
+interact(self, api_key).delete(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Bool
+
+---
+```python
+interact(self, api_key).paths(self)
+```
+
+**Parameters**
+```
+None
+```
+
+**Response**
+
+Bool
+
+---
 
 ## Routes
 Coming soon

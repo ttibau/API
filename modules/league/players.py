@@ -76,6 +76,6 @@ class Players:
             user_ids_remove(row["user_id"])
 
         if len(user_ids) == 0:
-            return Response(data="Valid user IDs")
+            return Response(data=True)
         else:
             return Response(data=user_ids, error="Invalid user IDs")

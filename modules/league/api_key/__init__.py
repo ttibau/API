@@ -46,11 +46,6 @@ class ApiKey:
         if user_validate.error:
             return Response(data="Invalid user")
 
-        if active:
-            active = 1
-        else:
-            active = 0
-
         query = """INSERT INTO api_keys (
                        user_id,
                        `key`,
@@ -70,7 +65,7 @@ class ApiKey:
             "key": secrets.token_urlsafe(24),
             "league_id": self.current_league.league_id,
             "access_level": access_level,
-            "active": active,
+            "active": int(active),
         }
 
         await self.current_league.obj.database.execute(
@@ -78,4 +73,6 @@ class ApiKey:
             values=values
         )
 
-        return Response(data=values)
+        return Response(data={
+            "key": values["key"]
+        })

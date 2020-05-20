@@ -9,8 +9,8 @@ class Response:
             if data is None and not error:
                 error = "No data"
                 self.status = 500
-
-            self.status = status
+            else:
+                self.status = status
 
         self.data = data
         self.error = error

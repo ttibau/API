@@ -22,22 +22,14 @@ class Interact(object):
             values=self.values
         )
 
-        if count == 1:
-            return Response(data="Valid key")
-        else:
-            return Response(error="No such key")
+        return Response(data=count == 1)
 
     async def edit(self, access_level: int, active: bool = True):
         """ Edit API Key """
 
         validate_key = await self.validate()
-        if validate_key.error:
+        if not validate_key.data:
             return validate_key
-
-        if active:
-            active = 1
-        else:
-            active = 0
 
         query = """UPDATE api_keys
                    SET access_level = :access_level,
@@ -47,7 +39,7 @@ class Interact(object):
         values = {
             **self.values,
             "access_level": access_level,
-            "active": active,
+            "active": int(active),
         }
 
         await self.current_league.obj.database.execute(
