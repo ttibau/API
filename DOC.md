@@ -21,46 +21,31 @@ create(self, players: dict, maps: dict, team_names: dict)
 ```
 
 **Parameters**
-```json
-    - players
-        {
-            "options": {
-                "type": "random"
-                        / "elo"
-                        / "given",
-                "param": None
-                        / ASC OR DESC
-                        / {"capt_1": index, "capt_2": index}
-                "selection": "ABBAABBA"
-                                / "ABBABABA"
-                                / "ABABABAB"
-                                / None,
-                "assiged_teams": True / False,
-                "record_statistics": True / False,
-            },
-            "list": {
-                "user_id": None / 1 / 2
-            },
-        }
-    - maps
-        {
-            "options": {
-                "type": "veto" / "random" / "vote" / "given",
-                "selection": "ABBAABBA"
-                                / "ABBABABA"
-                                / "ABABABAB"
-                                / None,
-            },
-            "list": [list of full map names],
-        }
-    - team_names
-        {
-            "team_1": "Max 13 characters",
-            "team_2": "",
-        }
-```
-**Response**
+- Players: dict, required.
+    - options: dict, required.
+        - type: str, required.
+            - random, selects captains randomly based off the list of players.
+            - elo, selects captains depending off highest elo.
+            - given, selects captain depending off given indexes in param.
+        - param: dict, only required if type is `given`.
+            - capt_1: int, index of player in list.
+            - capt_2: int, index of player in list.
+        - selection: str, only required if players aren't assigned teams. Expects string containing only A & B what tells the system the order of selections. The string must be the same length of the players given ignoring the captain.
+        - assiged_teams: bool, telling the system if the teams are pre-assigned.
+        - record_statistics: bool, if we should record statistics or not.
+    - list: dict, expects key to be user ID & value to being the team (1, 2 or None / Null for no team.)
+- Maps: dict, required.
+    - options: dict, required.
+        - type: str, required.
+            - veto, captains veto maps.
+            - random, maps are randomly selected.
+            - given, map is given (Uses 1st index of map list.)
+    - list: list, required. List of valid map names e.g. de_mirage.
+- team_names: dict, required.
+    - team_1, required. Name of team 1 (max 20 characters.)
+    - team_2, required. Name of team 2 (max 20 characters.)
 
+**Response**
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---

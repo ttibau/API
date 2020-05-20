@@ -57,7 +57,7 @@ class Match:
                                     / "elo"
                                     / "given",
                             "param": None
-                                    / ASC OR DESC
+                                    / None
                                     / {"capt_1": index, "capt_2": index}
                             "selection": "ABBAABBA"
                                           / "ABBABABA"
@@ -73,7 +73,7 @@ class Match:
                 - maps
                     {
                         "options": {
-                            "type": "veto" / "random" / "vote" / "given",
+                            "type": "veto" / "random"  / "given",
                             "selection": "ABBAABBA"
                                           / "ABBABABA"
                                           / "ABABABAB"
@@ -83,7 +83,7 @@ class Match:
                     }
                 - team_names
                     {
-                        "team_1": "Max 13 characters",
+                        "team_1": "Max 20 characters",
                         "team_2": "",
                     }
         """
@@ -162,7 +162,9 @@ class Match:
 
             if not team_names.get("team_1") or not team_names.get("team_2") \
                 or type(team_names["team_1"]) != str\
-                    or type(team_names["team_2"]) != str:
+                    or type(team_names["team_2"]) != str\
+                    or len(team_names["team_1"]) > 20\
+                    or len(team_names["team_2"]) > 20:
                 self._clear_cache()
 
                 return Response(error="Invalid team names")
