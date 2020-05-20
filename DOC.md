@@ -47,6 +47,7 @@ create(self, players: dict, maps: dict, team_names: dict)
     - team_2, required. Name of team 2 (max 20 characters.)
 ```
 **Response**
+
 [Full scoreboard model](https://github.com/ModuleLIFT/API/blob/master/models/scoreboard.py#L15) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
 
 ---
