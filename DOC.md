@@ -3,14 +3,132 @@
 - [Routes](#routes)
 
 ## Modules 
-#### modulelift.client
-- validate_user(self, user_id)
+#### modulelift.client.user(self, user_id=None)
+---
+```python
+user(self, user_id=None).exists(self)
+```
 
+**Parameters**
+```
+None
+```
+**Response**
+
+Response object with data being a bool.
+
+---
+```python
+user(self, user_id=None).external_exists(self, steam_id, discord_id)
+```
+
+**Parameters**
+```
+- steam_id, valid steamID64.
+- discord_id, valid Discord snowflake ID.
+```
+**Response**
+
+Response object with data being a bool.
+
+---
+```python
+user(self, user_id=None).create(self, steam_id, ip=None, name=None, discord_id=None, pfp=None)
+```
+
+**Parameters**
+```
+- steam_id, valid steamID64.
+- ip, optional, used for alt detection.
+- name, optional, if not passed steam name will be used.
+- discord_id, optional, valid Discord snowflake ID.
+- pfp, optional, if not passed steam pfp will be used. Expects link to valid image format.
+```
+**Response**
+
+[Minimal player model](https://github.com/ModuleLIFT/API/blob/master/models/player.py#L46) inside the [response object](https://github.com/ModuleLIFT/API/blob/master/utils/response.py).
+
+---
 #### modulelift.client.league(self, league_id, region)
-- get_server(self)
-- queue_allowed(self)
-- details(self)
-- update(self, args: dict)
+---
+```python
+league(self, league_id, region).get_server(self)
+```
+
+**Parameters**
+```
+None
+```
+**Response**
+
+Response object with data being server ID.
+
+---
+```python
+league(self, league_id, region).queue_allowed(self)
+```
+
+**Parameters**
+```
+None
+```
+**Response**
+
+Response object with data telling us if the queue is allowed.
+
+---
+```python
+league(self, league_id, region).details(self)
+```
+
+**Parameters**
+```
+None
+```
+**Response**
+
+```python
+{
+    "league_name": str,
+    "league_website": str,
+    "discord_webhook": str,
+    "websocket_endpoint": str,
+    "queue_limit": int,
+    "league_id": str,
+    "discord_prefix": str,
+    "sm_message_prefix": str,
+    "knife_round": bool,
+    "pause": bool or int,
+    "surrender": bool,
+    "warmup_commands_only": bool,
+    "captain_choice_time": int,
+}
+```
+
+---
+```python
+league(self, league_id, region).update(self, args: dict)
+```
+
+**Parameters**
+```
+- league_name, str.
+- league_website, str.
+- websocket_endpoint, str.
+- discord_webhook, str.
+- discord_prefix, str.
+- sm_message_prefix, str.
+- knife_round, str.
+- pause, str.
+- surrender, str.
+- warmup_commands_only, str.
+- captain_choice_time, str.
+```
+**Response**
+
+Response object with whatever you passed to it.
+
+---
 
 ##### match(self, match_id=None)
 
