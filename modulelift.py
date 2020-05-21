@@ -1,58 +1,20 @@
 import os
 
-from tables import Tables
-
-from settings import Config
-
-from routes.router import Routes
-from middlewares.middlewares import Middlewares
-
-from utils.api import Api
-from utils.server import Server
-from utils.webhook import WebhookSend
-from utils.websocket import WebSocket
-from utils.cdn import Cdn
-from utils.steam import Steam
-from utils.proxy import Proxy
-from utils.masterkey import MasterKey
-
-from memory_cache import InMemoryCache
-from sessions import Sessions
-
 from modules.league import League
 from modules.user import User
 
-import asyncio
-import aiohttp
-
-from aioproxyio import proxy_io
+from sessions import SESSIONS
+from aiohttp_session import AIOHTTP
 
 
 class client:
-    in_memory_cache = InMemoryCache
-    sessions = Sessions
-    current_path = os.path.dirname(os.path.realpath(__file__))
-
-    websocket = None
-    webhook = None
-    steam = None
-    master_key = None
-    database = None
-    server = None
-    cdn = None
-
     def __init__(self):
         """ This client assumes the developer has taken
             the initiative to correctly initialize the needed sessions.
         """
 
-        # Creating tables & returning ORM objects back.
-        self.tables = Tables()
-        self.database = self.tables.load()
-
-        self.routes = Routes(obj=self)
-        self.middlewares = Middlewares(obj=self)
-        self.api = Api(obj=self)
+        self.user = User
+        self.league = League
 
     async def startup(self):
         """ Should be ran within context of the
@@ -61,34 +23,13 @@ class client:
             require loop context.
         """
 
-        loop = asyncio.get_event_loop()
-
-        await self.database.connect()
-
-        self.sessions.aiohttp = aiohttp.ClientSession(loop=loop)
-        self.sessions.proxy = proxy_io(api_key=Config.proxyio["key"],
-                                       session=self.sessions.aiohttp)
-        self.websocket = WebSocket(loop=loop)
-        self.webhook = WebhookSend(aiohttp_session=self.sessions.aiohttp)
-        self.steam = Steam(obj=self)
-        self.master_key = await MasterKey(obj=self).load()
-        self.server = Server(obj=self).load()
-        self.cdn = Cdn(obj=self).load()
+        await SESSIONS.database.connect()
 
     async def shutdown(self):
         """ Cleans up sessions created in context_init. """
 
-        await self.sessions.aiohttp.close()
-        await self.database.disconnect()
+        await AIOHTTP.ClientSession.close()
+        await SESSIONS.database.disconnect()
 
-    def league(self, league_id, region):
 
-        return League(obj=self, league_id=league_id, region=region)
-
-    def user(self, user_id=None):
-        """ Handles interactions with users. """
-
-        return User(obj=self, user_id=user_id)
-
-    def proxy(self, ip):
-        return Proxy(obj=self, ip=ip)
+CLIENT = client()

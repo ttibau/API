@@ -9,6 +9,9 @@ from os.path import splitext
 
 from utils.response import Response
 from utils.misc import Misc
+from utils.proxy import Proxy
+
+from sessions import SESSIONS
 
 from models.player import PlayerModel
 
@@ -21,8 +24,7 @@ class User:
         "png",
     ]
 
-    def __init__(self, obj, user_id):
-        self.obj = obj
+    def __init__(self, user_id):
         self.user_id = user_id
 
     async def exists(self):
@@ -33,7 +35,7 @@ class User:
                    WHERE user_id = :user_id"""
         values = {"user_id": self.user_id, }
 
-        count = await self.obj.database.fetch_val(
+        count = await SESSIONS.database.fetch_val(
             query=query,
             values=values,
         )
@@ -51,7 +53,7 @@ class User:
                                AND discord_id IS NOT NULL)"""
         values = {"steam_id": steam_id, "discord_id": discord_id, }
 
-        count = await self.obj.database.fetch_val(
+        count = await SESSIONS.database.fetch_val(
             query=query,
             values=values,
         )
@@ -70,7 +72,7 @@ class User:
         if exists.error:
             return exists
 
-        steam = await self.obj.steam.get_user(steam_id)
+        steam = await self.client.steam.get_user(steam_id)
         if steam.error:
             return steam
 
@@ -84,7 +86,7 @@ class User:
             return Response(error="File type not supported")
 
         if ip:
-            alt_detection = await self.obj.proxy(ip).alt_detection()
+            alt_detection = await Proxy(ip).alt_detection()
 
             if alt_detection.error:
                 return alt_detection
@@ -96,12 +98,12 @@ class User:
             name = steam.data["personaname"]
 
         try:
-            async with self.obj.sessions.aiohttp.get(pfp) as resp:
+            async with SESSIONS.aiohttp.get(pfp) as resp:
                 if resp.status == 200:
                     resp_data = await resp.read()
 
                     background_task = BackgroundTask(
-                        self.obj.cdn.upload,
+                        SESSIONS.cdn.upload,
                         path_key="pfps",
                         data=resp_data,
                         file_name="{}.{}".format(self.user_id, file_type)
@@ -172,7 +174,7 @@ class User:
                        :ip
                    )"""
 
-        await self.obj.database.execute(query=query, values=validate.data)
+        await SESSIONS.database.execute(query=query, values=validate.data)
 
         return Response(
             data=PlayerModel(validate.data).minimal,

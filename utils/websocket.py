@@ -4,17 +4,13 @@ from websockets.exceptions import ConnectionClosed,\
 
 
 class WebSocket:
-    def __init__(self, loop):
-        self.loop = loop
-
     async def send(self, uri, data):
         """ Attempts to send data to given WebSocket. """
 
         try:
             async with websockets.connect(
                 uri,
-                timeout=3.0,
-                loop=self.loop) \
+                timeout=3.0) \
                     as websocket:
                 try:
                     await websocket.send(data)

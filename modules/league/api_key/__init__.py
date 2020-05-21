@@ -2,6 +2,10 @@ import secrets
 
 from utils.response import Response
 
+from modules.user import User
+
+from sessions import SESSIONS
+
 from .interact import Interact
 
 
@@ -30,7 +34,7 @@ class ApiKey:
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(
+        async for row in SESSIONS.database.iterate(
                 query=query, values=values):
             rows_formatted_append(row["path"])
 
@@ -39,7 +43,7 @@ class ApiKey:
     async def generate(self, user_id, access_level: int, active: bool = True):
         """ Generates API key """
 
-        user_validate = await self.current_league.obj.user(
+        user_validate = await User(
             user_id=user_id
         ).exists()
 
@@ -68,7 +72,7 @@ class ApiKey:
             "active": int(active),
         }
 
-        await self.current_league.obj.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=values
         )

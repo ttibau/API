@@ -1,9 +1,11 @@
 from discord import Webhook, AsyncWebhookAdapter
 
+from aiohttp_session import AIOHTTP
+
 
 class WebhookSend:
-    def __init__(self, aiohttp_session):
-        self.adapter = AsyncWebhookAdapter(aiohttp_session)
+    def __init__(self):
+        self.adapter = AsyncWebhookAdapter(AIOHTTP.ClientSession)
 
     async def send(self, url, **kwargs):
         webhook = Webhook.from_url(

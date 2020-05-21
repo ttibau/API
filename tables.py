@@ -625,8 +625,3 @@ class Tables:
                 server_default="0"
             ),
         )
-
-    def load(self):
-        """ Loads database object. """
-
-        return self.database

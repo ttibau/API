@@ -3,3 +3,6 @@ class InMemoryCache:
 
     started_queues = {}
     temp_server_blacklist = []
+
+
+IN_MEMORY_CACHE = InMemoryCache()

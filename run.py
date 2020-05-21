@@ -1,6 +1,9 @@
+import uvicorn
+
 from starlette.applications import Starlette
 
-import uvicorn
+from routes.router import ROUTES, EXCEPTION_HANDLERS
+from middlewares import MIDDLEWARES
 
 from settings import Config
 
@@ -19,16 +22,13 @@ print("https://github.com/ModuleLIFT\n")
 
 print("-"*62)
 
-ml = modulelift.client()
-
-
 app = Starlette(
     debug=Config.debug,
-    routes=ml.routes.list,
-    middleware=ml.middlewares.list,
-    exception_handlers=ml.routes.exception_handlers,
-    on_startup=[ml.startup],
-    on_shutdown=[ml.shutdown],
+    routes=ROUTES,
+    middleware=MIDDLEWARES,
+    exception_handlers=EXCEPTION_HANDLERS,
+    on_startup=[modulelift.CLIENT.startup],
+    on_shutdown=[modulelift.CLIENT.shutdown],
 )
 
 if __name__ == "__main__":

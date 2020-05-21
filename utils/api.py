@@ -1,12 +1,12 @@
 from utils.response import Response
 from utils.responder import Responder
 
+from sessions import SESSIONS
+
 
 class Api:
-    def __init__(self, obj):
-        self.obj = obj
-
-    async def validate(self, api_key, league_id, request_path, request_method):
+    @staticmethod
+    async def validate(api_key, league_id, request_path, request_method):
         """ Validates the given request depending on the
             api key, league id & the access type
                 - api_key, UUID api key.
@@ -28,7 +28,7 @@ class Api:
                          AND api_keys.active = 1
                          AND api_permissions.method = :method"""
 
-        row = await self.obj.database.fetch_val(query=query, values={
+        row = await SESSIONS.database.fetch_val(query=query, values={
             "api_key": api_key,
             "league_id": league_id,
             "path": request_path,
@@ -37,7 +37,8 @@ class Api:
 
         return row == 1
 
-    def unauthorized(self):
+    @staticmethod
+    def unauthorized():
         """ Handles unauthorized requests """
 
         return Responder(

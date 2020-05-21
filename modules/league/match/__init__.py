@@ -9,6 +9,10 @@ from .select import Select
 
 from starlette.background import BackgroundTask, BackgroundTasks
 
+from memory_cache import IN_MEMORY_CACHE
+
+from sessions import SESSIONS
+
 import discord
 import re
 
@@ -25,19 +29,17 @@ class Match:
     def _clear_cache(self, server_id=None):
         """ Clears cached data for current league out of memory. """
 
-        in_memory_cache = self.current_league.obj.in_memory_cache
+        if server_id in IN_MEMORY_CACHE.temp_server_blacklist:
+            IN_MEMORY_CACHE.temp_server_blacklist.remove(server_id)
 
-        if server_id in in_memory_cache.temp_server_blacklist:
-            in_memory_cache.temp_server_blacklist.remove(server_id)
-
-        if in_memory_cache.started_queues.get(self.current_league.league_id):
-            if in_memory_cache.started_queues[self.current_league.league_id] \
+        if IN_MEMORY_CACHE.started_queues.get(self.current_league.league_id):
+            if IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
                  == 1:
-                in_memory_cache.started_queues.pop(
+                IN_MEMORY_CACHE.started_queues.pop(
                     self.current_league.league_id
                 )
             else:
-                in_memory_cache.started_queues[self.current_league.league_id] \
+                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
                     -= 1
 
     @property
@@ -90,17 +92,16 @@ class Match:
 
         queue_allowed = await self.current_league.queue_allowed()
         if not queue_allowed.error:
-            in_memory_cache = self.current_league.obj.in_memory_cache
 
             # Once this queue is inserted into the database or it fails
             # -1 is removed from in_memory_cache.started_queues for this
             # league ID.
-            if in_memory_cache.started_queues.get(
+            if IN_MEMORY_CACHE.started_queues.get(
                     self.current_league.league_id):
-                in_memory_cache.started_queues[self.current_league.league_id] \
+                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
                      += 1
             else:
-                in_memory_cache.started_queues[self.current_league.league_id] \
+                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
                      = 1
 
             if "options" not in players or type(players["options"]) != dict \
@@ -140,7 +141,7 @@ class Match:
                    != len_players - 2:
                     self._clear_cache()
 
-                    return Response(error="Invaild selection type")
+                    return Response(error="Invalid selection type")
 
                 maps["options"]["selection"] = maps["options"][
                     "selection"].upper()
@@ -157,7 +158,7 @@ class Match:
             if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
                 self._clear_cache()
 
-                return Response(error="Odd amout of players or\
+                return Response(error="Odd amount of players or\
                                          players is above 2 or below 10")
 
             if not team_names.get("team_1") or not team_names.get("team_2") \
@@ -175,13 +176,15 @@ class Match:
 
                 return available_server
 
-            in_memory_cache.temp_server_blacklist.append(available_server.data)
+            IN_MEMORY_CACHE.temp_server_blacklist.append(available_server.data)
 
             queue = Queue(players=players,
                           maps=maps,
                           team_names=team_names,
                           server_id=available_server.data,
-                          obj=self)
+                          region=self.current_league.region,
+                          league_id=self.current_league.league_id,
+                          match_id=self.match_id)
 
             # Ensures valid user IDs are given
             # If errors returns response return with
@@ -200,7 +203,7 @@ class Match:
                 assign_random = queue.captain.random()
 
                 # If none isn't returned
-                # something has errored.
+                # something has error-ed.
                 if assign_random:
                     self._clear_cache(server_id=available_server.data)
 
@@ -285,12 +288,17 @@ class Match:
                 return queue_create
 
             server_task = BackgroundTask(
-                self.current_league.obj.server(
+                SESSIONS.server(
                     server_id=available_server.data
                 ).start
             )
 
-            return Response(background=server_task, data=queue_create.data)
+            self.match_id = queue_create
+
+            return Response(
+                background=server_task,
+                data=(await self.scoreboard()).data
+            )
         else:
             return Response(error="Over queue limit")
 
@@ -310,7 +318,7 @@ class Match:
             "region": self.current_league.region,
         }
 
-        row = await self.current_league.obj.database.fetch_one(
+        row = await SESSIONS.database.fetch_one(
             query=query,
             values=values
         )
@@ -399,7 +407,7 @@ class Match:
 
         values = {"match_id": self.match_id, }
 
-        players = await self.current_league.obj.database.fetch_all(
+        players = await SESSIONS.database.fetch_all(
             query=query,
             values=values
         )
@@ -423,7 +431,7 @@ class Match:
 
         query = """UPDATE scoreboard_total SET status = 0
                    WHERE match_id = :match_id"""
-        await self.current_league.obj.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=values
         )
@@ -439,7 +447,7 @@ class Match:
         if not league_details.error:
             if league_details.data["websocket_endpoint"]:
                 background_tasks.add_task(
-                    self.current_league.obj.websocket.send,
+                    SESSIONS.websocket.send,
                     uri=league_details.data["websocket_endpoint"],
                     data=match.data
                 )
@@ -499,14 +507,14 @@ class Match:
                     )
 
                 background_tasks.add_task(
-                    self.current_league.obj.webhook.send,
+                    SESSIONS.webhook.send,
                     url=league_details.data["discord_webhook"],
                     content=match_message,
                     embed=embed
                 )
 
         background_tasks.add_task(
-            self.current_league.obj.server(
+            SESSIONS.server(
                 server_id=match.data["server_id"]
             ).stop
         )

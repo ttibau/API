@@ -1,7 +1,9 @@
+from sessions import SESSIONS
+
 from utils.response import Response
 
 
-class Interact(object):
+class Interact:
     def __init__(self, current_league, api_key):
         self.current_league = current_league
         self.values = {
@@ -17,7 +19,7 @@ class Interact(object):
                    WHERE `key` = :key
                           AND league_id = :league_id"""
 
-        count = await self.current_league.obj.database.fetch_val(
+        count = await SESSIONS.database.fetch_val(
             query=query,
             values=self.values
         )
@@ -42,7 +44,7 @@ class Interact(object):
             "active": int(active),
         }
 
-        await self.current_league.obj.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=values
         )
@@ -55,7 +57,7 @@ class Interact(object):
         query = """DELETE FROM api_keys
                    WHERE `key` = :key AND league_id = :league_id"""
 
-        await self.current_league.obj.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=self.values
         )
@@ -78,7 +80,7 @@ class Interact(object):
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(
+        async for row in SESSIONS.database.iterate(
                 query=query, values=self.values):
             rows_formatted_append(row["path"])
 

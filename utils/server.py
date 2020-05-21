@@ -6,11 +6,10 @@ import sys
 
 from settings import Config
 
+from aiohttp_session import AIOHTTP
+
 
 class Server:
-    def __init__(self, obj):
-        self.obj = obj
-
     def load(self):
         """ Working out what server provider we are using.
 
@@ -28,7 +27,7 @@ class Server:
             pterodactyl = aiodactyl.client(
                 api_key=Config.server["key"],
                 route=Config.server["pterodactyl"]["route"],
-                session=self.obj.sessions.aiohttp
+                session=AIOHTTP.ClientSession
             )
 
             return pterodactyl.client
@@ -36,7 +35,7 @@ class Server:
         elif Config.server["pes"]["enabled"]:
             pes = aiopes.client(
                 api_key=Config.server["key"],
-                session=self.obj.sessions.aiohttp
+                session=AIOHTTP.ClientSession
             )
 
             return pes.server
@@ -50,7 +49,7 @@ class Server:
             dathost = aiodathost.client(
                 username=username,
                 password=password,
-                session=self.obj.sessions.aiohttp
+                session=AIOHTTP.ClientSession
             )
 
             return dathost.server

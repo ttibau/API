@@ -2,13 +2,15 @@ import aiob2
 
 from settings import Config
 
+from aiohttp_session import AIOHTTP
+
 
 class B2:
-    def __init__(self, obj):
+    def __init__(self):
         client = aiob2.client(
             application_key_id=Config.cdn["b2"]["application_key_id"],
             application_key=Config.cdn["b2"]["application_key"],
-            session=obj.sessions.aiohttp
+            session=AIOHTTP.ClientSession
         )
 
         self.bucket = client.bucket(bucket_id=Config.cdn["bucket"])

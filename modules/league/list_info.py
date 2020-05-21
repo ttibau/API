@@ -3,6 +3,8 @@ from utils.response import Response
 from models.match import MatchModel
 from models.player import PlayerModel
 
+from sessions import SESSIONS
+
 
 class List:
     def __init__(self, current_league, limit, offset, search, desc):
@@ -43,7 +45,7 @@ class List:
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(
+        async for row in SESSIONS.database.iterate(
                 query=query, values=self.values):
             rows_formatted_append(MatchModel(row).full)
 
@@ -81,7 +83,7 @@ class List:
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj.database.iterate(
+        async for row in SESSIONS.database.iterate(
                 query=query, values=self.values):
             rows_formatted_append(PlayerModel(row).full)
 

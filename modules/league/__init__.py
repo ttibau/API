@@ -8,10 +8,13 @@ from .api_key import ApiKey
 
 from settings import Config
 
+from memory_cache import IN_MEMORY_CACHE
+
+from sessions import SESSIONS
+
 
 class League:
-    def __init__(self, obj, league_id, region=None):
-        self.obj = obj
+    def __init__(self, league_id, region=None):
         self.league_id = league_id
         self.region = region
 
@@ -69,11 +72,11 @@ class League:
         values = {"server_ids": region_servers}
 
         # Removing any server ID being used in an active match.
-        async for row in self.obj.database.iterate(query=query, values=values):
+        async for row in SESSIONS.database.iterate(query=query, values=values):
             region_servers_remove(row["server_id"])
 
         # Removing any server IDs from our temp blacklist.
-        for server_id in self.obj.in_memory_cache.temp_server_blacklist:
+        for server_id in IN_MEMORY_CACHE.temp_server_blacklist:
             if server_id in region_servers:
                 region_servers_remove(server_id)
 
@@ -92,7 +95,7 @@ class League:
                         ON score.league_id = info.league_id
                            AND score.status != 0
                    WHERE info.league_id = :league_id"""
-        row = await self.obj.database.fetch_one(
+        row = await SESSIONS.database.fetch_one(
             query=query,
             values={"league_id": self.league_id, }
         )
@@ -101,9 +104,9 @@ class League:
             # Ensures users can't create another
             # queue when another queue is being created
             # what would put them over the queue limit.
-            if self.obj.in_memory_cache.started_queues.get(self.league_id):
+            if IN_MEMORY_CACHE.started_queues.get(self.league_id):
                 active_queues = row["active_queues"] \
-                     + self.obj.in_memory_cache.started_queues[self.league_id]
+                     + IN_MEMORY_CACHE.started_queues[self.league_id]
             else:
                 active_queues = row["active_queues"]
 
@@ -114,7 +117,7 @@ class League:
     async def details(self):
         """ Gets basic details of league. """
 
-        row = await self.obj.database.fetch_one(
+        row = await SESSIONS.database.fetch_one(
             query="""SELECT league_name, league_website, discord_webhook,
                             websocket_endpoint, queue_limit,
                             league_id, discord_prefix,
@@ -162,7 +165,7 @@ class League:
             query = query[:-1]
             query += " WHERE league_id = :league_id"
 
-            await self.obj.database.execute(query=query, values=values)
+            await SESSIONS.database.execute(query=query, values=values)
 
             return Response(data=args)
 

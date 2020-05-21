@@ -2,6 +2,8 @@ from utils.response import Response
 
 from models.player import PlayerModel
 
+from sessions import SESSIONS
+
 
 class Players:
     def __init__(self, current_league, user_ids: list):
@@ -49,8 +51,8 @@ class Players:
 
         rows_formatted = []
         rows_formatted_append = rows_formatted.append
-        async for row in self.current_league.obj\
-                .database.iterate(query=query, values=values):
+        async for row in SESSIONS.database.iterate(
+                query=query, values=values):
 
             player = PlayerModel(row)
 
@@ -70,7 +72,7 @@ class Players:
         query = """SELECT user_id FROM users
                    WHERE user_id IN :user_ids"""
 
-        async for row in self.current_league.obj.database.iterate(
+        async for row in SESSIONS.database.iterate(
                 query=query,
                 values=self.values):
             user_ids_remove(row["user_id"])

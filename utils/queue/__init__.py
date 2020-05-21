@@ -1,6 +1,8 @@
 from utils.misc import Misc
 from utils.response import Response
 
+from sessions import SESSIONS
+
 from .captain import Captain
 from .map import Map
 
@@ -13,31 +15,26 @@ class Queue:
 
     details = {}
 
-    def __init__(self, players, maps, team_names, server_id, obj):
-        self.obj = obj
-
-        current_league = self.obj.current_league
-
+    def __init__(self, players, maps, team_names,
+                 server_id, region, league_id, match_id):
         self.players = players
-        self.players_list = list(self.players["list"].keys())
 
         self.maps = maps
 
-        self.database = current_league.obj.database
-
-        self.details["match_id"] = self.obj.match_id
+        self.details["match_id"] = match_id
         self.details["server_id"] = server_id
 
-        self.details["league_id"] = current_league.league_id
-        self.details["region"] = current_league.region
-
-        self.current_league = current_league
+        self.details["league_id"] = league_id
+        self.details["region"] = region
 
         self.details["team_1_name"] = Misc.sanitation(team_names["team_1"])
         self.details["team_2_name"] = Misc.sanitation(team_names["team_2"])
 
-        self.captain = Captain(obj=self)
-        self.map = Map(obj=self)
+        self.captain = Captain(
+            players=self.players,
+            captains=self.captains
+        )
+        self.map = Map(details=self.details, maps=self.maps)
 
     def assign(self, user_id, team, captain):
         """ Assigns player to tell. """
@@ -137,19 +134,17 @@ class Queue:
                                                  :map_order,
                                                  :player_order,
                                                  :record_statistics)"""
-        await self.database.execute(query=query, values=self.details)
+        await SESSIONS.database.execute(query=query, values=self.details)
 
         query = """INSERT INTO scoreboard (match_id, user_id, captain, team)
                    VALUES (:match_id, :user_id, :captain, :team)"""
-        await self.database.execute_many(query=query, values=self.users)
+        await SESSIONS.database.execute_many(query=query, values=self.users)
 
         if map_pool:
             # If map type is random or given we don't
             # need a map pool.
             query = """INSERT INTO map_pool (match_id, map)
                                      VALUES (:match_id, :map)"""
-            await self.database.execute_many(query=query, values=map_pool)
+            await SESSIONS.database.execute_many(query=query, values=map_pool)
 
-        self.obj.match_id = self.details["match_id"]
-
-        return await self.obj.scoreboard()
+        return self.details["match_id"]

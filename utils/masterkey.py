@@ -1,27 +1,34 @@
-import aiofiles
 import secrets
 import os
+import sys
 
 
 class MasterKey:
-    def __init__(self, obj):
-        self.obj = obj
-        self.master_key_path = "{}/master_key.txt".format(obj.current_path)
+    def __init__(self):
+        self.pathway = os.path.join(
+            os.path.dirname(sys.modules['__main__'].__file__),
+            "master_key.text"
+        )
 
-    async def load(self):
+        print(self.pathway)
+
+    def load(self):
         """ Attempts to load master key. """
 
-        if os.path.exists(self.master_key_path):
-            async with aiofiles.open(self.master_key_path, mode="r") as file:
-                return await file.read()
+        if os.path.exists(self.pathway):
+            with open(self.pathway, mode="r") as file:
+                return file.read()
         else:
-            return await self.generate()
+            return self.generate()
 
-    async def generate(self):
+    def generate(self):
         """ Generates master key file with key. """
 
         key = secrets.token_urlsafe(48)
-        async with aiofiles.open(self.master_key_path, mode="w") as file:
-            await file.write(key)
+        with open(self.pathway, mode="w") as file:
+            file.write(key)
 
         return key
+
+
+MASTER_KEY = MasterKey().load()

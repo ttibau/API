@@ -5,6 +5,8 @@ from webargs_starlette import use_args
 
 from utils.responder import Responder
 
+import modulelift
+
 
 class User(HTTPEndpoint):
     @use_args({"steam_id": fields.String(required=True),
@@ -16,5 +18,5 @@ class User(HTTPEndpoint):
         """ Get user. """
 
         return Responder(
-            await self.obj.user().create(**args)
+            await modulelift.CLIENT.user().create(**args)
         ).json()

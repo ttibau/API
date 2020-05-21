@@ -1,9 +1,10 @@
 from utils.response import Response
 
+from sessions import SESSIONS
+
 
 class Proxy:
-    def __init__(self, obj, ip):
-        self.obj = obj
+    def __init__(self, ip):
         self.values = {"ip": ip, }
 
     async def alt_detection(self):
@@ -28,7 +29,7 @@ class Proxy:
         query = """SELECT COUNT(*) FROM ip_details
                    WHERE ip = :ip"""
 
-        count = await self.obj.database.fetch_val(
+        count = await SESSIONS.database.fetch_val(
             query=query,
             values=self.values,
         )
@@ -41,7 +42,7 @@ class Proxy:
         query = """SELECT ip, proxy, provider, city, country
                    FROM ip_details WHERE ip = :ip"""
 
-        row = await self.obj.database.fetch_one(
+        row = await SESSIONS.database.fetch_one(
             query=query,
             values=self.values
         )
@@ -52,7 +53,7 @@ class Proxy:
 
             return Response(data=row_formatted)
 
-        ip_details = await self.obj.sessions.proxy.get(
+        ip_details = await SESSIONS.sessions.proxy.get(
             ip=self.values["ip"],
             flags={"asn": True, "vpn": True, }
         )
@@ -94,7 +95,7 @@ class Proxy:
                         :city,
                         :country
                    )"""
-        await self.obj.database.execute(query=query, values=values)
+        await SESSIONS.database.execute(query=query, values=values)
 
         values["proxy"] = ip_details["proxy"]
 

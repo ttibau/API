@@ -2,6 +2,8 @@ from utils.response import Response
 
 from models.player import PlayerModel
 
+from sessions import SESSIONS
+
 
 class Player:
     def __init__(self, current_league, user_id):
@@ -41,7 +43,7 @@ class Player:
                     WHERE users.user_id = :user_id
                 """
 
-        row = await self.current_league.obj.database.fetch_one(
+        row = await SESSIONS.database.fetch_one(
             query=query,
             values=self.values
         )
@@ -72,7 +74,7 @@ class Player:
                    WHERE user_id = :user_id AND region = :region
                          AND league_id = :league_id"""
 
-        await self.current_league.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=self.values
         )
@@ -86,7 +88,7 @@ class Player:
                    WHERE user_id = :user_id AND region = :region
                          AND league_id = :league_id"""
 
-        await self.current_league.database.execute(
+        await SESSIONS.database.execute(
             query=query,
             values=self.values
         )
