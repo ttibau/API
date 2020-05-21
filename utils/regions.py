@@ -11,18 +11,6 @@ class Regions:
                 query="SELECT region FROM regions"):
             rows_append(row["region"])
 
-        to_remove = []
-        to_remove_append = to_remove.append
-        for row in rows:
-            if row not in Config.regions.keys():
-                to_remove_append(row)
-
-        if len(to_remove) > 0:
-            await SESSIONS.database.execute(
-                query="DELETE FROM regions WHERE region in (:to_remove)",
-                values={"to_remove": to_remove, }
-            )
-
         to_insert = []
         to_insert_append = to_insert.append
         for region in Config.regions.keys():
