@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "2d63887b-8bdd-4ad9-bbb8-00803f9d78fa",
+		"name": "ModuleLIFT",
+		"description": "Payloads for ModuleLIFT's routes.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Generic Middleware test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "UzohM2qBb0vJ1r_GSPROHT7_TpmjN1eV1TesCDbeKqa35OkMd1zijRHNCNguqbxX",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"protocolProfileBehavior": {}
+}

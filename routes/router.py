@@ -14,23 +14,23 @@ from .errors import Errors
 
 
 ROUTES = [
-    Mount("/api", [
+    Mount("/api", routes=[
         Route("/league/", League),
-        Mount("/match", [
+        Mount("/match", routes=[
             Route("/", Match),
             Route("/clone/", MatchClone),
             Route("/scoreboard/", MatchScoreboard),
-            Mount("/select", [
+            Mount("/select", routes=[
                 Route("/map/", MatchSelectMap),
                 Route("/player/", MatchSelectPlayer),
             ]),
         ]),
-        Mount("/player", [
+        Mount("/player", routes=[
             Route("/", Player),
             Route("/fetch/", PlayerFetch),
             Route("/validate/", PlayerValidate),
         ]),
-        Mount("/list", [
+        Mount("/list", routes=[
             Route("/players/", PlayersList),
             Route("/matches/", MatchesList),
         ]),

@@ -1,5 +1,3 @@
-import os
-
 from modules.league import League
 from modules.user import User
 

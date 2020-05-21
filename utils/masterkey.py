@@ -7,10 +7,8 @@ class MasterKey:
     def __init__(self):
         self.pathway = os.path.join(
             os.path.dirname(sys.modules['__main__'].__file__),
-            "master_key.text"
+            "master_key.txt"
         )
-
-        print(self.pathway)
 
     def load(self):
         """ Attempts to load master key. """
