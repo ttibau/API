@@ -54,17 +54,20 @@ class Match:
             assign_random = queue.captain.random()
 
             if assign_random.error:
+                queue.cache.clear()
                 return assign_random
 
         elif queue.player_type.elo:
             assign_elo = await queue.captain.elo()
 
             if assign_elo.error:
+                queue.cache.clear()
                 return assign_elo
 
         else:
             assign_given = queue.captain.given()
             if assign_given:
+                queue.cache.clear()
                 return assign_given
 
         # Working out map selection type.
