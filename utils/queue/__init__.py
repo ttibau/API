@@ -1,48 +1,232 @@
-from utils.misc import Misc
+from starlette.background import BackgroundTask
+
 from utils.response import Response
+from utils.misc import Misc
 
 from sessions import SESSIONS
 
 from .captain import Captain
 from .map import Map
 
+from .cache import QueueCache
+
+import re
+
+
+class PlayerTypes:
+    random = False
+    elo = False
+    given = False
+
+
+class MapTypes:
+    given = False
+    random = False
+    veto = False
+
 
 class Queue:
     captains = {"team_1": None, "team_2": None}
 
-    users = []
-    users_append = users.append
+    players_formatted = []
+    players_formatted_append = players_formatted.append
 
-    details = {}
+    players_list = []
 
-    def __init__(self, players, maps, team_names,
-                 server_id, region, league_id, match_id):
+    details = {
+        "match_id": None,
+        "server_id": None,
+        "league_id": None,
+        "region": None,
+        "team_1_name": None,
+        "team_2_name": None,
+    }
+
+    players_obj = None
+
+    player_type = PlayerTypes()
+    map_type = MapTypes()
+
+    def __init__(self, current_league, current_match,
+                 players, maps, team_names):
+        """ Handles queue logic, expects league object. """
+
+        self.current_league = current_league
+        self.current_match = current_match
+
         self.players = players
-
         self.maps = maps
+        self.team_names = team_names
+        self.players_list = list(self.players["list"].keys())
 
-        self.details["match_id"] = match_id
-        self.details["server_id"] = server_id
-
-        self.details["league_id"] = league_id
-        self.details["region"] = region
-
-        self.details["team_1_name"] = Misc.sanitation(team_names["team_1"])
-        self.details["team_2_name"] = Misc.sanitation(team_names["team_2"])
-
-        self.players_list = list(players["list"].keys())
+        self.cache = QueueCache(current_league.league_id)
 
         self.captain = Captain(
-            players=self.players,
-            captains=self.captains,
-            players_list=self.players_list
+            self.players_obj,
+            self.players,
+            self.captains,
+            self.players_list
         )
-        self.map = Map(details=self.details, maps=self.maps)
+        self.map = Map(self.details, self.maps)
+
+    async def validate(self):
+        """ Validates queue """
+
+        # Validating if queue is allowed.
+        queue_allowed = await self.current_league.queue_allowed()
+        if queue_allowed.error:
+            return Response(error="Over queue limit")
+
+        # Validating player payload.
+        if "options" not in self.players\
+            or type(self.players["options"]) != dict \
+            or "type" not in self.players["options"] \
+                or "list" not in self.players \
+                or type(self.players["list"]) != dict \
+                or "assiged_teams" not in self.players["options"] \
+                or "record_statistics" not in self.players["options"]:
+
+            return Response(error="Players payload formatted incorrectly")
+
+        # Validating maps playload.
+        if len(self.maps) < 1\
+            or "options" not in self.maps \
+            or type(self.maps["options"]) != dict\
+                or "type" not in self.maps["options"] \
+                or "list" not in self.maps \
+                or type(self.maps["list"]) != list:
+
+            return Response(error="Maps payload formatted incorrectly")
+
+        # Assign a var the length of players['list'].
+        # this will be used for multiple checks.
+        players_len = len(self.players["list"])
+
+        # Validating selection & types for maps & players.
+        if "selection" not in self.players["options"]\
+                or "selection" not in self.maps["options"]:
+            if not self.players["options"]["assiged_teams"]\
+                or (self.maps["options"]["type"] != "random"
+                    and self.maps["options"]["type"] != "given"):
+
+                return Response(error="Selection type must be passed")
+        else:
+            # Validating Selection types.
+            if len(self.maps["options"]["selection"]) \
+                != len(self.maps["list"]) \
+                or len(self.players["options"]["selection"]) \
+                    != players_len - 2:
+
+                return Response(error="Invalid selection type")
+
+            self.maps["options"]["selection"] =\
+                self.maps["options"]["selection"].upper()
+
+            self.players["options"]["selection"] =\
+                self.players["options"]["selection"].upper()
+
+            # Validating selection type has only A or B
+            if not re.match("^[AB]*$", self.maps["options"]["selection"]) \
+                or not re.match("^[AB]*$",
+                                self.players["options"]["selection"]):
+
+                return Response(error="Only A & B are valid")
+
+        # Validating player length.
+        if (players_len % 2) == 1 or players_len < 2 and players_len > 10:
+
+            return Response(error="Odd amount of players or " +
+                            "players is above 2 or below 10")
+
+        # Validating team name playload.
+        if "team_1" not in self.team_names\
+            or "team_2" not in self.team_names \
+            or type(self.team_names["team_1"]) != str\
+                or type(self.team_names["team_2"]) != str\
+                or len(self.team_names["team_1"]) > 20\
+                or len(self.team_names["team_2"]) > 20:
+
+            return Response(error="Invalid team names")
+
+        self.details["team_1_name"] = Misc.sanitation(
+            self.team_names["team_1"]
+        )
+        self.details["team_2_name"] = Misc.sanitation(
+            self.team_names["team_2"]
+        )
+
+        # Validating a server is available.
+        available_server = await self.current_league.get_server()
+        if available_server.error:
+            return available_server
+
+        # Caching the server into the temp blacklist.
+        self.details["server_id"] = self.cache.server(available_server.data)
+
+        self.players_obj = self.current_league.players(
+            user_ids=self.players_list
+        )
+
+        # Validating player IDs are correct.
+        players_validate = await self.players_obj.validate()
+        if players_validate.error:
+            return players_validate
+
+        # Validating if option type is correct.
+        if self.players["options"]["type"] == "random":
+            self.player_type.random = True
+
+        elif self.players["options"]["type"] == "given":
+            # Validating if params payload.
+            if "param" not in self.players["options"] or\
+                type(self.players["options"]["param"]) != dict \
+                or "capt_1" not in self.players["options"]["param"] \
+                or "capt_2" not in self.players["options"]["param"] \
+                or type(
+                    self.players["options"]["param"]["capt_1"]
+                    ) != int \
+                    or type(
+                        self.players["options"]["param"]["capt_2"]
+                        ) != int:
+
+                return Response(error="Param payload " +
+                                "formatted incorrectly")
+
+            if self.players["options"]["param"]["capt_1"] \
+                > players_len - 1 \
+                or self.players["options"]["param"]["capt_2"] \
+                    > players_len - 1:
+
+                return Response(error="Index is not within range")
+
+            self.player_type.given = True
+
+        elif self.players["options"]["type"] == "elo":
+            self.player_type.elo = True
+
+        else:
+            return Response(error="{} isn't a valid player type".format(
+                self.players["options"]["type"]
+            ))
+
+        # Validating map payload.
+        if self.maps["options"]["type"] == "given":
+            self.map_type.given = True
+        elif self.maps["options"]["type"] == "random":
+            self.map_type.random = True
+        elif self.maps["options"]["type"] == "veto":
+            self.map_type.random = True
+        else:
+            return Response(error="{} isn't a valid map type".format(
+                self.maps["options"]["type"]
+            ))
+
+        return Response(data=True)
 
     def assign(self, user_id, team, captain):
         """ Assigns player to tell. """
 
-        self.users_append({
+        self.players_formatted_append({
             "match_id": self.details["match_id"],
             "user_id": user_id,
             "captain": captain,
@@ -53,6 +237,8 @@ class Queue:
         """ Assigns players & captains to given
             team & also inserts the data into the database.
         """
+
+        self.details["match_id"] = self.current_match.match_id
 
         if self.maps["options"]["type"] == "random" or \
            self.maps["options"]["type"] == "given":
@@ -93,7 +279,6 @@ class Queue:
 
         team_1_count = 0
         team_2_count = 0
-
         for user_id, team in self.players["list"].items():
             if self.captains["team_1"] == user_id or \
                     self.captains["team_2"] == user_id:
@@ -113,6 +298,8 @@ class Queue:
             elif team == 2:
                 team_2_count += 1
             else:
+                self.cache.clear()
+
                 return Response(error="{} isn't a valid team side".format(
                     team
                 ))
@@ -120,8 +307,13 @@ class Queue:
             self.assign(user_id=user_id, team=team, captain=captain)
 
         if team_1_count != team_2_count:
-            return Response(error="Team 1 & 2 should have a\
-                                   even amount of players")
+            self.cache.clear()
+
+            return Response(error="Team 1 & 2 should have a" +
+                            " even amount of players")
+
+        self.details["league_id"] = self.current_league.league_id
+        self.details["region"] = self.current_league.region
 
         query = """INSERT INTO scoreboard_total (match_id, league_id,
                                                  status, server_id,
@@ -141,7 +333,10 @@ class Queue:
 
         query = """INSERT INTO scoreboard (match_id, user_id, captain, team)
                    VALUES (:match_id, :user_id, :captain, :team)"""
-        await SESSIONS.database.execute_many(query=query, values=self.users)
+        await SESSIONS.database.execute_many(
+            query=query,
+            values=self.players_formatted
+        )
 
         if map_pool:
             # If map type is random or given we don't
@@ -150,4 +345,13 @@ class Queue:
                                      VALUES (:match_id, :map)"""
             await SESSIONS.database.execute_many(query=query, values=map_pool)
 
-        return Response(data=True)
+        server_task = BackgroundTask(
+            SESSIONS.server(
+                server_id=self.details["server_id"]
+            ).start
+        )
+
+        return Response(
+            background=server_task,
+            data=(await self.current_match.scoreboard()).data
+        )

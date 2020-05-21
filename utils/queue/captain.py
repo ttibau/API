@@ -4,7 +4,8 @@ from random import shuffle
 
 
 class Captain:
-    def __init__(self, players, captains, players_list):
+    def __init__(self, players_obj, players, captains, players_list):
+        self.players_obj = players_obj
         self.players = players
         self.captains = captains
         self.players_list = players_list
@@ -25,13 +26,19 @@ class Captain:
         self.captains["team_1"] = self.players_list[capt_1_index]
         self.captains["team_2"] = self.players_list[capt_2_index]
 
-    def elo(self, players_elo):
+    async def elo(self):
         """ Assigns captains based off elo,
                 players_elo - value from players.fetch_many.
         """
 
+        player_elo = await self.players_obj.fetch(include_stats=True)
+        if player_elo.error:
+            return player_elo
+
+        player_elo = player_elo.data
+
         if self.players["options"]["assiged_teams"]:
-            for row in players_elo:
+            for row in player_elo:
                 if self.players["list"][row["user_id"]] == 1 \
                      and not self.captains["team_1"].get(row["user_id"]):
                     self.captains["team_1"] = row["user_id"]
@@ -47,8 +54,8 @@ class Captain:
                 else:
                     break
         else:
-            self.captains["team_1"] = players_elo[0]["user_id"]
-            self.captains["team_2"] = players_elo[1]["user_id"]
+            self.captains["team_1"] = player_elo[0]["user_id"]
+            self.captains["team_2"] = player_elo[1]["user_id"]
 
     def random(self):
         """ Randomly assigns a captain. """

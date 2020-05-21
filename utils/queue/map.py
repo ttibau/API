@@ -15,7 +15,7 @@ class Map:
     def random(self):
         """ Sets a random map from the given maps. """
 
-        shuffle(self.maps)
+        shuffle(self.maps["list"])
 
         self.details["map"] = self.maps["list"][0]
         self.details["map_order"] = None

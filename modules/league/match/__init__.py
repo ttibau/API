@@ -7,14 +7,13 @@ from models.scoreboard import ScoreboardModel
 
 from .select import Select
 
-from starlette.background import BackgroundTask, BackgroundTasks
+from starlette.background import BackgroundTasks
 
 from memory_cache import IN_MEMORY_CACHE
 
 from sessions import SESSIONS
 
 import discord
-import re
 
 
 class Match:
@@ -26,22 +25,6 @@ class Match:
         else:
             self.match_id = Misc.uuid4()
 
-    def _clear_cache(self, server_id=None):
-        """ Clears cached data for current league out of memory. """
-
-        if server_id in IN_MEMORY_CACHE.temp_server_blacklist:
-            IN_MEMORY_CACHE.temp_server_blacklist.remove(server_id)
-
-        if IN_MEMORY_CACHE.started_queues.get(self.current_league.league_id):
-            if IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
-                 == 1:
-                IN_MEMORY_CACHE.started_queues.pop(
-                    self.current_league.league_id
-                )
-            else:
-                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
-                    -= 1
-
     @property
     def select(self):
 
@@ -52,253 +35,52 @@ class Match:
 
     async def create(self, players: dict, maps: dict, team_names: dict):
         """ Creates match.
-                - players
-                    {
-                        "options": {
-                            "type": "random"
-                                    / "elo"
-                                    / "given",
-                            "param": None
-                                    / None
-                                    / {"capt_1": index, "capt_2": index}
-                            "selection": "ABBAABBA"
-                                          / "ABBABABA"
-                                          / "ABABABAB"
-                                          / None,
-                            "assiged_teams": True / False,
-                            "record_statistics": True / False,
-                        },
-                        "list": {
-                            "user_id": None / 1 / 2
-                        },
-                    }
-                - maps
-                    {
-                        "options": {
-                            "type": "veto" / "random"  / "given",
-                            "selection": "ABBAABBA"
-                                          / "ABBABABA"
-                                          / "ABABABAB"
-                                          / None,
-                        },
-                        "list": [list of full map names],
-                    }
-                - team_names
-                    {
-                        "team_1": "Max 20 characters",
-                        "team_2": "",
-                    }
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#createself-players-dict-maps-dict-team_names-dict
         """
 
-        queue_allowed = await self.current_league.queue_allowed()
-        if not queue_allowed.error:
+        queue = Queue(
+            current_league=self.current_league,
+            current_match=self,
+            players=players,
+            maps=maps,
+            team_names=team_names,
+        )
 
-            # Once this queue is inserted into the database or it fails
-            # -1 is removed from in_memory_cache.started_queues for this
-            # league ID.
-            if IN_MEMORY_CACHE.started_queues.get(
-                    self.current_league.league_id):
-                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
-                     += 1
-            else:
-                IN_MEMORY_CACHE.started_queues[self.current_league.league_id] \
-                     = 1
+        validation = await queue.validate()
+        if validation.error:
+            queue.cache.clear()
+            return validation
 
-            if "options" not in players or type(players["options"]) != dict \
-                or "type" not in players["options"] \
-                    or "list" not in players \
-                    or type(players["list"]) != dict \
-                    or "assiged_teams" not in players["options"] \
-                    or "record_statistics" not in players["options"]:
-                self._clear_cache()
+        # Working out player selection type.
+        if queue.player_type.random:
+            assign_random = queue.captain.random()
 
-                return Response(error="Players payload formatted incorrectly")
+            if assign_random.error:
+                return assign_random
 
-            if len(maps) < 1 or "options" not in maps \
-                or type(maps["options"]) != dict\
-                    or "type" not in maps["options"] \
-                    or "list" not in maps \
-                    or type(maps["list"]) != list:
-                self._clear_cache()
+        elif queue.player_type.elo:
+            assign_elo = await queue.captain.elo()
 
-                return Response(error="Maps payload formatted incorrectly")
+            if assign_elo.error:
+                return assign_elo
 
-            len_players = len(players["list"])
-
-            if "selection" not in players["options"]\
-                    or "selection" not in maps["options"]:
-                if not players["options"]["assiged_teams"]\
-                    or (maps["options"]["type"] != "random"
-                        and maps["options"]["type"] != "given"):
-                    self._clear_cache()
-
-                    return Response(error="Selection type must be passed")
-
-            else:
-                if len(maps["options"]["selection"]) \
-                   != len(maps["list"]) \
-                   or len(players["options"]["selection"]) \
-                   != len_players - 2:
-                    self._clear_cache()
-
-                    return Response(error="Invalid selection type")
-
-                maps["options"]["selection"] = maps["options"][
-                    "selection"].upper()
-                players["options"]["selection"] = players["options"][
-                    "selection"].upper()
-
-                if not re.match("^[AB]*$", maps["options"]["selection"]) \
-                    or not re.match("^[AB]*$",
-                                    players["options"]["selection"]):
-                    self._clear_cache()
-
-                    return Response(error="Only A & B are valid")
-
-            if (len_players % 2) == 1 or len_players < 2 and len_players > 10:
-                self._clear_cache()
-
-                return Response(error="Odd amount of players or\
-                                         players is above 2 or below 10")
-
-            if not team_names.get("team_1") or not team_names.get("team_2") \
-                or type(team_names["team_1"]) != str\
-                    or type(team_names["team_2"]) != str\
-                    or len(team_names["team_1"]) > 20\
-                    or len(team_names["team_2"]) > 20:
-                self._clear_cache()
-
-                return Response(error="Invalid team names")
-
-            available_server = await self.current_league.get_server()
-            if available_server.error:
-                self._clear_cache()
-
-                return available_server
-
-            IN_MEMORY_CACHE.temp_server_blacklist.append(available_server.data)
-
-            queue = Queue(players=players,
-                          maps=maps,
-                          team_names=team_names,
-                          server_id=available_server.data,
-                          region=self.current_league.region,
-                          league_id=self.current_league.league_id,
-                          match_id=self.match_id)
-
-            # Ensures valid user IDs are given
-            # If errors returns response return with
-            # data of incorrect user ids.
-            players_obj = self.current_league.players(
-                user_ids=queue.players_list
-            )
-
-            players_validate = await players_obj.validate()
-            if players_validate.error:
-                self._clear_cache(server_id=available_server.data)
-
-                return players_validate
-
-            if players["options"]["type"] == "random":
-                assign_random = queue.captain.random()
-
-                # If none isn't returned
-                # something has error-ed.
-                if assign_random:
-                    self._clear_cache(server_id=available_server.data)
-
-                    return assign_random
-
-            elif players["options"]["type"] == "elo" or\
-                    players["options"]["type"] == "given":
-                if not players["options"].get("param"):
-                    self._clear_cache(server_id=available_server.data)
-
-                    return Response(
-                        error="Param is required for type {}".format(
-                            players["options"]["type"],
-                        ))
-
-                if players["options"]["type"] == "elo":
-                    players_elo = await players_obj.fetch(include_stats=True)
-
-                    if not players_elo.error:
-                        assign_elo = queue.captain.elo(players_elo)
-                        if assign_elo:
-                            self._clear_cache(server_id=available_server.data)
-
-                            return assign_elo
-                    else:
-                        self._clear_cache(server_id=available_server.data)
-
-                        return Response(error="""Something went
-                                                 wrong during elo fetch""")
-                else:
-                    if type(players["options"]["param"]) != dict \
-                        or "capt_1" not in players["options"]["param"] \
-                        or "capt_2" not in players["options"]["param"] \
-                        or type(players["options"]["param"]["capt_1"]) != int \
-                            or type(players["options"]["param"]["capt_2"]) \
-                            != int:
-                        self._clear_cache(server_id=available_server.data)
-
-                        return Response(error="Param payload\
-                                               formatted incorrectly")
-
-                    if players["options"]["param"]["capt_1"] \
-                        > len_players - 1 \
-                        or players["options"]["param"]["capt_2"] \
-                            > len_players - 1:
-
-                        self._clear_cache(server_id=available_server.data)
-
-                        return Response(error="Index is not within range")
-
-                    assign_given = queue.captain.given()
-                    if assign_given:
-                        self._clear_cache(server_id=available_server.data)
-
-                        return assign_given
-            else:
-                self._clear_cache(server_id=available_server.data)
-
-                return Response(error="{} isn't a valid player type".format(
-                    players["options"]["type"]
-                ))
-
-            if maps["options"]["type"] == "given":
-                queue.map.given()
-            elif maps["options"]["type"] == "random":
-                queue.map.random()
-            elif maps["options"]["type"] == "veto":
-                queue.map.veto()
-            else:
-                self._clear_cache(server_id=available_server.data)
-
-                return Response(error="{} isn't a valid map type".format(
-                    maps["options"]["type"]
-                ))
-
-            # Creating match from given data.
-            queue_create = await queue.create()
-
-            self._clear_cache(server_id=available_server.data)
-
-            if queue_create.error:
-                return queue_create
-
-            server_task = BackgroundTask(
-                SESSIONS.server(
-                    server_id=available_server.data
-                ).start
-            )
-
-            return Response(
-                background=server_task,
-                data=(await self.scoreboard()).data
-            )
         else:
-            return Response(error="Over queue limit")
+            assign_given = queue.captain.given()
+            if assign_given:
+                return assign_given
+
+        # Working out map selection type.
+        if queue.map_type.given:
+            queue.map.given()
+
+        elif queue.map_type.random:
+            queue.map.random()
+
+        else:
+            queue.map.veto()
+
+        # Creating the match.
+        return await queue.create()
 
     async def get(self):
         """ Gets base details about the match. """
