@@ -44,3 +44,11 @@ class Api:
         return Responder(
             Response(error="Unauthorized", status=401)
         ).ujson()
+
+    @staticmethod
+    def invalid_region():
+        """ Handles invalid regions """
+
+        return Responder(
+            Response(error="Invalid Region", status=500)
+        ).ujson()

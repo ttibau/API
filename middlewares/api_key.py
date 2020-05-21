@@ -54,7 +54,9 @@ class APIKeyValidation(BaseHTTPMiddleware):
                             + timedelta(seconds=Config.cache["max_age"])
 
             if "region" in request.query_params:
-                region = request.query_params["region"].lower()
+                region = request.query_params["region"].upper()
+                if region not in Config.regions:
+                    return Api.invalid_region()
             else:
                 region = None
 

@@ -36,6 +36,7 @@ class Config:
     regions = {
         # Unique region code
         # and all iso codes what fall under it.
+        # should always be upper case.
         "OCE": [
             "AU",
             "NZ",

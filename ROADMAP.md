@@ -1,16 +1,12 @@
 # API Roadmap
-- Improving modules documentation.
-    - Explaining what each function does.
 - Routes documentation.
     - Explaining how each route operates, what data can be pushed, etc.
-- Migrations.
-    - Waiting for [orm](https://github.com/encode/orm).
+- Testing payloads for every route.
+    - Test every route & document the method.
 - Setup script
     - Script to automate production deploying.
 - Login module.
-    - ~~Attaching discord & steam accounts to a user id.~~
     - Deleting & editing logins.
-    - ~~Alt detection & VPN blocking using [proxycheck.io](https://proxycheck.io/)~~
     - Logging events using Websocket.
 - Ban module.
     - Adding a ban to a user id, ban length is based off the ban severity value and the rep loss value assigned to the ban type.

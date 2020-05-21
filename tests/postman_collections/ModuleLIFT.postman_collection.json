@@ -36,6 +36,35 @@
 			"response": []
 		},
 		{
+			"name": "Invalid region",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8888/api/match?league_id=tl&region=invalidregion",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"match"
+					],
+					"query": [
+						{
+							"key": "league_id",
+							"value": "tl"
+						},
+						{
+							"key": "region",
+							"value": "invalidregion"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Match, given veto | Valid",
 			"request": {
 				"method": "POST",
@@ -80,7 +109,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"match_id\": \"efbd4c23-e4f0-45e4-a2b3-959af89b47e4\"\r\n}",
+					"raw": "{\r\n\t\"match_id\": \"5cb58ba9-7a94-4d42-ac55-10a56f50c2c8\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
