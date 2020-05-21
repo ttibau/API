@@ -1,6 +1,8 @@
 from modules.league import League
 from modules.user import User
 
+from utils.regions import Regions
+
 from sessions import SESSIONS
 from aiohttp_session import AIOHTTP
 
@@ -22,6 +24,7 @@ class client:
         """
 
         await SESSIONS.database.connect()
+        await Regions.cache()
 
     async def shutdown(self):
         """ Cleans up sessions created in context_init. """

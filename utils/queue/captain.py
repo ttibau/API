@@ -4,11 +4,10 @@ from random import shuffle
 
 
 class Captain:
-    def __init__(self, players, captains):
-        self.players_list = list(players["list"].keys())
-
+    def __init__(self, players, captains, players_list):
         self.players = players
         self.captains = captains
+        self.players_list = players_list
 
     def given(self):
         """ Assigns the given captins. """

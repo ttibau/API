@@ -7,12 +7,106 @@
 	},
 	"item": [
 		{
-			"name": "Generic Middleware test",
+			"name": "Generic Middleware | Valid",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "localhost:8888/api/match?league_id=tl&region=oce",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"match"
+					],
+					"query": [
+						{
+							"key": "league_id",
+							"value": "tl"
+						},
+						{
+							"key": "region",
+							"value": "oce"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Match, given veto | Valid",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"players\": {\r\n\t\t\"options\": {\r\n\t\t\t\"type\": \"given\",\r\n\t\t\t\"param\": {\"capt_1\": 0, \"capt_2\": 1},\r\n\t\t\t\"selection\": \"ABBABABA\",\r\n\t\t\t\"assiged_teams\": false,\r\n\t\t\t\"record_statistics\": false\r\n\t\t},\r\n\t\t\"list\": {\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae23\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae24\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae25\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae26\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae27\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae28\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae29\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae30\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae31\": null,\r\n\t\t\t\"fffe46cd-6668-45a1-817c-e18d8cafae32\": null\r\n\t\t}\r\n\t},\r\n\t\"maps\": {\r\n\t\t\"options\": {\r\n\t\t\t\"type\": \"veto\",\r\n\t\t\t\"selection\": \"ABBA\"\r\n\t\t},\r\n\t\t\"list\": [\r\n\t\t\t\"de_mirage\",\r\n\t\t\t\"de_inferno\",\r\n\t\t\t\"de_cache\",\r\n\t\t\t\"de_nuke\"\r\n\t\t]\r\n\t},\r\n\t\"team_names\": {\r\n\t\t\"team_1\": \"Test 1\",\r\n\t\t\"team_2\": \"Test 2\"\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8888/api/match?league_id=tl&region=oce",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"match"
+					],
+					"query": [
+						{
+							"key": "league_id",
+							"value": "tl"
+						},
+						{
+							"key": "region",
+							"value": "oce"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete match",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"match_id\": \"efbd4c23-e4f0-45e4-a2b3-959af89b47e4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8888/api/match?league_id=tl&region=oce",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"api",
+						"match"
+					],
+					"query": [
+						{
+							"key": "league_id",
+							"value": "tl"
+						},
+						{
+							"key": "region",
+							"value": "oce"
+						}
+					]
 				}
 			},
 			"response": []

@@ -293,8 +293,6 @@ class Match:
                 ).start
             )
 
-            self.match_id = queue_create
-
             return Response(
                 background=server_task,
                 data=(await self.scoreboard()).data

@@ -30,9 +30,12 @@ class Queue:
         self.details["team_1_name"] = Misc.sanitation(team_names["team_1"])
         self.details["team_2_name"] = Misc.sanitation(team_names["team_2"])
 
+        self.players_list = list(players["list"].keys())
+
         self.captain = Captain(
             players=self.players,
-            captains=self.captains
+            captains=self.captains,
+            players_list=self.players_list
         )
         self.map = Map(details=self.details, maps=self.maps)
 
@@ -147,4 +150,4 @@ class Queue:
                                      VALUES (:match_id, :map)"""
             await SESSIONS.database.execute_many(query=query, values=map_pool)
 
-        return self.details["match_id"]
+        return Response(data=True)
