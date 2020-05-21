@@ -9,8 +9,6 @@ from .select import Select
 
 from starlette.background import BackgroundTasks
 
-from memory_cache import IN_MEMORY_CACHE
-
 from sessions import SESSIONS
 
 import discord
