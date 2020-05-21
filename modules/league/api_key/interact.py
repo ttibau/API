@@ -12,7 +12,9 @@ class Interact:
         }
 
     async def validate(self):
-        """ Validates if key exists. """
+        """ Validates if key exists.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#validateself-1
+        """
 
         query = """SELECT COUNT(*)
                    FROM api_keys
@@ -27,7 +29,9 @@ class Interact:
         return Response(data=count == 1)
 
     async def edit(self, access_level: int, active: bool = True):
-        """ Edit API Key """
+        """ Edit API Key.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#editself-access_level-int-active-bool--true
+        """
 
         validate_key = await self.validate()
         if not validate_key.data:
@@ -52,7 +56,9 @@ class Interact:
         return Response(data=True)
 
     async def delete(self):
-        """ Deletes API Key """
+        """ Deletes API Key.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#deleteself-1
+        """
 
         query = """DELETE FROM api_keys
                    WHERE `key` = :key AND league_id = :league_id"""
@@ -65,7 +71,9 @@ class Interact:
         return Response(data=True)
 
     async def paths(self):
-        """ Gets all paths this key can access. """
+        """ Gets all paths this key can access.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#pathsself-1
+        """
 
         query = """SELECT api_paths.path FROM api_keys
                         INNER JOIN api_permissions

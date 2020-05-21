@@ -81,7 +81,9 @@ class Match:
         return await queue.create()
 
     async def get(self):
-        """ Gets base details about the match. """
+        """ Gets base details about the match.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#getself
+        """
 
         query = """SELECT match_id, server_id, map_order, player_order, timestamp, status,
                           map, team_1_name, team_2_name,
@@ -107,7 +109,9 @@ class Match:
             return Response(error="No match with that ID")
 
     async def clone(self):
-        """ Clones given match. """
+        """ Clones given match.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#cloneself
+        """
 
         match_scoreboard = await self.scoreboard()
         if match_scoreboard.error:
@@ -162,7 +166,9 @@ class Match:
         return await self.create(**match_data)
 
     async def scoreboard(self):
-        """ Match scoreboard. """
+        """ Match scoreboard.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#scoreboardself
+        """
 
         match = await self.get()
         if match.error:
@@ -196,7 +202,9 @@ class Match:
         ).full)
 
     async def end(self):
-        """ Ends given match. """
+        """ Ends given match.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#endself
+        """
 
         match = await self.scoreboard()
         if match.error:

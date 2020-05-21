@@ -16,13 +16,17 @@ class ApiKey:
     def interact(self, api_key):
         """ Object for interacting with a
             API key.
+
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#interactself-api_key
         """
 
         return Interact(current_league=self.current_league,
                         api_key=api_key)
 
     async def paths(self):
-        """ Gets all paths current league can access. """
+        """ Gets all paths current league can access.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#pathsself
+        """
 
         query = """SELECT DISTINCT api_paths.path
                    FROM api_permissions
@@ -41,7 +45,9 @@ class ApiKey:
         return Response(data=rows_formatted)
 
     async def generate(self, user_id, access_level: int, active: bool = True):
-        """ Generates API key """
+        """ Generates API key.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#generateself-user_id-access_level-int-active-bool--true
+        """
 
         user_validate = await User(
             user_id=user_id

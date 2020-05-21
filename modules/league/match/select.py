@@ -44,7 +44,9 @@ class Select:
         return team
 
     async def player(self, user_id: str):
-        """ Selects player. """
+        """ Selects player.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#selectplayerself-user_id-str
+        """
 
         match_scoreboard = await self.current_match.scoreboard()
         if match_scoreboard.error:
@@ -113,7 +115,9 @@ class Select:
         return Response(data=return_data)
 
     async def map(self, map_id: str):
-        """ Selects map. """
+        """ Selects map.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#selectmapself-map_id-str
+        """
 
         match_scoreboard = await self.current_match.scoreboard()
         if match_scoreboard.error:

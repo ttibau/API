@@ -24,7 +24,9 @@ class List:
             self.order_by = "ASC"
 
     async def matches(self):
-        """ Pulls matches """
+        """ Pulls matches
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#matchesself
+        """
 
         query = """SELECT st.match_id, st.timestamp, st.status, st.map, st.server_id,
                           st.team_1_name, st.team_2_name, st.team_1_score,
@@ -52,7 +54,9 @@ class List:
         return Response(data=rows_formatted)
 
     async def players(self):
-        """ Pulls players """
+        """ Pulls players
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#playersself
+        """
 
         query = """SELECT IFNULL(statistics.elo, 0) AS elo,
                           IFNULL(statistics.kills, 0) AS kills,

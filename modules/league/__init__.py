@@ -56,7 +56,9 @@ class League:
         return Players(current_league=self, user_ids=user_ids)
 
     async def get_server(self):
-        """ Finds a available server for the currnet league. """
+        """ Finds a available server for the current league.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#get_serverself
+        """
 
         if not Config.server["regions"].get(self.region):
             return Response(error="No server IDs for that region")
@@ -86,7 +88,9 @@ class League:
             return Response(error="No available servers")
 
     async def queue_allowed(self):
-        """ Checks if over the active queue limit. """
+        """ Checks if over the active queue limit.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#queue_allowedself
+        """
 
         query = """SELECT COUNT(score.status) AS active_queues,
                           IFNULL(info.queue_limit, 0) AS queue_limit
@@ -115,7 +119,9 @@ class League:
             return Response(error=True)
 
     async def details(self):
-        """ Gets basic details of league. """
+        """ Gets basic details of league.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#detailsself
+        """
 
         row = await SESSIONS.database.fetch_one(
             query="""SELECT league_name, league_website, discord_webhook,
@@ -143,7 +149,9 @@ class League:
         return Response(error="No such league")
 
     async def update(self, args: dict):
-        """ Updates details of league. """
+        """ Updates details of league.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#updateself-args-dict
+        """
 
         if len(args) > 0:
             query = "UPDATE league_info SET "

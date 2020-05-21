@@ -16,7 +16,9 @@ class Player:
         }
 
     async def get(self):
-        """ Gets infomation on given player. """
+        """ Gets infomation on given player.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#getself-1
+        """
 
         query = """SELECT users.user_id, users.steam_id,
                           users.discord_id, users.name,
@@ -54,7 +56,9 @@ class Player:
             return Response(error="Invalid user")
 
     async def reset(self):
-        """ Resets statistics for given user. """
+        """ Resets statistics for given user.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#resetself
+        """
 
         query = """UPDATE statistics SET
                    total_time = 0,
@@ -82,7 +86,9 @@ class Player:
         return Response(data=True)
 
     async def delete(self):
-        """ Deletes statistics for given user. """
+        """ Deletes statistics for given user.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#deleteself
+        """
 
         query = """DELETE FROM statistics
                    WHERE user_id = :user_id AND region = :region

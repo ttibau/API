@@ -14,7 +14,9 @@ class Players:
         }
 
     async def fetch(self, include_stats=False):
-        """ Selects given players. """
+        """ Selects given players.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#fetchself-include_statsfalse
+        """
 
         values = dict(self.values)
 
@@ -64,7 +66,9 @@ class Players:
         return Response(data=rows_formatted)
 
     async def validate(self):
-        """ Validates given users & returns data of users who aren't valid. """
+        """ Validates given users & returns data of users who aren't valid.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#validateself
+        """
 
         user_ids = list(self.values["user_ids"])
         user_ids_remove = user_ids.remove

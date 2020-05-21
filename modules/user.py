@@ -10,6 +10,7 @@ from os.path import splitext
 from utils.response import Response
 from utils.misc import Misc
 from utils.proxy import Proxy
+from utils.steam import Steam
 
 from sessions import SESSIONS
 
@@ -28,7 +29,9 @@ class User:
         self.user_id = user_id
 
     async def exists(self):
-        """ Validates if user exists. """
+        """ Validates if user exists.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#existsself
+        """
 
         query = """SELECT COUNT(*)
                    FROM users
@@ -43,7 +46,9 @@ class User:
         return Response(data=bool(count))
 
     async def external_exists(self, steam_id, discord_id):
-        """ Validates if external ID has been used before. """
+        """ Validates if external ID has been used before.
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#external_existsself-steam_id-discord_id
+        """
 
         query = """SELECT COUNT(*)
                    FROM users
@@ -72,7 +77,7 @@ class User:
         if exists.error:
             return exists
 
-        steam = await self.client.steam.get_user(steam_id)
+        steam = await Steam.get_user(steam_id)
         if steam.error:
             return steam
 
@@ -132,6 +137,8 @@ class User:
             steam API will be used instead.
 
             If IP isn't passed then alt detection isn't done.
+
+            https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#createself-steam_id-ipnone-namenone-discord_idnone-pfpnone
         """
 
         self.user_id = Misc.uuid4()
