@@ -43,7 +43,7 @@ The idea behind ModuleLIFT is to create a powerful API for creating & monitoring
 ## Contributions
 Before contributing make sure to do the following:
 - Read [this documentation](/docs/modules.md), developing an idea for the internal design is important to limit security concerns, repetitive code & consistent API design.
-- Read [how to test](/tests).
+- Read [our testing documentation](/tests).
 - Look over the [Starlette documentation](https://www.starlette.io/).
 - Have a peek at the [Databases documentation](https://github.com/encode/databases).
 - Understand awaiting code.
