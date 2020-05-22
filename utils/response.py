@@ -3,14 +3,10 @@ class Response:
         """ Response object. """
 
         # If an error is passed we ensure the correct status code is given.
-        if status == 200 and error:
+        if error and status == 200:
             self.status = 500
         else:
-            if data is None and not error:
-                error = "No data"
-                self.status = 500
-            else:
-                self.status = status
+            self.status = status
 
         self.data = data
         self.error = error
