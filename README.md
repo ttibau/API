@@ -23,7 +23,7 @@
 
 ## Contributions
 Before contributing make sure to do the following:
-- Read [this documentation](/docs/modules.md), developing an idea for the internal design is important to limit security concerns, repetitive code & consistent API design.
+- Read [this documentation](/docs/modules.md), developing an idea for the internal design is important to limit security concerns, limit repetitive code & to keep a consistent design.
 - Read [our testing documentation](/tests).
 - Look over the [Starlette documentation](https://www.starlette.io/).
 - Have a peek at the [Databases documentation](https://github.com/encode/databases).

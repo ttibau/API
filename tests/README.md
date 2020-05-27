@@ -3,4 +3,4 @@
 - Install [Postman](https://www.postman.com/).
 - Load our [dummy data](/tests/sql_dummy_data) into your database.
 - Import the latest Postman collection from [here](/tests/postman_collections).
-- Run ``run.py`` with python 3, leave the server running on ``localhost:8888``.
+- [Run the server](/deploying.md#development--testing), leave the server running on ``localhost:8888`.
