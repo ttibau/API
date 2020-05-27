@@ -16,6 +16,7 @@
 - [Documentation](/docs)
 - [Roadmap](/ROADMAP.md)
 - [Deploying](/deploying.md)
+- [Testing](/tests)
 - [About](#about)
 - [Why use ModuleLIFT API?](#why-use-modulelift-api)
 - [Contributions](#contributions)
