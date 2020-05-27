@@ -1,6 +1,6 @@
 from utils.response import Response
 
-from settings import Config
+from settings import CONFIG
 
 from aiohttp_session import AIOHTTP
 
@@ -9,7 +9,7 @@ base_url = "https://api.steampowered.com/"
 
 profile_url = base_url +\
     "ISteamUser/GetPlayerSummaries/v2/?key=" +\
-    Config.steam["key"] + "&steamids={}"
+    CONFIG.steam["key"] + "&steamids={}"
 
 
 class Steam:

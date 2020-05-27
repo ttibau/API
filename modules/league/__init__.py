@@ -6,7 +6,7 @@ from .players import Players
 from .list_info import List
 from .api_key import ApiKey
 
-from settings import Config
+from settings import CONFIG
 
 from memory_cache import IN_MEMORY_CACHE
 
@@ -60,11 +60,13 @@ class League:
             https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#get_serverself
         """
 
-        if not Config.server["regions"].get(self.region):
+        if not CONFIG.server["regions"].get(self.region):
+            print(self.region)
+            print(CONFIG.server["regions"])
             return Response(error="No server IDs for that region")
 
         region_servers = list(
-            Config.server["regions"][self.region]
+            CONFIG.server["regions"][self.region]
         )
         region_servers_remove = region_servers.remove
 

@@ -106,6 +106,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `scoreboard` WRITE;
 /*!40000 ALTER TABLE `scoreboard` DISABLE KEYS */;
+INSERT INTO `scoreboard` VALUES ('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae23',1,1,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae24',1,2,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae25',0,1,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae26',0,2,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae27',0,1,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae28',0,2,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae29',0,1,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae30',0,2,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae31',0,1,1,0,0,0,0,0,0,0,0,0,0),('67f56df5-3faf-4c0c-9af9-3792433b500a','fffe46cd-6668-45a1-817c-e18d8cafae32',0,2,1,0,0,0,0,0,0,0,0,0,0);
 /*!40000 ALTER TABLE `scoreboard` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,6 +116,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `scoreboard_total` WRITE;
 /*!40000 ALTER TABLE `scoreboard_total` DISABLE KEYS */;
+INSERT INTO `scoreboard_total` VALUES ('67f56df5-3faf-4c0c-9af9-3792433b500a','server_id',NULL,NULL,'2020-05-27 08:10:59',1,'de_inferno','OCE','tl','Test 1','Test 2',0,0,0,0,0);
 /*!40000 ALTER TABLE `scoreboard_total` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,4 +148,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-21 16:47:24
+-- Dump completed on 2020-05-27 20:13:17

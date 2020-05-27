@@ -1,4 +1,4 @@
-from settings import Config
+from settings import CONFIG
 
 from utils.server import Server
 from utils.webhook import WebhookSend
@@ -15,7 +15,7 @@ from aiohttp_session import AIOHTTP
 
 class Sessions:
     proxy = proxy_io(
-        api_key=Config.proxyio["key"],
+        api_key=CONFIG.proxyio["key"],
         session=AIOHTTP.ClientSession
     )
     websocket = WebSocket()

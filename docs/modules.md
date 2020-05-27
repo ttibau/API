@@ -214,7 +214,8 @@ Attempts to create a match off the given data. If successful it sets the match_i
             - capt_1: int, index of player in list.
             - capt_2: int, index of player in list.
         - selection: str, only required if players aren't assigned teams. Expects string containing only A & B what tells the system the order of selections. The string must be the same length of the players given ignoring the captain.
-        - assiged_teams: bool, telling the system if the teams are pre-assigned.
+        - assigned_teams: bool, telling the system if the teams are pre-assigned.
+        - auto_balance: bool, system will auto balance teams based off elo, can't be used if assigned_teams is true.
         - record_statistics: bool, if we should record statistics or not.
     - list: dict, expects key to be user ID & value to being the team (1, 2 or None / Null for no team.)
 - Maps: dict, required.

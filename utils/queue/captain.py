@@ -16,7 +16,7 @@ class Captain:
         capt_1_index = self.players["options"]["param"]["capt_1"]
         capt_2_index = self.players["options"]["param"]["capt_2"]
 
-        if self.players["options"]["assiged_teams"]:
+        if self.players["options"]["assigned_teams"]:
             if self.players["list"][
                 self.players_list[capt_1_index]] == \
                     self.players["list"][
@@ -35,16 +35,13 @@ class Captain:
         if player_elo.error:
             return player_elo
 
-        player_elo = player_elo.data
-
-        if self.players["options"]["assiged_teams"]:
-            for row in player_elo:
+        if self.players["options"]["assigned_teams"]:
+            for row in player_elo.data:
                 if self.players["list"][row["user_id"]] == 1 \
-                     and not self.captains["team_1"].get(row["user_id"]):
+                     and row["user_id"] not in self.captains["team_1"]:
                     self.captains["team_1"] = row["user_id"]
                 elif self.players["list"][row["user_id"]] == 2 \
-                        and not self.captains["team_2"].get(
-                            row["user_id"]):
+                        and row["user_id"] not in self.captains["team_2"]:
                     self.captains["team_2"] = row["user_id"]
                 elif self.players["list"][row["user_id"]] != 1 \
                         and self.players["list"][row["user_id"]] != 2:
@@ -54,8 +51,8 @@ class Captain:
                 else:
                     break
         else:
-            self.captains["team_1"] = player_elo[0]["user_id"]
-            self.captains["team_2"] = player_elo[1]["user_id"]
+            self.captains["team_1"] = player_elo.data[0]["user_id"]
+            self.captains["team_2"] = player_elo.data[1]["user_id"]
 
     def random(self):
         """ Randomly assigns a captain. """

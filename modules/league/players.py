@@ -14,7 +14,7 @@ class Players:
         }
 
     async def fetch(self, include_stats=False):
-        """ Selects given players.
+        """ Selects given players, if include_stats then will be ordered by elo.
             https://github.com/ModuleLIFT/API/blob/master/docs/modules.md#fetchself-include_statsfalse
         """
 

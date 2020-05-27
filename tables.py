@@ -1,6 +1,6 @@
 from databases import Database, DatabaseURL
 
-from settings import Config
+from settings import CONFIG
 
 import sqlalchemy
 
@@ -8,11 +8,11 @@ import sqlalchemy
 class Tables:
     database_url = DatabaseURL(
         "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
-                                                Config.database["username"],
-                                                Config.database["password"],
-                                                Config.database["servername"],
-                                                Config.database["port"],
-                                                Config.database["dbname"])
+                                                CONFIG.database["username"],
+                                                CONFIG.database["password"],
+                                                CONFIG.database["servername"],
+                                                CONFIG.database["port"],
+                                                CONFIG.database["dbname"])
     )
     database = Database(database_url)
     metadata = sqlalchemy.MetaData()

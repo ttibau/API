@@ -75,18 +75,28 @@ class Queue:
         # Validating if queue is allowed.
         queue_allowed = await self.current_league.queue_allowed()
         if queue_allowed.error:
+
+            self.cache.clear()
             return Response(error="Over queue limit")
 
         # Validating player payload.
-        if "options" not in self.players\
+        if "options" not in self.players \
             or type(self.players["options"]) != dict \
             or "type" not in self.players["options"] \
                 or "list" not in self.players \
                 or type(self.players["list"]) != dict \
-                or "assiged_teams" not in self.players["options"] \
-                or "record_statistics" not in self.players["options"]:
+                or "assigned_teams" not in self.players["options"] \
+                or "record_statistics" not in self.players["options"] \
+                or "auto_balance" not in self.players["options"]:
 
+            self.cache.clear()
             return Response(error="Players payload formatted incorrectly")
+
+        if self.players["options"]["assigned_teams"] \
+                and self.players["options"]["auto_balance"]:
+
+            self.cache.clear()
+            return Response(error="Team can't be assigned if auto balanced")
 
         # Validating maps playload.
         if len(self.maps) < 1\
@@ -96,6 +106,7 @@ class Queue:
                 or "list" not in self.maps \
                 or type(self.maps["list"]) != list:
 
+            self.cache.clear()
             return Response(error="Maps payload formatted incorrectly")
 
         # Assign a var the length of players['list'].
@@ -105,10 +116,11 @@ class Queue:
         # Validating selection & types for maps & players.
         if "selection" not in self.players["options"]\
                 or "selection" not in self.maps["options"]:
-            if not self.players["options"]["assiged_teams"]\
+            if not self.players["options"]["assigned_teams"]\
                 or (self.maps["options"]["type"] != "random"
                     and self.maps["options"]["type"] != "given"):
 
+                self.cache.clear()
                 return Response(error="Selection type must be passed")
         else:
             # Validating Selection types.
@@ -117,6 +129,7 @@ class Queue:
                 or len(self.players["options"]["selection"]) \
                     != players_len - 2:
 
+                self.cache.clear()
                 return Response(error="Invalid selection type")
 
             self.maps["options"]["selection"] =\
@@ -130,11 +143,13 @@ class Queue:
                 or not re.match("^[AB]*$",
                                 self.players["options"]["selection"]):
 
+                self.cache.clear()
                 return Response(error="Only A & B are valid")
 
         # Validating player length.
         if (players_len % 2) == 1 or players_len < 2 and players_len > 10:
 
+            self.cache.clear()
             return Response(error="Odd amount of players or " +
                             "players is above 2 or below 10")
 
@@ -146,6 +161,7 @@ class Queue:
                 or len(self.team_names["team_1"]) > 20\
                 or len(self.team_names["team_2"]) > 20:
 
+            self.cache.clear()
             return Response(error="Invalid team names")
 
         self.details["team_1_name"] = Misc.sanitation(
@@ -158,6 +174,8 @@ class Queue:
         # Validating a server is available.
         available_server = await self.current_league.get_server()
         if available_server.error:
+
+            self.cache.clear()
             return available_server
 
         # Caching the server into the temp blacklist.
@@ -170,6 +188,8 @@ class Queue:
         # Validating player IDs are correct.
         players_validate = await self.players_obj.validate()
         if players_validate.error:
+
+            self.cache.clear()
             return players_validate
 
         # Validating if option type is correct.
@@ -189,6 +209,7 @@ class Queue:
                         self.players["options"]["param"]["capt_2"]
                         ) != int:
 
+                self.cache.clear()
                 return Response(error="Param payload " +
                                 "formatted incorrectly")
 
@@ -197,6 +218,7 @@ class Queue:
                 or self.players["options"]["param"]["capt_2"] \
                     > players_len - 1:
 
+                self.cache.clear()
                 return Response(error="Index is not within range")
 
             self.player_type.given = True
@@ -205,6 +227,8 @@ class Queue:
             self.player_type.elo = True
 
         else:
+
+            self.cache.clear()
             return Response(error="{} isn't a valid player type".format(
                 self.players["options"]["type"]
             ))
@@ -217,13 +241,15 @@ class Queue:
         elif self.maps["options"]["type"] == "veto":
             self.map_type.random = True
         else:
+
+            self.cache.clear()
             return Response(error="{} isn't a valid map type".format(
                 self.maps["options"]["type"]
             ))
 
         return Response(data=True)
 
-    def assign(self, user_id, team, captain):
+    def _assign(self, user_id, team, captain):
         """ Assigns player to tell. """
 
         self.players_formatted_append({
@@ -233,6 +259,26 @@ class Queue:
             "team": team,
         })
 
+    async def _auto_balance(self):
+        """ Assigns players to team based off elo. """
+
+        player_elo = await self.players_obj.fetch(include_stats=True)
+        if player_elo.error:
+            return player_elo
+
+        for index in range(0, len(player_elo.data)):
+            current_player = player_elo.data[index]
+
+            if current_player["user_id"] != self.captains["team_1"] \
+                    or current_player["user_id"] != self.captains["team_2"]:
+
+                if (index + 1) % 2 == 0:
+                    print("assigning team 2")
+                    self.players["list"][current_player["user_id"]] = 2
+                else:
+                    print("assigning team 1")
+                    self.players["list"][current_player["user_id"]] = 1
+
     async def create(self):
         """ Assigns players & captains to given
             team & also inserts the data into the database.
@@ -240,11 +286,12 @@ class Queue:
 
         self.details["match_id"] = self.current_match.match_id
 
-        if self.maps["options"]["type"] == "random" or \
-           self.maps["options"]["type"] == "given":
+        if self.map_type.random or \
+           self.map_type.given:
             map_pool = None
 
-            if self.players["options"]["assiged_teams"]:
+            if self.players["options"]["assigned_teams"] \
+                    or self.players["options"]["auto_balance"]:
                 # Setting match as live
                 self.details["player_order"] = None
                 self.details["status"] = 1
@@ -262,7 +309,8 @@ class Queue:
                     "match_id": self.details["match_id"],
                 })
 
-            if self.players["options"]["assiged_teams"]:
+            if self.players["options"]["assigned_teams"] \
+                    or self.players["options"]["auto_balance"]:
                 # Setting match as map selection stage
                 self.details["player_order"] = None
                 self.details["status"] = 2
@@ -276,6 +324,9 @@ class Queue:
             self.details["record_statistics"] = 1
         else:
             self.details["record_statistics"] = 0
+
+        if self.players["options"]["auto_balance"]:
+            await self._auto_balance()
 
         team_1_count = 0
         team_2_count = 0
@@ -304,7 +355,7 @@ class Queue:
                     team
                 ))
 
-            self.assign(user_id=user_id, team=team, captain=captain)
+            self._assign(user_id=user_id, team=team, captain=captain)
 
         if team_1_count != team_2_count:
             self.cache.clear()

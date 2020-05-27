@@ -5,7 +5,7 @@ from starlette.applications import Starlette
 from routes.router import ROUTES, EXCEPTION_HANDLERS
 from middlewares import MIDDLEWARES
 
-from settings import Config
+from settings import CONFIG
 
 import modulelift
 
@@ -23,7 +23,7 @@ print("https://github.com/ModuleLIFT\n")
 print("-"*62)
 
 app = Starlette(
-    debug=Config.debug,
+    debug=CONFIG.debug,
     routes=ROUTES,
     middleware=MIDDLEWARES,
     exception_handlers=EXCEPTION_HANDLERS,

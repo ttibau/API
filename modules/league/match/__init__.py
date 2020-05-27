@@ -46,7 +46,6 @@ class Match:
 
         validation = await queue.validate()
         if validation.error:
-            queue.cache.clear()
             return validation
 
         # Working out player selection type.
@@ -54,20 +53,17 @@ class Match:
             assign_random = queue.captain.random()
 
             if assign_random.error:
-                queue.cache.clear()
                 return assign_random
 
         elif queue.player_type.elo:
             assign_elo = await queue.captain.elo()
 
             if assign_elo.error:
-                queue.cache.clear()
                 return assign_elo
 
         else:
             assign_given = queue.captain.given()
             if assign_given:
-                queue.cache.clear()
                 return assign_given
 
         # Working out map selection type.
@@ -128,7 +124,7 @@ class Match:
                 "options": {
                     "type": "given",
                     "param": {"capt_1": None, "capt_2": None},
-                    "assiged_teams": True,
+                    "assigned_teams": True,
                     "record_statistics": match_scoreboard.
                     data["record_statistics"],
                 },

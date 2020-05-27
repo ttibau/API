@@ -71,7 +71,6 @@ class Config:
         # Cached on boot and on change.
         "regions": {
             # Region code for that server.
-            # SHOULD ALWAYS BE lower case.
             "oce": [
                 # Unique ID for server
                 # given by host.
@@ -107,3 +106,6 @@ class Config:
             "demos": "demos/{}",
         }
     }
+
+
+CONFIG = Config()
