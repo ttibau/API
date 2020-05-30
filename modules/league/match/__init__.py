@@ -125,6 +125,7 @@ class Match:
                     "type": "given",
                     "param": {"capt_1": None, "capt_2": None},
                     "assigned_teams": True,
+                    "auto_balance": False,
                     "record_statistics": match_scoreboard.
                     data["record_statistics"],
                 },
