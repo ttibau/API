@@ -273,10 +273,8 @@ class Queue:
                     or current_player["user_id"] != self.captains["team_2"]:
 
                 if (index + 1) % 2 == 0:
-                    print("assigning team 2")
                     self.players["list"][current_player["user_id"]] = 2
                 else:
-                    print("assigning team 1")
                     self.players["list"][current_player["user_id"]] = 1
 
     async def create(self):
