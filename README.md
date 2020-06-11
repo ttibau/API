@@ -12,6 +12,9 @@
 ```
 #### This project is NOT considered production ready.
 
+### Development Status
+Currently I'm improving some of the libraries this project uses, then I'll be implementing more discord functionality & cleaning up the API responses. Afterwards development on the graphql routes will start & we'll see some detailed examples on how to use this API.
+
 # Index
 - [Documentation](/docs)
 - [Roadmap](/ROADMAP.md)
