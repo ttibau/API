@@ -1,4 +1,5 @@
 
+
 ## Match
 Manage matches with match route
 
@@ -10,12 +11,12 @@ Manage matches with match route
 - **maps** - list of maps in a match
 - **team_names** - name of both teams in a match
 
-| Name    | Type   | required | Description              | Example                                                                                                                                                                                      |
-|---------|--------|----------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Name    | Type   | required | Description                                                                                                                                                                                          |
+|---------|--------|----------|--------------------------|
 | options | Object |    yes   | The players match config |                                                                                                                                                                                              |
-| type    | String |    yes   | The match type           | - **random**: select captains randomly based on the list of players. <br>- **elo**: selects captains depending off highest elo. <br>- **given**: selects captain depending off given indexes in param.   |
-|         |        |          |                          |                                                                                                                                                                                              |
-|         |        |          |                          |                                                                                                                                                                                              |                                                                                                                                                                                     |
+| type    | String |    yes   | The match type: <br> - **random**: select captains randomly based on the list of players. <br>- **elo**: selects captains depending off highest elo. <br>- **given**: selects captain depending off given indexes in param.          | 
+|    param     |    Object    |     Only is required if  type is **given**     |          Gives the capt_1 and capt_2 index in a list           |      
+|    param     |       String     |  Only required if  players aren't assigned teams      | Expects string containing only A & B what tells the system the order of selections. The string must be the same length of the players given ignoring the captain    |                                                                                                                                                                            
 
 ```javascript
 {
