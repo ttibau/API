@@ -9,7 +9,7 @@ Manage matches with match route
 ### Parameters
 
 **Player Parameters:**
-| Name    | Type   | required | Description                                                                                                                                                                                          |
+| Name    | Type   | Required | Description                                                                                                                                                                                          |
 |---------|--------|----------|--------------------------|
 | options | Dictionary |    Yes   | The players match config |                                                                                                                                                                                              |
 | type    | String |    Yes   | The match type: <br> - **random**: select captains randomly based on the list of players. <br>- **elo**: selects captains depending off highest elo. <br>- **given**: selects captain depending off given indexes in param.          | 
@@ -18,7 +18,21 @@ Manage matches with match route
 | assigned_teams  | Boolean  | No   | Telling the system if the teams are pre assigned  |     
 auto_balance | Boolean | No |  System will auto balance teams based off elo, **can't be used if assigned_teams is true**  |                
 | record_statistics | Boolean | No | If we should record statistics or not  |
-| list | Dictionary | Yes | Expects keys to be user ID & value to being the team (1, 2 or None / Null for no team) |                                                                                                                                                
+| list | Dictionary | Yes | Expects keys to be user ID & value to being the team (1, 2 or None / Null for no team) |                                                                                          
+
+**Maps Parameters:**
+| Name 	| Type 	| Required 	| Description 	|
+|---------|--------|----------|--------------------------|
+| options 	|  Dictionary	| Yes	| The maps match config 	|
+| type 	|  String 	| Yes 	|  The map selection type: <br> - **veto:** captains veto maps <br> - **random:** maps are randomly selected <br> - **given:** map is given (Uses 1st index of map list)	|
+| list 	|  List | Yes 	| Listof valid map names e.g. **de_mirage** 	|
+
+**Team Names Parameters:**
+| Name 	| Type 	| Required 	| Description 	|
+|---------|--------|----------|--------------------------|
+| team_1 	|  Dictionary	|  Yes	| Name of team 1 (max 20 characters.)	|
+| team_2 	|  Dictionary	|  Yes	| Name of team 2 (max 20 characters.)	|
+
 
 ```javascript
 {
