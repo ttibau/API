@@ -11,10 +11,14 @@ Manage matches with match route
 **Player Parameters:**
 | Name    | Type   | required | Description                                                                                                                                                                                          |
 |---------|--------|----------|--------------------------|
-| options | Object |    yes   | The players match config |                                                                                                                                                                                              |
-| type    | String |    yes   | The match type: <br> - **random**: select captains randomly based on the list of players. <br>- **elo**: selects captains depending off highest elo. <br>- **given**: selects captain depending off given indexes in param.          | 
-|    param     |    Object    |     Only is required if  type is **given**     |          Gives the capt_1 and capt_2 index in a list           |      
-|    param     |       String     |  Only required if  players aren't assigned teams      | Expects string containing only A & B what tells the system the order of selections. The string must be the same length of the players given ignoring the captain    |                                                                                                                                                                            
+| options | Dictionary |    Yes   | The players match config |                                                                                                                                                                                              |
+| type    | String |    Yes   | The match type: <br> - **random**: select captains randomly based on the list of players. <br>- **elo**: selects captains depending off highest elo. <br>- **given**: selects captain depending off given indexes in param.          | 
+|    param     |    Dictionary|     Only is required if  type is **given**     |          Gives the capt_1 and capt_2 index in a list           |      
+|    selection|       String     |  Only required if  players aren't assigned teams      | Expects string containing only A & B what tells the system the order of selections. The string must be the same length of the players given ignoring the captain    |  
+| assigned_teams  | Boolean  | No   | Telling the system if the teams are pre assigned  |     
+auto_balance | Boolean | No |  System will auto balance teams based off elo, **can't be used if assigned_teams is true**  |                
+| record_statistics | Boolean | No | If we should record statistics or not  |
+| list | Dictionary | Yes | Expects keys to be user ID & value to being the team (1, 2 or None / Null for no team) |                                                                                                                                                
 
 ```javascript
 {
