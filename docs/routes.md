@@ -6,11 +6,9 @@ Manage matches with match route
 ### New Match
 `POST /api/match/`
 
-#### Parameters
-- **players** - list of player in a match
-- **maps** - list of maps in a match
-- **team_names** - name of both teams in a match
+### Parameters
 
+**Player Parameters:**
 | Name    | Type   | required | Description                                                                                                                                                                                          |
 |---------|--------|----------|--------------------------|
 | options | Object |    yes   | The players match config |                                                                                                                                                                                              |
