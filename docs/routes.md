@@ -117,29 +117,81 @@ auto_balance | Boolean | No |  System will auto balance teams based off elo, **c
 #### Response: 
 
 ``` javascript
-{
-	name: "John Doe", 
-	user_id: '5d3e0a22-38cd-4509-a698-42398a6c6632',
-	steam_id: '[STEAM_0:0:88691122]',
-	discord_id: '123123123123', 
-	pfp: 'https://example.com/users/uuid4.png',
-	joined: '1528797322',
-	statistics: {
-		kills: 8,
-		deaths: 1,
-		assists: 4,
-		shots: 140,
-		hits: 331,
-		damage: 1076,
-		headshots: 3,
-		rounds_won: 6,
-		rounds_lost: 3,
-		wins: 1, 
-		ties: 0,
-		loses: 1
+[
+	{
+		name: "John Doe", 
+		user_id: '5d3e0a22-38cd-4509-a698-42398a6c6632',
+		steam_id: '[STEAM_0:0:88691122]',
+		discord_id: '123123123123', 
+		pfp: 'https://example.com/users/uuid4.png',
+		joined: '1528797322',
+		statistics: {
+			kills: 8,
+			deaths: 1,
+			assists: 4,
+			shots: 140,
+			hits: 331,
+			damage: 1076,
+			headshots: 3,
+			rounds_won: 6,
+			rounds_lost: 3,
+			wins: 1, 
+			ties: 0,
+			loses: 1
+		},
+		ranking: {
+			elo: 1762
+		}
+	}, 
+	{
+		name: "John Doe", 
+		user_id: '5d3e0a22-38cd-4509-a698-42398a6c6632',
+		steam_id: '[STEAM_0:0:88691122]',
+		discord_id: '123123123123', 
+		pfp: 'https://example.com/users/uuid4.png',
+		joined: '1528797322',
+		statistics: {
+			kills: 8,
+			deaths: 1,
+			assists: 4,
+			shots: 140,
+			hits: 331,
+			damage: 1076,
+			headshots: 3,
+			rounds_won: 6,
+			rounds_lost: 3,
+			wins: 1, 
+			ties: 0,
+			loses: 1
+		},
+		ranking: {
+			elo: 1762
+		}
 	},
-	ranking: {
-		elo: 1762
+	{
+		name: "John Doe", 
+		user_id: '5d3e0a22-38cd-4509-a698-42398a6c6632',
+		steam_id: '[STEAM_0:0:88691122]',
+		discord_id: '123123123123', 
+		pfp: 'https://example.com/users/uuid4.png',
+		joined: '1528797322',
+		statistics: {
+			kills: 8,
+			deaths: 1,
+			assists: 4,
+			shots: 140,
+			hits: 331,
+			damage: 1076,
+			headshots: 3,
+			rounds_won: 6,
+			rounds_lost: 3,
+			wins: 1, 
+			ties: 0,
+			loses: 1
+		},
+		ranking: {
+			elo: 1762
+		}
 	}
-}
+]
 ```
